@@ -34,7 +34,57 @@ void drawRoad() {
 
 }
 
+void drawMountain(float mountainCenterX, float mountainCenterY) {
+	glColor3f(0.19, 0.19, 0.19);
+	glBegin(GL_TRIANGLE_FAN);
+	glVertex2f(mountainCenterX, mountainCenterY);
+	glVertex2f(mountainCenterX + 100, mountainCenterY + (rand() % 25 + 10));
+	glVertex2f(mountainCenterX + 75, mountainCenterY + (rand() % 75 + 20));
+	glColor3f(0.66, 0.66, 0.66);
+	glVertex2f(mountainCenterX + 25, mountainCenterY + (rand() % 100 + 35));
+	glVertex2f(mountainCenterX, mountainCenterY + rand() % 100 + 40);
+	glColor3f(0.19, 0.19, 0.19);
+	glVertex2f(mountainCenterX - 25, mountainCenterY + (rand() % 100 + 35));
+	glVertex2f(mountainCenterX - 75, mountainCenterY + (rand() % 75 + 20));
+	glVertex2f(mountainCenterX - 100, mountainCenterY + (rand() % 25 + 10));
+	glEnd();
+
+	glColor3f(0.36, 0.36, 0.36);
+	glBegin(GL_TRIANGLE_FAN);
+	glVertex2f(mountainCenterX, mountainCenterY);
+	glVertex2f(mountainCenterX + 100, mountainCenterY + (rand() % 25 + 10));
+	glVertex2f(mountainCenterX + 75, mountainCenterY + (rand() % 75 + 20));
+	glColor3f(0.69, 0.69, 0.69);
+	glVertex2f(mountainCenterX + 25, mountainCenterY + (rand() % 100 + 35));
+	glVertex2f(mountainCenterX, mountainCenterY + rand() % 100 + 40);
+	glColor3f(0.36, 0.36, 0.36);
+	glVertex2f(mountainCenterX - 25, mountainCenterY + (rand() % 100 + 35));
+	glVertex2f(mountainCenterX - 75, mountainCenterY + (rand() % 75 + 20));
+	glVertex2f(mountainCenterX - 100, mountainCenterY + (rand() % 25 + 10));
+	glEnd();
+}
+
 void drawLand() {
+	srand(time(NULL));
+	// build random mountain from outer edges in;
+	// that way the mountain in the middle can cover the outer mountains spaces and rougher edges
+
+	// outer most
+	drawMountain(750, 310);
+	drawMountain(50, 265);
+
+	// level 1 mountains
+	drawMountain(680, 275);
+	drawMountain(130, 235);
+
+	// level 2 mountains
+	drawMountain(550, 215);
+	drawMountain(250, 215);
+
+	// level 3 mountains
+	drawMountain(450, 200);
+	drawMountain(350, 180);
+
 	// draw grass
 	glColor3f(0.08, 0.50, 0.0);
 	glBegin(GL_POLYGON);
@@ -266,7 +316,7 @@ void drawShapes(void)
 
 	drawSky();
 	drawLand();
-	drawHome(65, 100, 80, 80);
+	//drawHome(65, 100, 80, 80);
 	//drawHome(150, 20, 250, 250);
 
 	glFlush(); // Process all OpenGL routines as quickly as possible.
