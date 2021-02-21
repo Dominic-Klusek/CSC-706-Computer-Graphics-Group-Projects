@@ -1,6 +1,5 @@
 #include "masks.h"
-#include <GL/glut.h> // (or others, depending on the system in use)
-#include<SOIL/SOIL.h>
+#include <GL/glut.h>
 #include<iostream>
 using namespace std;
 
@@ -19,23 +18,17 @@ void init(void)
 	srand(time(NULL));
 }
 
-GLuint glInitTexture(char* filename)
-{
-	GLuint t = SOIL_load_OGL_texture(filename, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
-
-	glBindTexture(GL_TEXTURE_2D, t);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-	return t;
-}
-
-void drawRoad() {
-	// draw a quad slanted to the right
-
-}
-
 void drawMountain(float mountainCenterX, float mountainCenterY) {
+	// draw randomly created mountains
+	/* Mountains are randomly created by using a triangle fan with randomly
+	offset x and y coordinate; also chang the color to create a more dynamic look
+	
+	Mountains are made more dynamic by creating 1 light set of mountains and 1 darker
+	set of mountains; again with color change to make it more dynamic.
+
+	Mountains are modeled somewhat on a bell curve; taller in the middle, 
+	then getting shorter further away from the middle
+	*/
 	glColor3f(0.19, 0.19, 0.19);
 	glBegin(GL_TRIANGLE_FAN);
 	glVertex2f(mountainCenterX, mountainCenterY);
@@ -66,7 +59,6 @@ void drawMountain(float mountainCenterX, float mountainCenterY) {
 }
 
 void drawLand() {
-	srand(time(NULL));
 	// build random mountain from outer edges in;
 	// that way the mountain in the middle can cover the outer mountains spaces and rougher edges
 
@@ -121,35 +113,67 @@ void drawLand() {
 		glColor3f(0.40, 0.20, 0.0);
 		glVertex2f(windowWidth, 0);
 	glEnd();
+
+	// draw road
+	glColor3f(0.0, 0.0, 0.0);
+	glBegin(GL_POLYGON);
+		glVertex2f(0, 50);
+		glVertex2f(0, 0);
+		glVertex2f(225, 0);
+		glVertex2f(190, 101);
+		glVertex2f(25, 122);
+	glEnd();
+
+	glColor3f(0.0, 0.0, 0.0);
+	glBegin(GL_POLYGON);
+		glVertex2f(340, 82);
+		glVertex2f(300, 150);
+		glVertex2f(220, 110);
+		glVertex2f(230, 95);
+	glEnd();
+
+	// draw road markings
+	glColor3f(0.9, 0.9, 0.0);
+	glBegin(GL_QUADS);
+		glVertex2f(102, 15);
+		glVertex2f(118, 13);
+		glVertex2f(117, 99);
+		glVertex2f(102, 101);
+	glEnd();
+
+	glBegin(GL_POLYGON);
+		glVertex2f(295, 86);
+		glVertex2f(277, 120);
+		glVertex2f(270, 115);
+		glVertex2f(285, 88);
+	glEnd();
 }
 
 void drawSun(float sunCenterX = 400.0, float sunCenterY = 400.0, float sunRadius = 50.0) {
+	// Sun is just a circle of a certain color
 	glColor3f(0.90, 0.90, 0.0);
 	drawACircleWith(sunCenterX, sunCenterY, 0, 360, sunRadius, sunRadius, GL_POLYGON);
 }
 
 void drawSky() {
-	// TODO, implement sky function
-	float sunCenterX = 400.0;
-	float sunCenterY = 400.0;
-	float sunRadius = windowWidth / 5.0;
+	// cariables to define, and modify sun
+	float sunCenterX = 800.0;
+	float sunCenterY = 800.0;
+	float sunRadius = 50.0;
 
-
-	cout << "Window Height: " << windowHeight << endl;
-	cout << "Window Wodth: " << windowWidth << endl;
-
+	// the sky is just a blue polygon, with a yellow corner
 	glColor3f(0.50, 0.83, 1.00);
 	glBegin(GL_POLYGON);
 		glVertex2f(0, 0);
 		glVertex2f(windowWidth, 0);
 		glColor3f(1.0, 0.85, 0.10);
-		//glColor3f(1.0, 0.0, 0.00);
 		glVertex2f(windowWidth, windowHeight);
 		glColor3f(0.50, 0.83, 1.00);
 		glVertex2f(0, windowHeight);
 	glEnd();
 
-	drawSun(800, 800);
+	// call drawSun function to draw sun over the sky.
+	drawSun(sunCenterX, sunCenterY, sunRadius);
 
 	glFlush();
 }
@@ -258,40 +282,40 @@ void drawWindow(float x, float y, float width, float height) {
 		glVertex2f(windowX - sillOffset, windowY);
 		glVertex2f(windowX - sillOffset, windowY - sillThickness);
 		glVertex2f(windowX + windowWidth + sillOffset, windowY - sillThickness);
+		// add light 
 		glColor3f(0.5, 0.5, 0.5);
 		glVertex2f(windowX + windowWidth + sillOffset, windowY);
 		glColor3f(0.0, 0.0, 0.0);
 	glEnd();
 }
 
-void drawHome(float x, float y, float width, float height,
-	float colorR = 0.95, float colorG = 0.95, float colorB = 0.95) {
-	// draw house main body
-	glColor3f(colorR, colorG, colorB);
+void drawHome(float x, float y, float width, float height) {
+	// draw house main body background
+	glColor3f(0.5, 0.5, 0.5);
 	glBegin(GL_POLYGON);
 		glVertex2i(x, y);
 		glVertex2i(x + width, y);
-		glColor3f(0.5, 0.5, 0.5);
 		glVertex2i(x + width, y + height);
-		glColor3f(colorR, colorG, colorB);
 		glVertex2i(x, y + height);
 		glVertex2i(x, y);
 	glEnd();
 
+	// draw house siding
 	glEnable(GL_POLYGON_STIPPLE); // Enable POLYGON STIPPLE
-	glColor3f(0.39, 0.39, 0.39);
-	glPolygonStipple(frontHouse);
+	glColor3f(0.30, 0, 0);
+	glPolygonStipple(brick);
 	glBegin(GL_POLYGON);
 		glVertex2i(x, y);
 		glVertex2i(x + width, y);
-		//glColor3f(0.5, 0.5, 0.5);
+		glColor3f(0.10, 0.0, 0.0);
 		glVertex2i(x + width, y + height);
-		glColor3f(colorR, colorG, colorB);
+		glColor3f(0.30, 0, 0);
 		glVertex2i(x, y + height);
 		glVertex2i(x, y);
 	glEnd();
 	glDisable(GL_POLYGON_STIPPLE);
 
+	// add outline to main house body
 	glColor3f(0, 0, 0);
 	glBegin(GL_LINE_STRIP);
 		glVertex2i(x, y);
@@ -301,7 +325,7 @@ void drawHome(float x, float y, float width, float height,
 		glVertex2i(x, y);
 	glEnd();
 
-	// draw house roof
+	// draw house roof background
 	// constant are to account for some space between roof and house main body, as well as to extend the roof past the walls of the house
 	glBegin(GL_POLYGON);
 		glVertex2i(x - width / 6, y + height - 2);
@@ -311,7 +335,7 @@ void drawHome(float x, float y, float width, float height,
 		glColor3f(0, 0, 0);
 	glEnd();
 
-
+	// draw roof lines
 	glEnable(GL_POLYGON_STIPPLE); // Enable POLYGON STIPPLE
 	glPolygonStipple(roofMask);
 	glBegin(GL_POLYGON);
@@ -323,8 +347,10 @@ void drawHome(float x, float y, float width, float height,
 	glEnd();
 	glDisable(GL_POLYGON_STIPPLE);
 
+	// call function to draw door
 	drawDoor(x, y, width, height);
 
+	// call function to draw window.
 	drawWindow(x, y, width, height);
 
 	glFlush(); // Process all OpenGL routines as quickly as possible.
@@ -332,62 +358,70 @@ void drawHome(float x, float y, float width, float height,
 
 
 void drawLeaves(float x, float y, float radius = 5) {
+	// leaves are a polygonal circle with random offsets to the edges
 	int intRadius = radius / 2;
 	glColor3f(0.15, 0.30, 0.0);
 	glBegin(GL_POLYGON);
-	glVertex2d(x, y);
-	glColor3f(0.24, 0.48, 0.0);
-	for (double i = 0; i <= 360; i++)
-	{
-		glVertex2d(x + cos((i * pi) / 180) * radius + (rand() % int(intRadius * 2)) - intRadius, y + sin((i * pi) / 180) * radius + (rand() % int(intRadius * 2)) - intRadius);
-	}
+		glVertex2d(x, y);
+		glColor3f(0.24, 0.48, 0.0);
+		for (double i = 0; i <= 360; i++)
+		{
+			glVertex2d(x + cos((i * pi) / 180) * radius + (rand() % int(intRadius * 2)) - intRadius, y + sin((i * pi) / 180) * radius + (rand() % int(intRadius * 2)) - intRadius);
+		}
 	glEnd();
 }
 
 void drawBranch(float beginX, float beginY, float endX, float endY, int thickness, int numVertices = 25) {
+	// bramnches are drawn from beginning x and y coordinates
+	// calculate slope from beginning coordinates to the center of the leave ball
 	float modX = (endX - beginX) / numVertices;
 	float modY = (endY - beginY) / numVertices;
 
-	if (modX > modY) {
+	// to keep the thickness consisten; check which direction will the offset make more sense(x or y)
+	// also to make the branch seem more "realistic", change the color on each odd and even vertex
+	if (abs(modX) > abs(modY)) {
+		// if modX is larger than modY; the x slope is more extreme, so easier make thickness in the y direction
 		glBegin(GL_TRIANGLE_STRIP);
 		for (int i = 0; i < numVertices; i++) {
-			//cout << "Next Coodinates: " << "(" << beginX + modX * i << ", " << beginY + modY * i << ")" << endl;
 
 			if (i % 2 == 0) {
 				glColor3f(0.34, 0.22, 0.0);
-				glVertex2f(beginX + modX * i, beginY + modY * i + rand() % thickness + thickness / 2);
+				glVertex2f(beginX + modX * i, beginY + modY * i + rand() % thickness + thickness / 3);
 			}
 			else {
 				glColor3f(0.45, 0.30, 0.0);
-				glVertex2f(beginX + modX * i, beginY + modY * i + rand() % thickness - thickness / 2);
+				glVertex2f(beginX + modX * i, beginY + modY * i + rand() % thickness - thickness / 3);
 			}
 		}
 		glEnd();
 	}
 	else {
+		// else, easier make thickness in the x direction
 		glBegin(GL_TRIANGLE_STRIP);
 		for (int i = 0; i < numVertices; i++) {
-			//cout << "Next Coodinates: " << "(" << beginX + modX * i << ", " << beginY + modY * i << ")" << endl;
 
 			if (i % 2 == 0) {
 				glColor3f(0.34, 0.22, 0.0);
-				glVertex2f(beginX + modX * i + rand() % thickness + thickness / 2, beginY + modY * i);
+				glVertex2f(beginX + modX * i + rand() % thickness + thickness / 3, beginY + modY * i);
 			}
 			else {
 				glColor3f(0.45, 0.30, 0.0);
-				glVertex2f(beginX + modX * i + rand() % thickness - thickness / 2, beginY + modY * i);
+				glVertex2f(beginX + modX * i + rand() % thickness - thickness / 3, beginY + modY * i);
 			}
 		}
 		glEnd();
 	}
 }
 
-void drawTree(float x, float y, float width, float height, float branchThickness = 10,  int numVertices = 20) {
+void drawTree(float x, float y, float width, float height, float branchThickness = 10,  int numLeaves = 6, int numVertices = 20) {
+	// some constant to help with drawing the tree
 	int trunkModX = round(width / 5.0);
 	int trunkModX2 = round(width / 30.0);
 	float trunkModY = height / numVertices;
-	// draw trunk
 
+	// draw trunktrunk is a triangle strip with random offsets in the x direction to make the trunk more dynamic
+	// the triangle strip has a number of vertices equal to numVertices
+	// on each odd and even vertex, the color is changed to give a more realistic color
 	glBegin(GL_TRIANGLE_STRIP);
 	for (int i = 0; i < numVertices; i++) {
 		if (i % 2 == 0) {
@@ -403,43 +437,39 @@ void drawTree(float x, float y, float width, float height, float branchThickness
 
 
 	// draw leaves
-	int leavesY = y + height / 2;
+	// some constants
+	int leavesY = y + height / 3 * 2;
 	int leavesModX = width / 2;
 	int leavesModY = height / 4;
-	int radiusMod = width / 5;
+	int radiusMod = width / 4;
 	float leafCenterX, leafCenterY;
+	if (leavesModX < 1)
+		leavesModX = 1;
 
-	//generate coords
-	leafCenterX = x - rand() % leavesModX;
-	leafCenterY = leavesY + rand() % leavesModY * 2 + leavesModY;
+	// each tree has 4 sets of leaves, which are randomly placed, and have branches going toward them
+	// 2 sets are skewed to the right, and 2 to the left
 
-	// draw leaves, and branch
-	drawLeaves(leafCenterX, leafCenterY, rand() % radiusMod + radiusMod);
-	drawBranch(x + width / 8, y + trunkModY * numVertices / 2, leafCenterX, leafCenterY, branchThickness);
+	for (int i = 0; i < numLeaves / 2; i++) {
+		//generate coords
+		leafCenterX = x - rand() % (int(width) * 2) + width;
+		leafCenterY = leavesY + rand() % leavesModY * 2 + leavesModY;
 
-	//generate coords
-	leafCenterX = x - rand() % leavesModX;
-	leafCenterY = leavesY + rand() % leavesModY * 2 + leavesModY;
+		// draw leaves, and branch
+		drawLeaves(leafCenterX, leafCenterY, rand() % radiusMod * 2 + radiusMod);
+		drawBranch(x + width / 8, y + trunkModY * numVertices / 2, leafCenterX, leafCenterY, branchThickness);
+	}
 
-	// draw leaves, and branch
-	drawLeaves(leafCenterX, leafCenterY, rand() % radiusMod + radiusMod);
-	drawBranch(x + width / 8, y + trunkModY * numVertices / 2, leafCenterX, leafCenterY, branchThickness);
+	for (int i = 0; i < numLeaves / 2; i++) {
+		//generate coords
+		leafCenterX = x + rand() % int(width) + width / 2;
+		leafCenterY = leavesY + rand() % leavesModY * 2 + leavesModY;
 
-	//generate coords
-	leafCenterX = x + rand() % leavesModX;
-	leafCenterY = leavesY + rand() % leavesModY * 2 + leavesModY;
-	
-	// draw leaves, and branch
-	drawLeaves(leafCenterX, leafCenterY, rand() % radiusMod + radiusMod);
-	drawBranch(x + width / 8, y + trunkModY * numVertices / 2, leafCenterX, leafCenterY, branchThickness);
+		// draw leaves, and branch
+		drawLeaves(leafCenterX, leafCenterY, rand() % radiusMod * 2 + radiusMod);
+		drawBranch(x + width / 8, y + trunkModY * numVertices / 2, leafCenterX, leafCenterY, branchThickness);
+	}
 
-	//generate coords
-	leafCenterX = x + rand() % leavesModX;
-	leafCenterY = leavesY + rand() % leavesModY * 2 + leavesModY;
 
-	// draw leaves, and branch
-	drawLeaves(leafCenterX, leafCenterY, rand() % radiusMod + radiusMod);
-	drawBranch(x + width / 8, y + trunkModY * numVertices / 2, leafCenterX, leafCenterY, branchThickness);
 
 }
 
@@ -447,17 +477,21 @@ void drawShapes(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT); // Clear display window.
 
-	//drawSky();
-	//drawLand();
-	//drawHome(65, 100, 80, 80);
-	//drawHome(150, 20, 250, 250);
-	drawTree(100, 250, 120, 150, 10, 25);
-	drawTree(150, 250, 80, 120, 8, 25);
-	drawTree(200, 250, 200, 250, 15, 50);
+	// call functions to draw main objects of scene
+	// Objects drawn in the order Sky -> Ground -> Houses and Trees
+	drawSky();
+	drawLand();
+	drawHome(400, 20, 250, 250);
+	drawTree(700, 20, 120, 360, 10, 12);
+
+
+	drawHome(65, 220, 25, 25);
+	drawTree(100, 220, 20, 45, 1, 24);
+
+	drawHome(135, 165, 35, 35);
+	drawTree(170, 165, 25, 50, 1, 24);
 
 	glFlush(); // Process all OpenGL routines as quickly as possible.
-
-	//glEnable(GL_TEXTURE_2D); // renable textures in case of resizing window
 }
 
 void main(int argc, char** argv)
