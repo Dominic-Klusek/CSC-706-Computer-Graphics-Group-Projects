@@ -1,24 +1,11 @@
 #include "masks.h"
 #include <GL/glut.h> // (or others, depending on the system in use)
-#include<SOIL/SOIL.h>
 
 void init(void)
 {
 	glClearColor(1.0, 1.0, 1.0, 0.0); // Set display-window color to white.
 	glMatrixMode(GL_PROJECTION); // Set projection parameters.
-	glEnable(GL_TEXTURE_2D);
 	gluOrtho2D(0.0, 200.0, 0.0, 250.0);
-}
-
-GLuint glInitTexture(char* filename)
-{
-	GLuint t = SOIL_load_OGL_texture(filename, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
-
-	glBindTexture(GL_TEXTURE_2D, t);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-	return t;
 }
 
 void drawRectangle(void)
@@ -151,83 +138,8 @@ void drawRectangle(void)
 	glEnd();
 	glDisable(GL_POLYGON_STIPPLE);
 
-	/*
-	// load first texture
-	char filename[] = "resized_texture_2.png";
-	GLuint tex = glInitTexture(filename);
-
-	// set texture environment
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-
-	// bind texture to be used
-	glBindTexture(GL_TEXTURE_2D, tex);
-
-	// draw rectabgle with texture
-	glBegin(GL_QUADS);
-		// top left vertex
-		glTexCoord2f(0.0, 1.0);
-		glVertex2i(20, 20);
-		// top right
-		glTexCoord2f(1.0, 1.0);
-		glVertex2i(70, 20);
-		// bottom right
-		glTexCoord2f(1.0, 0.0);
-		glVertex2i(70, 70);
-		//bottom left
-		glTexCoord2f(0.0, 0.0);
-		glVertex2i(20, 70);
-	glEnd();
-	glDisable(GL_TEXTURE_2D);
-
-	// draw another rectangle
-	glColor3f(0.0, 1.0, 1.0);
-	glBegin(GL_QUADS);
-		// top left vertex
-		glColor3f(0.0, 1.0, 1.0);
-		glVertex2i(60, 60);
-
-		// top right
-		glColor3f(0.0, 0.0, 1.0);
-		glVertex2i(80, 60);
-
-		// bottom right
-		glVertex2i(80, 80);
-
-		//bottom left
-		glVertex2i(60, 80);
-	glEnd();
-
-	glColor3f(1, 0, 1); // Your color goes here
-	glEnable(GL_POLYGON_STIPPLE); // Enable POLYGON STIPPLE
-	glPolygonStipple(fire);
-	
-	// draw a triangle
-	glColor3f(0.0, 0.0, 0.0);
-	glBegin(GL_TRIANGLES);
-		glVertex2i(100, 100);
-
-		glVertex2i(150, 160);
-
-		glVertex2i(180, 80);
-	glEnd();
-	glDisable(GL_POLYGON_STIPPLE);
-
-	// draw a triangle fan
-	glColor3f(0.5, 0.1, 0.8);
-	glBegin(GL_TRIANGLE_FAN);
-		glVertex3i(100, 50, 0);
-		glVertex3i(150, 10, 0);
-		glVertex3i(200, 10, 0);
-		glVertex3i(250, 50, 0);
-		glVertex3i(200, 90, 0);
-		glVertex3i(150, 90, 0);
-	glEnd();
-	*/
-
 	glFlush(); // Process all OpenGL routines as quickly as possible.
 
-	glEnable(GL_TEXTURE_2D); // renable textures in case of resizing window
 }
 
 void main(int argc, char** argv)
