@@ -1,0 +1,49 @@
+Part 1:
+	Self Explanatory; it has the bare minimum for the assignment.
+		- 2 Solid colored shapes (Square and Triangle)
+		- 2 Gradient Shapes (Circle and Triangle Fan)
+		- 3 Polygon Stippled Shapes (Rhombus, Hexagon, Angled Pacmac)
+		
+Part 2:
+	A bit more complicated; there is a bit of random generation, just to make it easier to place
+	multiple copies of the homes, trees, and mountains.
+	
+	A large amount of the code was seperated out into functions to make it easier to follow:
+		- drawMountain(float mountainCenterX, float mountainCenterY): draw randomly generated mountains
+		whose center is at (mountainCenterX, mountainCenterY). Mountains are a triangle fan with randomly
+		offset vertices, and an added gradient to make the mountains look more dynamic. In  addition, 
+		each set of mountains is made up of a lighter and a darker set of mountains to give off the look of 
+		random shadows
+		
+		- drawLand: Draws the landscape by first calling the drawMountain function multiple times to cover the
+		horizon. Then draw the grass with a polygon stipple on top, and then draw some dirt at the bottom of the
+		screen to break up the grass. Also add the road and road markings
+		
+		- drawSun(float sunCenterX, float sunCenterY, float sunRadius): Uses the drawCircle function provided
+		by Dr.Natacha to draw a sun.
+		
+		- drawSky(): draws the sky by placing a blue polygon with a yellow corner to create the effect of 
+		sunlight.
+		
+		- drawDoor(float x, float y, float width, float height): Draws a door, with doorknob.
+		
+		- drawWindow(float x, float y, float width, float height): Draw the window complete with glass pane,
+		window supports, window frame, and window sill.
+		
+		- drawHome(float x, float y, float width, float height): Draws a home starting at (x,y) of 
+		specified width and height. Also calls the drawDoor and drawWindow function. This function is a bit
+		complicated because there is a large amount of accounting for different widths and heights.
+		
+		- drawLeaves: A modified drawCircle function which randomly offsets the vertices to create "leaves". The
+		center is darker than the outside edges.
+		
+		- drawBranch(float beginX, float beginY, float endX, float endY, int thickness, int numVertices = 25): 
+		Calculates slope and then draws a triangleStrip from (beginX, beginY) to (endX, endY). The triangleStrip
+		is randomly offset to make the branch more realistic.
+		
+		- drawTree(float x, float y, float width, float height, float branchThickness = 10,  int numLeaves = 6, int numVertices = 20):
+		draws a Tree starting at (x, y) of width, height. Then call drawLeaves a number of times=numLeaves;
+		half of which are skewed to the left, and half skewed to the right. Leaf coordinates are randomly determined.
+		Then for each set of leaves; call drawBranch to draw a branch from the tree trunk to the leaves.
+		
+		- drawShapes(): Call all necessary function to draw the image.

@@ -11,7 +11,6 @@ void init(void)
 {
 	glClearColor(1.0, 1.0, 1.0, 0.0); // Set display-window color to white.
 	glMatrixMode(GL_PROJECTION); // Set projection parameters.
-	glEnable(GL_TEXTURE_2D);
 	gluOrtho2D(0.0, 800, 0.0, 800);
 	windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
 	windowWidth = glutGet(GLUT_WINDOW_WIDTH);
@@ -356,7 +355,6 @@ void drawHome(float x, float y, float width, float height) {
 	glFlush(); // Process all OpenGL routines as quickly as possible.
 }
 
-
 void drawLeaves(float x, float y, float radius = 5) {
 	// leaves are a polygonal circle with random offsets to the edges
 	int intRadius = radius / 2;
@@ -386,11 +384,11 @@ void drawBranch(float beginX, float beginY, float endX, float endY, int thicknes
 
 			if (i % 2 == 0) {
 				glColor3f(0.34, 0.22, 0.0);
-				glVertex2f(beginX + modX * i, beginY + modY * i + rand() % thickness + thickness / 3);
+				glVertex2f(beginX + modX * i, beginY + modY * i + rand() % thickness + thickness / 1.1);
 			}
 			else {
 				glColor3f(0.45, 0.30, 0.0);
-				glVertex2f(beginX + modX * i, beginY + modY * i + rand() % thickness - thickness / 3);
+				glVertex2f(beginX + modX * i, beginY + modY * i + rand() % thickness - thickness / 1.1);
 			}
 		}
 		glEnd();
@@ -402,11 +400,11 @@ void drawBranch(float beginX, float beginY, float endX, float endY, int thicknes
 
 			if (i % 2 == 0) {
 				glColor3f(0.34, 0.22, 0.0);
-				glVertex2f(beginX + modX * i + rand() % thickness + thickness / 3, beginY + modY * i);
+				glVertex2f(beginX + modX * i + rand() % thickness + thickness / 1.1, beginY + modY * i);
 			}
 			else {
 				glColor3f(0.45, 0.30, 0.0);
-				glVertex2f(beginX + modX * i + rand() % thickness - thickness / 3, beginY + modY * i);
+				glVertex2f(beginX + modX * i + rand() % thickness - thickness / 1.1, beginY + modY * i);
 			}
 		}
 		glEnd();
@@ -456,7 +454,7 @@ void drawTree(float x, float y, float width, float height, float branchThickness
 
 		// draw leaves, and branch
 		drawLeaves(leafCenterX, leafCenterY, rand() % radiusMod * 2 + radiusMod);
-		drawBranch(x + width / 8, y + trunkModY * numVertices / 2, leafCenterX, leafCenterY, branchThickness);
+		drawBranch(x + width / 8, y + trunkModY * numVertices, leafCenterX, leafCenterY, branchThickness);
 	}
 
 	for (int i = 0; i < numLeaves / 2; i++) {
@@ -466,11 +464,8 @@ void drawTree(float x, float y, float width, float height, float branchThickness
 
 		// draw leaves, and branch
 		drawLeaves(leafCenterX, leafCenterY, rand() % radiusMod * 2 + radiusMod);
-		drawBranch(x + width / 8, y + trunkModY * numVertices / 2, leafCenterX, leafCenterY, branchThickness);
+		drawBranch(x + width / 8, y + trunkModY * numVertices, leafCenterX, leafCenterY, branchThickness);
 	}
-
-
-
 }
 
 void drawShapes(void)
@@ -482,7 +477,7 @@ void drawShapes(void)
 	drawSky();
 	drawLand();
 	drawHome(400, 20, 250, 250);
-	drawTree(700, 20, 120, 360, 10, 12);
+	drawTree(700, 20, 120, 360, 5, 12);
 
 
 	drawHome(65, 220, 25, 25);
