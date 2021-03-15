@@ -3,7 +3,7 @@
 #include<iostream>
 using namespace std;
 
-// glocal variables
+// global variables
 double windowHeight;
 double windowWidth;
 
@@ -12,9 +12,12 @@ void init(void)
 	glClearColor(1.0, 1.0, 1.0, 0.0); // Set display-window color to white.
 	glMatrixMode(GL_PROJECTION); // Set projection parameters.
 	gluOrtho2D(0.0, 800, 0.0, 800);
+
+	// get window height and width
 	windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
 	windowWidth = glutGet(GLUT_WINDOW_WIDTH);
-	srand(time(NULL));
+
+	srand(time(NULL)); // seed the random number generator
 }
 
 void drawMountain(float mountainCenterX, float mountainCenterY) {

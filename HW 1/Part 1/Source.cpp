@@ -8,10 +8,9 @@ void init(void)
 	gluOrtho2D(0.0, 200.0, 0.0, 250.0);
 }
 
-void drawRectangle(void)
+void drawShapes(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT); // Clear display window.
-
 
 	// Part a) At least 2 geometric figures filled with solid colors
 	// figure 1 Rectangle 
@@ -156,7 +155,7 @@ void main(int argc, char** argv)
 
 	init(); // Execute initialization procedure.
 
-	glutDisplayFunc(drawRectangle); // Send graphics to display window.
+	glutDisplayFunc(drawShapes); // Send graphics to display window.
 
 	glutMainLoop(); // Display everything and wait.
 }
