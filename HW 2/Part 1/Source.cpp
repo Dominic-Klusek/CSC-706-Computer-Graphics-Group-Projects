@@ -2,7 +2,12 @@
 #include <fstream>
 #include <iostream>
 #include <GL/glut.h> // (or others, depending on the system in use)
+#include "Canvas_freeglut.h"
 using namespace std;
+
+char title[] = "Working with Canvas";
+Canvas window = Canvas(600, 600, title);
+
 
 void init(void)
 {
@@ -27,11 +32,13 @@ void drawPolyLineFile(char* fileName)
 		for (int i = 0; i < numLines; i++)
 		{
 			inStream >> x >> y; // read the next x, y pair
-			glVertex2i(x, y);
+			//window.lineTo(x, y);
+			glVertex2f(x, y);
 		}
 		glEnd();
 	}
-	glFlush();
+	//glutSwapBuffers();
+	//glFlush();
 	inStream.close();
 }
 
@@ -42,35 +49,28 @@ void drawShapes(void)
 	// 2. Draw dinosaur using drawPolyLineFile
 	// 3. Perform transformations
 	// 4. Do it again
-	glMatrixMode(GL_MODELVIEW);
+
 	glClear(GL_COLOR_BUFFER_BIT); // Clear display window.
-	
+
 	glColor3f(0.5, 0.5, 0.5); // set color
-	
+
 	// make a loop that goes around in a circle
-	int originX = 100;
-	int originY = 100;
-	float radius = 75.0;
+	int originX = 300;
+	int originY = 300;
+	float radius = 100.0;
 	char data[] = "brontoi.dat"; // define polyline file
-	glScaled(0.15, 0.15, 0); // scale drawing
+	glScaled(0.65, 0.65, 0); // scale drawing
 	for (int i = 0; i < 360; i += 45) {
-		cout << originX + cos((i * pi) / 180)<< ", " << originY + sin((i * pi) / 180) << endl;
-		glViewport(originX + cos((i * pi) / 180) * radius, originY + sin((i * pi) / 180) * radius, 100, 100); // set viewPort
+		cout << originX + cos((i * pi) / 180) << ", " << originY + sin((i * pi) / 180) << endl;
+		window.setViewport(originX + cos((i * pi) / 180) * radius, originY + sin((i * pi) / 180) * radius, 100, 100);
 		drawPolyLineFile(data);
 	}
-	/*
-	glViewport(50, 50, 100, 100); // set viewPort
-
-	glTranslated(40, 40, 0); // need to translate to fit drawing when rotated
-	glRotated(45, 0, 0, 1); // rotate
-	glScaled(0.15, 0.15, 0); // scale drawing
-	drawPolyLineFile(data); // draw the dinosaur*/
-	glFlush(); // Process all OpenGL routines as quickly as possible.
+	glutSwapBuffers();
 }
 
 void main(int argc, char** argv)
 {
-	glutInit(&argc, argv); // Initialize GLUT.
+	/*glutInit(&argc, argv); // Initialize GLUT.
 
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB); // Set display mode.
 
@@ -82,7 +82,11 @@ void main(int argc, char** argv)
 
 	init(); // Execute initialization procedure.
 
-	glutDisplayFunc(drawShapes); // Send graphics to display window.
+	glutDisplayFunc(drawShapes); // Send graphics to display window.*/
+
+	window.setWindow(0, 600, 0, 600);
+
+	glutDisplayFunc(drawShapes);
 
 	glutMainLoop(); // Display everything and wait.
 }

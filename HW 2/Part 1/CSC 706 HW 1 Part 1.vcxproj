@@ -23,7 +23,7 @@
     <ProjectGuid>{15D99E10-DD3D-4C72-9BFF-D0F5195904B2}</ProjectGuid>
     <RootNamespace>OpenGLTutorial</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>CSC 706 HW 2 Part 1</ProjectName>
+    <ProjectName>CSC 706 HW 1 Part 1</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -145,6 +145,7 @@
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Canvas_freeglut.h" />
     <ClInclude Include="masks.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
