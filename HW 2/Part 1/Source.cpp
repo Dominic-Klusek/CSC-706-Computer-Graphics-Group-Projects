@@ -6,15 +6,7 @@
 using namespace std;
 
 char title[] = "Working with Canvas";
-Canvas window = Canvas(600, 600, title);
-
-
-void init(void)
-{
-	glClearColor(1.0, 1.0, 1.0, 0.0); // Set display-window color to white.
-	glMatrixMode(GL_PROJECTION); // Set projection parameters.
-	gluOrtho2D(0.0, 200.0, 0.0, 250.0);
-}
+Canvas window = Canvas(1000, 1000, title);
 
 void drawPolyLineFile(char* fileName)
 {
@@ -32,61 +24,145 @@ void drawPolyLineFile(char* fileName)
 		for (int i = 0; i < numLines; i++)
 		{
 			inStream >> x >> y; // read the next x, y pair
-			//window.lineTo(x, y);
 			glVertex2f(x, y);
 		}
 		glEnd();
 	}
-	//glutSwapBuffers();
-	//glFlush();
 	inStream.close();
 }
 
-void drawShapes(void)
+void drawRegularDino(void)
 {
-	// basic idea of problem 1
-	// 1. Define a glViewport
-	// 2. Draw dinosaur using drawPolyLineFile
-	// 3. Perform transformations
-	// 4. Do it again
-
-	glClear(GL_COLOR_BUFFER_BIT); // Clear display window.
+	//glClear(GL_COLOR_BUFFER_BIT); // Clear display window.
 
 	glColor3f(0.5, 0.5, 0.5); // set color
 
 	// make a loop that goes around in a circle
-	int originX = 300;
-	int originY = 300;
-	float radius = 100.0;
+	int originX = 250;
+	int originY = 750;
+	float radius = 150;
 	char data[] = "brontoi.dat"; // define polyline file
-	glScaled(0.65, 0.65, 0); // scale drawing
-	for (int i = 0; i < 360; i += 45) {
-		cout << originX + cos((i * pi) / 180) << ", " << originY + sin((i * pi) / 180) << endl;
-		window.setViewport(originX + cos((i * pi) / 180) * radius, originY + sin((i * pi) / 180) * radius, 100, 100);
+	for (int i = 0; i < 360; i += 30) {
+		//cout << originX + cos((i * pi) / 180) << ", " << originY + sin((i * pi) / 180) << endl;
+		window.setViewport(originX + cos((i * pi) / 180) * radius, originY + sin((i * pi) / 180) * radius, 1000, 1000);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		glScaled(0.2, 0.2, 0); // scale drawing
 		drawPolyLineFile(data);
 	}
+
+	//glutSwapBuffers();
+}
+
+void drawDownDino(void)
+{
+	//glClear(GL_COLOR_BUFFER_BIT); // Clear display window.
+
+	glColor3f(0.5, 0.5, 0.5); // set color
+
+	// make a loop that goes around in a circle
+	int originX = -150;
+	int originY = -150;
+	float radius = 150;
+	char data[] = "brontoi.dat"; // define polyline file
+	float currentAngle = -180;
+	float angleMod = 0;
+	int offsetIndex = 0;
+	for (int i = 0; i < 360; i += 30) {
+		window.setViewport(originX + cos((i * pi) / 180) * radius, originY + sin((i * pi) / 180) * radius, 1000, 1000);
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(-500, 500, -500, 500, -1, 1);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		glRotatef(currentAngle, 0, 0, 1);
+		glScalef(0.2, 0.2, 0);
+		drawPolyLineFile(data);
+		offsetIndex++;
+		currentAngle += angleMod;
+	}
+
+	//glutSwapBuffers();
+}
+
+void draw45Dino(void)
+{
+	//glClear(GL_COLOR_BUFFER_BIT); // Clear display window.
+
+	glColor3f(0.5, 0.5, 0.5); // set color
+
+	// make a loop that goes around in a circle
+	int originX = 250;
+	int originY = -200;
+	float radius = 150;
+	char data[] = "brontoi.dat"; // define polyline file
+	float currentAngle = -90;
+	float angleMod = 30;
+	int offsetIndex = 0;
+	for (int i = 0; i < 360; i += 30) {
+		window.setViewport(originX + cos((i * pi) / 180) * radius, originY + sin((i * pi) / 180) * radius, 1000, 1000);
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(-500, 500, -500, 500, -1, 1);
+		cout << currentAngle << endl;
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		//glTranslatef(offsetX[offsetIndex], offsetY[offsetIndex], 0);
+		glRotatef(currentAngle, 0, 0, 1);
+		glScalef(0.2, 0.2, 0);
+		drawPolyLineFile(data);
+		offsetIndex++;
+		currentAngle += angleMod;
+	}
+
+	//glutSwapBuffers();
+}
+
+void draw4UpsideDownDino(void)
+{
+	//glClear(GL_COLOR_BUFFER_BIT); // Clear display window.
+
+	glColor3f(0.5, 0.5, 0.5); // set color
+
+	// make a loop that goes around in a circle
+	int originX = 250;
+	int originY = 250;
+	float radius = 150;
+	char data[] = "brontoi.dat"; // define polyline file
+	float currentAngle = -270;
+	float angleMod = 30;
+	int offsetIndex = 0;
+	for (int i = 0; i < 360; i += 30) {
+		window.setViewport(originX + cos((i * pi) / 180) * radius, originY + sin((i * pi) / 180) * radius, 1000, 1000);
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(-500, 500, -500, 500, -1, 1);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		glRotatef(currentAngle, 0, 0, 1);
+		glScalef(0.2, 0.2, 0);
+		drawPolyLineFile(data);
+		offsetIndex++;
+		currentAngle += angleMod;
+	}
+
+	//glutSwapBuffers();
+}
+
+void drawSections(void) {
+	glClear(GL_COLOR_BUFFER_BIT); // Clear display window.
+	drawRegularDino();
+	drawDownDino();
+	draw45Dino();
+	draw4UpsideDownDino();
 	glutSwapBuffers();
 }
 
 void main(int argc, char** argv)
 {
-	/*glutInit(&argc, argv); // Initialize GLUT.
+	window.setWindow(0, 1000, 0, 1000);
 
-	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB); // Set display mode.
-
-	glutInitWindowPosition(50, 100); // Set top-left display-window position.
-
-	glutInitWindowSize(400, 300); // Set display-window width and height.
-
-	glutCreateWindow("CHANGE ME TO APPROPRIATE TITLE"); // Create display window.
-
-	init(); // Execute initialization procedure.
-
-	glutDisplayFunc(drawShapes); // Send graphics to display window.*/
-
-	window.setWindow(0, 600, 0, 600);
-
-	glutDisplayFunc(drawShapes);
+	glutDisplayFunc(drawSections);
 
 	glutMainLoop(); // Display everything and wait.
 }

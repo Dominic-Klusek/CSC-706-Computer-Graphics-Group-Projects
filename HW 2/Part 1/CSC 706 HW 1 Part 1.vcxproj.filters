@@ -16,4 +16,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Brontoi.dat" />
+  </ItemGroup>
 </Project>

@@ -148,6 +148,9 @@
     <ClInclude Include="Canvas_freeglut.h" />
     <ClInclude Include="masks.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Brontoi.dat" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
