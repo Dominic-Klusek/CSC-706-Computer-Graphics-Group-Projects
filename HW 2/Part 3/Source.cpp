@@ -12,17 +12,24 @@ GLfloat colorCodes[9] = {0.55, 0.55, 0.55, 0, 0, 0, 0.25, 0.25, 0.25};
 int currentFigure = 1;
 GLenum style = GL_POLYGON;
 
+void drawNGon(float originX, float originY, float numSides, float radius, float angle, float angleInc, GLenum polyStyle) {
+	glBegin(polyStyle);
+	glVertex2f(radius * cos(angle) + originX, radius * sin(angle) + originY);
+	for (int k = 0; k < numSides; k++) // repeat n times
+	{
+		angle += angleInc;
+		glVertex2f(radius * cos(angle) + originX, radius * sin(angle) + originY);
+	}
+	glEnd();
+}
+
 void FigureA(void) {
 	window.clearScreen(); //clear the window
 
 	// variables to define individual shape parameteres
-	float originX = 0;
-	float originY = 0;
-	float radius = 160;
-	float numSides = 3;
 	float rotAngle = -30;
 	double angle = rotAngle * pi / 180;  // initial angle
-	double angleInc = 2 * pi / numSides; //angle increment
+	double angleInc = 2 * pi / 3; //angle increment
 
 	////////  Background polygon ////////
 	// change color of backgrounf polygon
@@ -34,23 +41,12 @@ void FigureA(void) {
 	glLoadIdentity();
 
 	// draw background polygon
-	glBegin(style);
-	glVertex2f(radius * cos(angle) + originX, radius * sin(angle) + originY);
-	for (int k = 0; k < numSides; k++) // repeat n times
-	{
-		angle += angleInc;
-		glVertex2f(radius * cos(angle) + originX, radius * sin(angle) + originY);
-	}
-	glEnd();
+	drawNGon(0, 0, 3, 160, angle, angleInc, style);
 
 	// variables to define individual shape parameteres
-	originX = 0;
-	originY = 0;
-	radius = 64;
-	numSides = 3;
 	rotAngle = 0;
 	angle = rotAngle * pi / 180;  // initial angle
-	angleInc = 2 * pi / numSides; //angle increment
+	angleInc = 2 * pi / 3; //angle increment
 
 	// variables for drawing multiple shapes
 	float numShapes = 3;
@@ -76,16 +72,8 @@ void FigureA(void) {
 		glTranslatef(transX, 0, 0);
 		glScalef(scaleX, scaleY, 1.0);
 
-		// draw shape
-		glBegin(style);
-		glVertex2f(radius * cos(angle) + originX, radius * sin(angle) + originY);
-		for (int k = 0; k < numSides; k++) // repeat n times
-		{
-			angle += angleInc;
-			glVertex2f(radius * cos(angle) + originX, radius * sin(angle) + originY);
-			//cout << "Coord: " << "(" << radius * cos(angle) + originX << ", " << radius * sin(angle) + originY << ")" << endl;
-		}
-		glEnd();
+		// draw star point
+		drawNGon(0, 0, 3, 64, angle, angleInc, style);
 
 		// change angle for next triangle
 		shapeAngle += shapeAngleMod;
@@ -93,13 +81,9 @@ void FigureA(void) {
 
 	//////// Center shape ////////
 	// variables to define individual shape parameteres
-	originX = 0;
-	originY = 0;
-	radius = 32;
-	numSides = 3;
 	rotAngle = 30;
 	angle = rotAngle * pi / 180;  // initial angle
-	angleInc = 2 * pi / numSides; //angle increment
+	angleInc = 2 * pi / 3; //angle increment
 
 	// change color center shape
 	glColor3f(colorCodes[6], colorCodes[7], colorCodes[8]);
@@ -111,14 +95,7 @@ void FigureA(void) {
 	glLoadIdentity();
 
 	// draw inner shape
-	glBegin(style);
-	glVertex2f(radius * cos(angle) + originX, radius * sin(angle) + originY);
-	for (int k = 0; k < numSides; k++) // repeat n times
-	{
-		angle += angleInc;
-		glVertex2f(radius * cos(angle) + originX, radius * sin(angle) + originY);
-	}
-	glEnd();
+	drawNGon(0, 0, 3, 32, angle, angleInc, style);
 
 	glutSwapBuffers();
 }
@@ -127,13 +104,9 @@ void FigureB(void) {
 	window.clearScreen(); //clear the window
 
 	// variables to define shape parameteres
-	float originX = 0;
-	float originY = 0;
-	float radius = 150;
-	float numSides = 5;
 	float rotAngle = 18;
 	double angle = rotAngle * pi / 180;  // initial angle
-	double angleInc = 2 * pi / numSides; //angle increment
+	double angleInc = 2 * pi / 5; //angle increment
 
 	////////  Background polygon ////////
 	// change color of backgrounf polygon
@@ -145,24 +118,13 @@ void FigureB(void) {
 	glLoadIdentity();
 
 	// draw background polygon
-	glBegin(style);
-	glVertex2f(radius * cos(angle) + originX, radius * sin(angle) + originY);
-	for (int k = 0; k < numSides; k++) // repeat n times
-	{
-		angle += angleInc;
-		glVertex2f(radius * cos(angle) + originX, radius * sin(angle) + originY);
-	}
-	glEnd();
+	drawNGon(0, 0, 5, 150, angle, angleInc, style);
 
 	//////// Star ////////
 	// variables to define individual shape parameteres
-	originX = 0;
-	originY = 0;
-	radius = 61;
-	numSides = 3;
 	rotAngle = 0;
 	angle = rotAngle * pi / 180;  // initial angle
-	angleInc = 2 * pi / numSides; //angle increment
+	angleInc = 2 * pi / 3; //angle increment
 
 	// variables to define individual shape parameteres
 	float numShapes = 5;
@@ -188,15 +150,7 @@ void FigureB(void) {
 		glScalef(scaleX, scaleY, 1.0);
 
 		// draw shape
-		glBegin(style);
-		glVertex2f(radius * cos(angle) + originX, radius * sin(angle) + originY);
-		for (int k = 0; k < numSides; k++) // repeat n times
-		{
-			angle += angleInc;
-			glVertex2f(radius * cos(angle) + originX, radius * sin(angle) + originY);
-			//cout << "Coord: " << "(" << radius * cos(angle) + originX << ", " << radius * sin(angle) + originY << ")" << endl;
-		}
-		glEnd();
+		drawNGon(0, 0, 3, 61, angle, angleInc, style);
 
 		// change angle for next triangle
 		shapeAngle += shapeAngleMod;
@@ -204,13 +158,9 @@ void FigureB(void) {
 
 	//////// Center shape ////////
 	// variables to define individual shape parameteres
-	originX = 0;
-	originY = 0;
-	radius = 18;
-	numSides = 5;
 	rotAngle = 54;
 	angle = rotAngle * pi / 180;  // initial angle
-	angleInc = 2 * pi / numSides; //angle increment
+	angleInc = 2 * pi / 5; //angle increment
 
 	// change color center shape
 	glColor3f(colorCodes[6], colorCodes[7], colorCodes[8]);
@@ -222,14 +172,7 @@ void FigureB(void) {
 	glLoadIdentity();
 
 	// draw inner shape
-	glBegin(style);
-	glVertex2f(radius * cos(angle) + originX, radius * sin(angle) + originY);
-	for (int k = 0; k < numSides; k++) // repeat n times
-	{
-		angle += angleInc;
-		glVertex2f(radius * cos(angle) + originX, radius * sin(angle) + originY);
-	}
-	glEnd();
+	drawNGon(0, 0, 5, 18, angle, angleInc, style);
 
 	glutSwapBuffers();
 }
@@ -239,13 +182,9 @@ void FigureC(void) {
 
 	//////// Star ////////
 	// variables to define individual shape parameteres
-	float originX = 0;
-	float originY = 0;
-	float radius = 60;
-	float numSides = 3;
 	float rotAngle = 0;
 	float angle = rotAngle * pi / 180;  // initial angle
-	float angleInc = 2 * pi / numSides; //angle increment
+	float angleInc = 2 * pi / 3; //angle increment
 
 	// variables to define individual shape parameteres
 	float numShapes = 7;
@@ -271,15 +210,7 @@ void FigureC(void) {
 		glScalef(scaleX, scaleY, 1.0);
 
 		// draw shape
-		glBegin(style);
-		glVertex2f(radius * cos(angle) + originX, radius * sin(angle) + originY);
-		for (int k = 0; k < numSides; k++) // repeat n times
-		{
-			angle += angleInc;
-			glVertex2f(radius * cos(angle) + originX, radius * sin(angle) + originY);
-			//cout << "Coord: " << "(" << radius * cos(angle) + originX << ", " << radius * sin(angle) + originY << ")" << endl;
-		}
-		glEnd();
+		drawNGon(0, 0, 3, 60, angle, angleInc, style);
 
 		// change angle for next triangle
 		shapeAngle += shapeAngleMod;
@@ -287,13 +218,9 @@ void FigureC(void) {
 
 	//////// Center shape ////////
 	// variables to define individual shape parameteres
-	originX = 0;
-	originY = 0;
-	radius = 29;
-	numSides = 7;
 	rotAngle = 13;
 	angle = rotAngle * pi / 180;  // initial angle
-	angleInc = 2 * pi / numSides; //angle increment
+	angleInc = 2 * pi / 7; //angle increment
 
 	// change color center shape depends on the style
 	if (style == GL_LINE_STRIP || style == GL_LINE_STIPPLE) {
@@ -310,14 +237,7 @@ void FigureC(void) {
 	glLoadIdentity();
 
 	// draw inner shape (must be polygon for easier covering of center
-	glBegin(GL_POLYGON);
-	glVertex2f(radius * cos(angle) + originX, radius * sin(angle) + originY);
-	for (int k = 0; k < numSides; k++) // repeat n times
-	{
-		angle += angleInc;
-		glVertex2f(radius * cos(angle) + originX, radius * sin(angle) + originY);
-	}
-	glEnd();
+	drawNGon(0, 0, 7, 29, angle, angleInc, GL_POLYGON);
 
 	glutSwapBuffers();
 }
@@ -326,13 +246,9 @@ void FigureD(void) {
 	window.clearScreen(); //clear the window
 
 	// variables to define shape parameteres
-	float originX = 0;
-	float originY = 0;
-	float radius = 150;
-	float numSides = 6;
 	float rotAngle = 90;
 	double angle = rotAngle * pi / 180;  // initial angle
-	double angleInc = 2 * pi / numSides; //angle increment
+	double angleInc = 2 * pi / 6; //angle increment
 
 	////////  Background polygon ////////
 	// change color of backgrounf polygon
@@ -344,24 +260,13 @@ void FigureD(void) {
 	glLoadIdentity();
 
 	// draw background polygon
-	glBegin(style);
-	glVertex2f(radius * cos(angle) + originX, radius * sin(angle) + originY);
-	for (int k = 0; k < numSides; k++) // repeat n times
-	{
-		angle += angleInc;
-		glVertex2f(radius * cos(angle) + originX, radius * sin(angle) + originY);
-	}
-	glEnd();
+	drawNGon(0, 0, 6, 150, angle, angleInc, style);
 
 	//////// Star ////////
 	// variables to define individual shape parameteres
-	originX = 0;
-	originY = 0;
-	radius = 50;
-	numSides = 3;
 	rotAngle = 0;
 	angle = rotAngle * pi / 180;  // initial angle
-	angleInc = 2 * pi / numSides; //angle increment
+	angleInc = 2 * pi / 3; //angle increment
 
 	// variables to define individual shape parameteres
 	float numShapes = 6;
@@ -387,15 +292,7 @@ void FigureD(void) {
 		glScalef(scaleX, scaleY, 1.0);
 
 		// draw shape
-		glBegin(style);
-		glVertex2f(radius * cos(angle) + originX, radius * sin(angle) + originY);
-		for (int k = 0; k < numSides; k++) // repeat n times
-		{
-			angle += angleInc;
-			glVertex2f(radius * cos(angle) + originX, radius * sin(angle) + originY);
-			//cout << "Coord: " << "(" << radius * cos(angle) + originX << ", " << radius * sin(angle) + originY << ")" << endl;
-		}
-		glEnd();
+		drawNGon(0, 0, 3, 50, angle, angleInc, style);
 
 		// change angle for next triangle
 		shapeAngle += shapeAngleMod;
@@ -403,13 +300,9 @@ void FigureD(void) {
 
 	//////// Center shape ////////
 	// variables to define individual shape parameteres
-	originX = 0;
-	originY = 0;
-	radius = 40;
-	numSides = 6;
 	rotAngle = 0;
 	angle = rotAngle * pi / 180;  // initial angle
-	angleInc = 2 * pi / numSides; //angle increment
+	angleInc = 2 * pi / 6; //angle increment
 
 	// draw center shape, in this case its a pentagon
 	// set up viewport
@@ -423,38 +316,20 @@ void FigureD(void) {
 		// change color center shape(must be white to match background)
 		glColor3f(1, 1, 1);
 		// need to hide inner triangle edges
-		glBegin(GL_POLYGON);
-		glVertex2f(radius * cos(angle) + originX, radius * sin(angle) + originY);
-		for (int k = 0; k < 360; k++) // repeat n times
-		{
-			glVertex2d(originX + cos((k * pi) / 180) * radius, originY + sin((k * pi) / 180) * radius);
-		}
-		glEnd();
+		drawNGon(0, 0, 6, 40, angle, angleInc, GL_POLYGON);
 
 		// change color center shape
 		glColor3f(colorCodes[6], colorCodes[7], colorCodes[8]);
 
 		// draw center shape
-		glBegin(style);
-		glVertex2f(radius * cos(angle) + originX, radius * sin(angle) + originY);
-		for (int k = 0; k < 360; k++) // repeat n times
-		{
-			glVertex2d(originX + cos((k * pi) / 180) * radius, originY + sin((k * pi) / 180) * radius);
-		}
-		glEnd();
+		drawNGon(0, 0, 6, 40, angle, angleInc, style);
 	}
 	else {
 		// change color center shape outline
 		glColor3f(colorCodes[6], colorCodes[7], colorCodes[8]);
 
 		// draw center shape
-		glBegin(style);
-		glVertex2f(radius * cos(angle) + originX, radius * sin(angle) + originY);
-		for (int k = 0; k < 360; k++) // repeat n times
-		{
-			glVertex2d(originX + cos((k * pi) / 180) * radius, originY + sin((k * pi) / 180) * radius);
-		}
-		glEnd();
+		drawNGon(0, 0, 6, 40, angle, angleInc, style);
 	}
 
 	glutSwapBuffers();
