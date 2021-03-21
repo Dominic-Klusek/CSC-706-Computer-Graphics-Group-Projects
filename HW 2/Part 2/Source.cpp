@@ -1,3 +1,6 @@
+// CSC 706 HW 2 Part 2
+// Robert Kigobe, Dominic Klusek, Novichenko Konstantin
+
 #include "masks.h"
 #include <fstream>
 #include <iostream>
