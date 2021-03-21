@@ -8,83 +8,44 @@ using namespace std;
 char title[] = "Working with Canvas";
 Canvas window = Canvas(500, 500, title);
 
+void drawCircle(float originX, float originY, float radius, float start, float end, GLenum style) {
+	glBegin(style);
+	for (int i = start; i <= end; i += 1) {
+		glVertex2f(originX + cos((i * pi) / 180) * radius, originY + sin((i * pi) / 180) * radius);
+	}
+	glEnd();
+}
+
 void drawYingYang(void) {
 	glClear(GL_COLOR_BUFFER_BIT); // Clear display window.
-	// variables that control circle size and location
-	float originX = 250;
-	float originY = 250;
-	float radius = 200;
 
 	// draw top half of symbol
 	glColor3f(0, 0, 0); // set color
-	glBegin(GL_POLYGON);
-	for (int i = 0; i <= 180; i += 1) {
-		glVertex2f(originX + cos((i * pi) / 180) * radius, originY + sin((i * pi) / 180) * radius);
-	}
-	glEnd();
+	drawCircle(250, 250, 200, 0, 180, GL_POLYGON);
 
 	// draw bottom half of symbol
 	glColor3f(1, 1, 1); // set color
-	glBegin(GL_POLYGON);
-	for (int i = 180; i <= 360; i += 1) {
-		glVertex2f(originX + cos((i * pi) / 180) * radius, originY + sin((i * pi) / 180) * radius);
-	}
-	glEnd();
+	drawCircle(250, 250, 200, 180, 360, GL_POLYGON);
 
 	// draw circle to create curve of top half
-	originX = 350;
-	originY = 250;
-	radius = 100;
 	glColor3f(0, 0, 0); // set color
-	glBegin(GL_POLYGON);
-	for (int i = 0; i <= 360; i += 1) {
-		glVertex2f(originX + cos((i * pi) / 180) * radius, originY + sin((i * pi) / 180) * radius);
-	}
-	glEnd();
+	drawCircle(350, 250, 100, 0, 360, GL_POLYGON);
 
 	// draw circle to create curve of bottom half
-	originX = 150;
-	originY = 250;
-	radius = 100;
 	glColor3f(1, 1, 1); // set color
-	glBegin(GL_POLYGON);
-	for (int i = 0; i <= 360; i += 1) {
-		glVertex2f(originX + cos((i * pi) / 180) * radius, originY + sin((i * pi) / 180) * radius);
-	}
-	glEnd();
+	drawCircle(150, 250, 100, 0, 360, GL_POLYGON);
 
 	// draw "center" dot
-	originX = 350;
-	originY = 250;
-	radius = 25;
 	glColor3f(1, 1, 1); // set color
-	glBegin(GL_POLYGON);
-	for (int i = 0; i <= 360; i += 1) {
-		glVertex2f(originX + cos((i * pi) / 180) * radius, originY + sin((i * pi) / 180) * radius);
-	}
-	glEnd();
+	drawCircle(350, 250, 25, 0, 360, GL_POLYGON);
 
 	// draw "center" dot
-	originX = 150;
-	originY = 250;
-	radius = 25;
 	glColor3f(0, 0, 0); // set color
-	glBegin(GL_POLYGON);
-	for (int i = 0; i <= 360; i += 1) {
-		glVertex2f(originX + cos((i * pi) / 180) * radius, originY + sin((i * pi) / 180) * radius);
-	}
-	glEnd();
+	drawCircle(150, 250, 25, 0, 360, GL_POLYGON);
 
 	//draw outline
-	originX = 250;
-	originY = 250;
-	radius = 200;
 	glColor3f(0, 0, 0); // set color
-	glBegin(GL_LINE_STRIP);
-	for (int i = 0; i <= 360; i += 1) {
-		glVertex2f(originX + cos((i * pi) / 180) * radius, originY + sin((i * pi) / 180) * radius);
-	}
-	glEnd();
+	drawCircle(250, 250, 200, 0, 360, GL_LINE_STRIP);
 
 	glutSwapBuffers();
 }
