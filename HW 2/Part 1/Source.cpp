@@ -8,7 +8,7 @@
 #include "Canvas_freeglut.h"
 using namespace std;
 
-char title[] = "Working with Canvas";
+char title[] = "Dino Disaster on a Canvas";
 Canvas window = Canvas(1000, 1000, title);
 
 void drawPolyLineFile(char* fileName)

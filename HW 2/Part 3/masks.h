@@ -164,7 +164,6 @@ GLubyte fire[] = {
 void drawACircleWith(double centerX, double CenterY, double start, double end, double raduisX, double raduisY, GLenum mode)
 {
 	glBegin(mode);
-		glVertex2d(centerX, CenterY);
 		for (double i = start; i <= end; i++)
 		{
 			glVertex2d(centerX + cos((i * pi) / 180) * raduisX, CenterY + sin((i * pi) / 180) * raduisY);

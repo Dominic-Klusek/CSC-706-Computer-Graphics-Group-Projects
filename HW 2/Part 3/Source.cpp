@@ -2,18 +2,19 @@
 // Robert Kigobe, Dominic Klusek, Novichenko Konstantin
 
 #include "masks.h"
-#include <fstream>
-#include <iostream>
 #include <GL/glut.h> // (or others, depending on the system in use)
 #include "Canvas_freeglut.h"
 using namespace std;
 
-char title[] = "Working with Canvas";
+// create a global canvas object
+char title[] = "Drawing N-Gons";
 Canvas window = Canvas(500, 500, title);
-GLenum mode = GL_POLYGON;
-GLfloat colorCodes[9] = {0.55, 0.55, 0.55, 0, 0, 0, 0.25, 0.25, 0.25};
-int currentFigure = 1;
-GLenum style = GL_POLYGON;
+
+// define the current color we are using for the Background Polygon, Star Points, and Inner Polygon
+GLfloat colorCodes[9] = {0.55, 0.55, 0.55, 0, 0, 0, 1, 1, 1};
+
+int currentFigure = 1; // current figure index (for help redrawing on change of color or style)
+GLenum style = GL_LINE_STRIP; // the current style of our figures
 
 void drawNGon(float originX, float originY, float numSides, float radius, float angle, float angleInc, GLenum polyStyle) {
 	glBegin(polyStyle);
@@ -55,7 +56,7 @@ void FigureA(void) {
 	float numShapes = 3;
 	float shapeAngle = 90;
 	float shapeAngleMod = 120;
-	float transX = 64;
+	float transX = 63;
 	float scaleX = 1.5;
 	float scaleY = 0.5;
 
@@ -97,8 +98,10 @@ void FigureA(void) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	// draw inner shape
-	drawNGon(0, 0, 3, 32, angle, angleInc, style);
+	// draw inner shape, linewidth adjustment is to ensure star point edge covering
+	glLineWidth(2.0);
+	drawNGon(0, 0, 3, 30, angle, angleInc, style);
+	glLineWidth(1.0);
 
 	glutSwapBuffers();
 }
@@ -133,7 +136,7 @@ void FigureB(void) {
 	float numShapes = 5;
 	float shapeAngle = -54;
 	float shapeAngleMod = 72;
-	float transX = 60;
+	float transX = 59;
 	float scaleX = 1.5;
 	float scaleY = 0.2;
 
@@ -174,8 +177,10 @@ void FigureB(void) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	// draw inner shape
-	drawNGon(0, 0, 5, 18, angle, angleInc, style);
+	// draw inner shape, linewidth adjustment is to ensure star point edge covering
+	glLineWidth(2.0);
+	drawNGon(0, 0, 5, 16, angle, angleInc, style);
+	glLineWidth(1.0);
 
 	glutSwapBuffers();
 }
@@ -226,12 +231,7 @@ void FigureC(void) {
 	angleInc = 2 * pi / 7; //angle increment
 
 	// change color center shape depends on the style
-	if (style == GL_LINE_STRIP || style == GL_LINE_STIPPLE) {
-		glColor3f(1, 1, 1);
-	}
-	else {
-		glColor3f(colorCodes[3], colorCodes[4], colorCodes[5]);
-	}
+	glColor3f(colorCodes[6], colorCodes[7], colorCodes[8]);
 
 	// draw center shape, in this case its a sectagon
 	// set up viewport
@@ -239,8 +239,10 @@ void FigureC(void) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	// draw inner shape (must be polygon for easier covering of center
-	drawNGon(0, 0, 7, 29, angle, angleInc, GL_POLYGON);
+	// draw inner shape, linewidth adjustment is to ensure star point edge covering
+	glLineWidth(2.0);
+	drawNGon(0, 0, 7, 28, angle, angleInc, style);
+	glLineWidth(1.0);
 
 	glutSwapBuffers();
 }
@@ -314,26 +316,16 @@ void FigureD(void) {
 	glLoadIdentity();
 
 	// draw inner shape
+	// change color center shape(must be white to match background)
+	glColor3f(1, 1, 1);
+	// need to hide inner triangle edges
+	drawNGon(0, 0, 6, 40, angle, angleInc, GL_POLYGON);
 
-	if (style == GL_LINE_STRIP || style == GL_LINE_STIPPLE) {
-		// change color center shape(must be white to match background)
-		glColor3f(1, 1, 1);
-		// need to hide inner triangle edges
-		drawNGon(0, 0, 6, 40, angle, angleInc, GL_POLYGON);
+	// change color center shape
+	glColor3f(colorCodes[6], colorCodes[7], colorCodes[8]);
 
-		// change color center shape
-		glColor3f(colorCodes[6], colorCodes[7], colorCodes[8]);
-
-		// draw center shape
-		drawNGon(0, 0, 6, 40, angle, angleInc, style);
-	}
-	else {
-		// change color center shape outline
-		glColor3f(colorCodes[6], colorCodes[7], colorCodes[8]);
-
-		// draw center shape
-		drawNGon(0, 0, 6, 40, angle, angleInc, style);
-	}
+	// draw center shape
+	drawACircleWith(0, 0, 0, 360, 40, 40, style);
 
 	glutSwapBuffers();
 }
