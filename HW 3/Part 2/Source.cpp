@@ -20,14 +20,37 @@ void displaySolid(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
+	/*glEnable(GL_LIGHT0);
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_NORMALIZE);
-	GLfloat lightPosition[] = { 0.0f,0.0f,100.0f, 0.0f };
+	GLfloat lightPosition[] = { 0.0f,0.0f, 10.0f, 0.0f };
 	GLfloat lightIntensity[] = { 0.9f, 0.9f, 0.9f, 1.0f };
+	GLfloat lightDirection[] = { 0.0, 0.0, -1.0 };
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightIntensity);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightIntensity);*/
+
+	glEnable(GL_LIGHT1);
+	glShadeModel(GL_SMOOTH);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_NORMALIZE);
+	GLfloat light1_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
+	GLfloat light1_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat light1_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat light1_position[] = { 0.0, 0.0, 100.0f, 1.0 };
+	GLfloat spot_direction[] = { 0.0, 0.0, -1.0 };
+
+	glLightfv(GL_LIGHT1, GL_AMBIENT, light1_ambient);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_diffuse);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, light1_specular);
+	glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
+
+	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 135);
+	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, spot_direction);
+	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 1.0);
+
+	glEnable(GL_LIGHT1);
+
 
 
 	GLfloat mat_ambient[] = { 0.5f, 0.5f, 0.6f, 1.0f };
@@ -38,6 +61,7 @@ void displaySolid(void)
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
 	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+
 
 	int teapotSize = 45;
 	int x = -W + teapotSize * 2;
