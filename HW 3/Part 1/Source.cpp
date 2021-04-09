@@ -1,7 +1,96 @@
 // house.cpp
-#include <windows.h>
+//#include <windows.h>
+#include <time.h>
+#include <stdlib.h>
 #include <iostream>
 #include <GL/glut.h>
+using namespace std;
+
+void createCylinder(float trunkRadius, float trunkHeight) {
+	/* while looking for ideas I found a function to draw a tree
+	* didn't use that function but modified his cylinder function
+	* Source Link: http://www.mhzn.net/index.php/8-c-opengl/2-first-post
+	*/
+	// create quadratic object
+	GLUquadric* obj = gluNewQuadric();
+
+	// draw tree part
+	glPushMatrix();
+
+	glRotatef(-90, 1.0, 0.0, 0.0); // always necessary since cylinder is drawn along z-axis
+	gluCylinder(obj, trunkRadius, trunkRadius/2.0, trunkHeight, 20, 20);
+	glPopMatrix();
+}
+
+void createTree(float transX, float transZ) {
+	/*
+	* Function to create a tree
+	* Made from simple solid Toruses, and a Cylinder
+	*/
+	// tree leaves
+	float transY = 0.6; // have a variable to hold y translation
+	float innerRadius = 0.14;
+	float outerRadius = 0.28;
+	glColor3f(0, 0.2, 0.0); // set color
+	for (int i = 0; i < 7; i++) {
+		glPushMatrix();
+		glTranslatef(transX, transY, transZ);
+		glRotatef(-90, 1, 0, 0);
+		glutSolidTorus(innerRadius, outerRadius, 20, 20);
+		glPopMatrix();
+
+		transY = transY + 0.1;
+		innerRadius = innerRadius / 1.2;
+		outerRadius = outerRadius / 1.2;
+	}
+
+	// trunk
+	glColor3f(0.2, 0.2, 0);
+	glPushMatrix();
+	glTranslatef(transX, 0, transZ);
+	createCylinder(0.15, 0.7);
+	glPopMatrix();
+}
+
+void createFlower() {
+	/*
+	* Function to create a flower
+	* Stem is made from a cylinder
+	* Leaves are rotated solid Toruses
+	* the bulb is made from rotated teapots
+	*/
+	// create stem
+	glPushMatrix();
+	glColor3f(0, 0.3, 0.15);
+	createCylinder(0.2, 2);
+	glPopMatrix();
+
+	// create leaves (stretched torus)
+	float angle;
+	for (int i = 0; i < 4; i++) {
+		angle = rand() % 180 - 90;
+		glPushMatrix();
+		glRotatef(angle, 0, 0, 1);
+		glRotatef(-45, 1, 1, 1);
+		glScalef(0.5, 2, 0.5);
+		glutSolidTorus(0.25, 0.3, 20, 20);
+		glPopMatrix();
+	}
+
+	// create bulb
+	glColor3f(1.00, 0.40, 0.84);
+	angle = 0;
+	for (int i = 0; i < 12; i++) {
+		glPushMatrix();
+		glTranslatef(0, 2.25, 0);
+		glRotatef(35, 1, 0, 0);
+		glRotatef(angle, 0, 1, 0);
+		glutSolidTeapot(0.5);
+		glPopMatrix();
+		angle += 30;
+	}
+
+}
 
 void display() {
 	/* clear window */
@@ -13,18 +102,63 @@ void display() {
 	/* draw scene */
 	glPushMatrix();
 
-	GLfloat light0_ambient[] = { 0.49, 0.55, 0.61, 1.0 };
-	GLfloat light0_diffuse[] = { 0.25f, 0.25f, 0.25f, 1.0 };
-	GLfloat light0_specular[] = { 0.8f, 0.8f, 0.8f, 1.0 };
+	GLfloat light0_ambient[] = { 0.25, 0.55, 0.85, 1.0 };
+	GLfloat light0_diffuse[] = { 0.0f, 0.15f, 0.30f, 1.0 };
+	GLfloat light0_specular[] = { 0.60f, 0.8f, 1.0f, 1.0 };
+	GLfloat light0_position[] = { 0.8f, 0.8f, 0.5f, 1.0 };
 
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light0_specular);
-	//glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
+	glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
 
 	glEnable(GL_LIGHT0);
 
-	// door
+	// set material
+	GLfloat ambientLight[] = { 0.10588, 0.058824, 0.0113725 };
+	GLfloat diffuseLight[] = { 0.427451, 0.470588, 0.541176 };
+	GLfloat specularLight[] = { 0.3333, 0.3333, 0.521569 };
+	glMaterialfv(GL_FRONT, GL_AMBIENT, ambientLight);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, ambientLight);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, ambientLight);
+
+	/////////// ground ///////////
+	glPushMatrix();
+	glColor3f(0.13, 0.40, 0.00);
+	glTranslatef(0, -1.5, 0.0);
+	glScalef(25, 0.25, 25);
+	glutSolidCube(0.25);
+	glPopMatrix();
+		
+	/////////// driveway ///////////
+	glPushMatrix();
+	glColor3f(0, 0, 0.00);
+	glTranslatef(0.8, -1.45, 1.7);
+	glScalef(15, 0.25, 5);
+	glutSolidCube(0.25);
+	glPopMatrix();
+
+	/////////// flowers ///////////
+	float transX;
+	float transZ;
+	for (int i = 0; i < 10; i++) {
+		transX = rand() % 2 + 1.75 + (rand() % 2) / (float)(rand() % 4 + 2);
+		transZ = (rand() % 2) + (rand() % 3) / (float)(rand() % 4 + 2);
+
+		glPushMatrix();
+		glTranslatef(transX, 0, transZ);
+		glScalef(0.1, 0.1, 0.1);
+		createFlower();
+		glPopMatrix();
+	}
+	
+	/////////// tree ///////////
+	glPushMatrix();
+	glScalef(1.2, 1.8, 1.2);
+	createTree(2.0, -0.5);
+	glPopMatrix();
+
+	/////////// door ///////////
 	glPushMatrix();
 	glColor3f(0.25, 0.21, 0.04);
 	glTranslatef(-0.35, -0.35, 1.0);
@@ -32,20 +166,13 @@ void display() {
 	glutSolidCube(0.25);
 	glPopMatrix();
 
-	// door handle
+	/////////// door handle ///////////
 	glPushMatrix();
 	glTranslatef(-0.10, -0.3, 1.1);
 	glutSolidSphere(0.05, 128, 128);
 	glPopMatrix();
 
-	// house
-	//GLfloat ambientLight[] = { 0.10588, 0.058824, 0.0113725};
-	//GLfloat diffuseLight[] = { 0.427451, 0.470588, 0.541176 };
-	//GLfloat specularLight[] = { 0.3333, 0.3333, 0.521569 };
-	//glMaterialfv(GL_FRONT, GL_AMBIENT, ambientLight);
-	//glMaterialfv(GL_FRONT, GL_DIFFUSE, ambientLight);
-	//glMaterialfv(GL_FRONT, GL_SPECULAR, ambientLight);
-
+	/////////// house ///////////
 	glPushMatrix();
 	glColor3f(0, 1, 0);
 	glutSolidCube(2); // building
@@ -54,7 +181,7 @@ void display() {
 	// window
 	glPushMatrix();
 	glColor3f(0.8, 0.8, 0);
-	glTranslatef(0.55, 0.35, 1.0);
+	glTranslatef(0.55, 0.35, 0.97);
 	glScaled(3, 3, 0.25);
 	glutSolidCube(0.25); // building
 	glPopMatrix();
@@ -75,7 +202,7 @@ void display() {
 	glutSolidCube(.25);
 	glPopMatrix();
 
-	// car
+	/////////// car ///////////
 	// body
 	glColor3f(0.5, 0.5, 0.5);
 	glPushMatrix();
@@ -120,6 +247,9 @@ void reshape(int width, int height) {
 }
 
 int main(int argc, char* argv[]) {
+	// seed rand function
+	srand(time(NULL));
+
 	/* initialize GLUT, using any commandline parameters passed to the program*/
 	glutInit(&argc, argv);
 
