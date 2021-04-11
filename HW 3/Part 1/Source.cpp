@@ -93,20 +93,30 @@ void createFlower() {
 }
 
 void display() {
-	/* clear window */
+	/////////// clear window ///////////
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	/* future matrix manipulations should affect the modelview matrix */
+	/////////// future matrix manipulations should affect ///////////
+	/////////// the modelview matrix ///////////
 	glMatrixMode(GL_MODELVIEW);
 
-	/* draw scene */
+	/////////// draw scene ///////////
 	glPushMatrix();
 
+	/*
+	// Nightime Light Parameters
 	GLfloat light0_ambient[] = { 0.25, 0.55, 0.85, 1.0 };
 	GLfloat light0_diffuse[] = { 0.0f, 0.15f, 0.30f, 1.0 };
 	GLfloat light0_specular[] = { 0.60f, 0.8f, 1.0f, 1.0 };
+	GLfloat light0_position[] = { 0.8f, 0.8f, 0.5f, 1.0 };*/
+
+	/////////// Light Parameters ///////////
+	GLfloat light0_ambient[] = { 0.6, 0.6, 0.6, 1.0 };
+	GLfloat light0_diffuse[] = { 0.6f, 0.6f, 0.6f, 1.0 };
+	GLfloat light0_specular[] = { 0.8f, 0.8f, 0.8f, 1.0 };
 	GLfloat light0_position[] = { 0.8f, 0.8f, 0.5f, 1.0 };
 
+	/////////// Set Light Parameters and enable light ///////////
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light0_specular);
@@ -114,7 +124,7 @@ void display() {
 
 	glEnable(GL_LIGHT0);
 
-	// set material
+	/////////// set material ///////////
 	GLfloat ambientLight[] = { 0.10588, 0.058824, 0.0113725 };
 	GLfloat diffuseLight[] = { 0.427451, 0.470588, 0.541176 };
 	GLfloat specularLight[] = { 0.3333, 0.3333, 0.521569 };
@@ -132,7 +142,7 @@ void display() {
 		
 	/////////// driveway ///////////
 	glPushMatrix();
-	glColor3f(0, 0, 0.00);
+	glColor3f(0, 0, 0);
 	glTranslatef(0.8, -1.45, 1.7);
 	glScalef(15, 0.25, 5);
 	glutSolidCube(0.25);
@@ -141,16 +151,53 @@ void display() {
 	/////////// flowers ///////////
 	float transX;
 	float transZ;
-	for (int i = 0; i < 10; i++) {
-		transX = rand() % 2 + 1.75 + (rand() % 2) / (float)(rand() % 4 + 2);
-		transZ = (rand() % 2) + (rand() % 3) / (float)(rand() % 4 + 2);
 
-		glPushMatrix();
-		glTranslatef(transX, 0, transZ);
-		glScalef(0.1, 0.1, 0.1);
-		createFlower();
-		glPopMatrix();
+	transX = 2.0;
+	transZ = 0.75;
+
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			glPushMatrix();
+			glTranslatef(transX, 0, transZ);
+			glScalef(0.1, 0.1, 0.1);
+			createFlower();
+			glPopMatrix();
+			transZ += 0.3;
+		}
+
+		transZ = 0.75;
+		transX += 0.3;
 	}
+
+	/////////// flower box ///////////
+	glColor3f(0.20, 0.03, 0.00);
+	glPushMatrix();
+	glTranslatef(1.75, 0, 1.15);
+	glRotatef(90, 0, 1, 0);
+	glScalef(1.4, 0.1, 0.1);
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(2.4, 0, 0.50);
+	glRotatef(180, 0, 1, 0);
+	glScalef(1.4, 0.1, 0.1);
+	glutSolidCube(1.0);
+	glPopMatrix();
+	
+	glPushMatrix();
+	glTranslatef(3.05, 0, 1.15);
+	glRotatef(90, 0, 1, 0);
+	glScalef(1.4, 0.1, 0.1);
+	glutSolidCube(1.0);
+	glPopMatrix();
+	
+	glPushMatrix();
+	glTranslatef(2.40, 0, 1.85);
+	glRotatef(180, 0, 1, 0);
+	glScalef(1.4, 0.1, 0.1);
+	glutSolidCube(1.0);
+	glPopMatrix();
 	
 	/////////// tree ///////////
 	glPushMatrix();
@@ -160,7 +207,7 @@ void display() {
 
 	/////////// door ///////////
 	glPushMatrix();
-	glColor3f(0.25, 0.21, 0.04);
+	glColor3f(0.66, 0.76, 0.83);
 	glTranslatef(-0.35, -0.35, 1.0);
 	glScalef(3, 5, 0.25);
 	glutSolidCube(0.25);
@@ -174,13 +221,13 @@ void display() {
 
 	/////////// house ///////////
 	glPushMatrix();
-	glColor3f(0, 1, 0);
+	glColor3f(0.3, 0.3, 0.3);
 	glutSolidCube(2); // building
 	glPopMatrix();
 
 	// window
 	glPushMatrix();
-	glColor3f(0.8, 0.8, 0);
+	glColor3f(0.6, 0.8, 1);
 	glTranslatef(0.55, 0.35, 0.97);
 	glScaled(3, 3, 0.25);
 	glutSolidCube(0.25); // building
@@ -188,15 +235,15 @@ void display() {
 
 	// roof
 	glPushMatrix();
-	glColor3f(1, 0, 0);
-	glTranslated(0,1.35,0);
+	glColor3f(0.56, 0.63, 0.7);
+	glTranslated(0, 1.35, 0);
 	glRotated(-90, 1, 0, 0);
 	glutSolidCone(1.5, 1, 16, 8);
 	glPopMatrix();
 
 	// chimney
 	glPushMatrix();
-	glColor3f(0, 0, 1);
+	glColor3f(0.28, 0.32, 0.35);
 	glTranslated(1, 2, -0.5);
 	glScaled(1, 3, 1);
 	glutSolidCube(.25);
@@ -211,26 +258,27 @@ void display() {
 	glutSolidCube(.5);
 	glPopMatrix();
 
+	glColor3f(0, 0, 0);
 	glPushMatrix();
-	glTranslated(1.45,-0.25,2.5);
+	glTranslated(1.45,-0.25,2.55);
 	glScaled(1, 1, 1);
 	glutSolidTorus(.05, .1, 8, 8); // wheel
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslated(0.55, -0.25, 2.5);
+	glTranslated(0.55, -0.25, 2.55);
 	glScaled(1, 1, 1);
 	glutSolidTorus(.05, .1, 8, 8); // wheel
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslated(1.45, -0.25, 2);
+	glTranslated(1.45, -0.25, 1.95);
 	glScaled(1, 1, 1);
 	glutSolidTorus(.05, .1, 8, 8); // wheel
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslated(0.55, -0.25, 2);
+	glTranslated(0.55, -0.25, 1.95);
 	glScaled(1, 1, 1);
 	glutSolidTorus(.05, .1, 8, 8); // wheel
 	glPopMatrix();
@@ -254,7 +302,7 @@ int main(int argc, char* argv[]) {
 	glutInit(&argc, argv);
 
 	/* setup the size, position, and display mode for new windows */
-	glutInitWindowSize(500, 500);
+	glutInitWindowSize(1000, 1000);
 	glutInitWindowPosition(0, 0);
 	glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH);
 
@@ -273,7 +321,7 @@ int main(int argc, char* argv[]) {
 	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT);
 
 	// Enable shading
-	glShadeModel(GL_FLAT); // GL_FLAT is a rough shading 
+	glShadeModel(GL_SMOOTH); // GL_FLAT is a rough shading 
 	
 	/* define the projection transformation */
 	glMatrixMode(GL_PROJECTION);
