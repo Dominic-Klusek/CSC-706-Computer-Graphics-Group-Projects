@@ -320,7 +320,7 @@ int main(int argc, char* argv[]) {
 
 	/* setup the size, position, and display mode for new windows */
 	glutInitWindowSize(1000, 1000);
-	glutInitWindowPosition(0, 0);
+	glutInitWindowPosition(100, 100);
 	glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH);
 
 	/* create and set up a window */

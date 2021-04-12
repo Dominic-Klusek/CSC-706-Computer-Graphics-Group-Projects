@@ -179,7 +179,8 @@ void timer(int val) {
 	rotationAngle += 5;
 
 	// call function again with delay
-	glutTimerFunc(16, timer, 0);
+	if(spin)
+		glutTimerFunc(16, timer, 0);
 
 	// recall display function
 	glutPostRedisplay();
