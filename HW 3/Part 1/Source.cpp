@@ -103,9 +103,8 @@ void display() {
 	/////////// draw scene ///////////
 	glPushMatrix();
 
-	/*
 	// Nightime Light Parameters
-	GLfloat light0_ambient[] = { 0.25, 0.55, 0.85, 1.0 };
+	/*GLfloat light0_ambient[] = { 0.25, 0.55, 0.85, 1.0 };
 	GLfloat light0_diffuse[] = { 0.0f, 0.15f, 0.30f, 1.0 };
 	GLfloat light0_specular[] = { 0.60f, 0.8f, 1.0f, 1.0 };
 	GLfloat light0_position[] = { 0.8f, 0.8f, 0.5f, 1.0 };*/
@@ -230,7 +229,25 @@ void display() {
 	glColor3f(0.6, 0.8, 1);
 	glTranslatef(0.55, 0.35, 0.97);
 	glScaled(3, 3, 0.25);
-	glutSolidCube(0.25); // building
+	glutSolidCube(0.25); 
+	glPopMatrix();
+
+	// window supports
+	glPushMatrix();
+	glColor3f(0.15, 0.19, 0.0);
+	glTranslatef(0.55, 0.35, 0.99);
+	glRotatef(180, 0, 1, 0);
+	glScalef(1.5, 0.1, 0.1);
+	glutSolidCube(0.5);
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3f(0.15, 0.19, 0.0);
+	glTranslatef(0.55, 0.35, 0.99);
+	glRotatef(90, 0, 0, 1);
+	glRotatef(180, 0, 1, 0);
+	glScalef(1.5, 0.1, 0.1);
+	glutSolidCube(0.5);
 	glPopMatrix();
 
 	// roof
