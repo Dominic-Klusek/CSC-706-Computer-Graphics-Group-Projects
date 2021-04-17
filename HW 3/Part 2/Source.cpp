@@ -1,3 +1,5 @@
+// CSC 706 HW 3 Part 2
+// Robert Kigobe, Dominic Klusek, Novichenko Konstantin
 #include <GL/glut.h>
 #include <iostream>
 #include <math.h>

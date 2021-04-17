@@ -20,7 +20,7 @@ void createCylinder(float trunkRadius, float trunkHeight) {
 	glPushMatrix();
 
 	glRotatef(-90, 1.0, 0.0, 0.0); // always necessary since cylinder is drawn along z-axis
-	gluCylinder(obj, trunkRadius, trunkRadius/2.0, trunkHeight, 20, 20);
+	gluCylinder(obj, trunkRadius, trunkRadius, trunkHeight, 20, 20);
 	glPopMatrix();
 }
 
@@ -313,6 +313,175 @@ void reshape(int width, int height) {
 	glViewport(0, 0, width, height);
 }
 
+void drawSphere()
+{
+	glutSolidSphere(.1, 16, 16);
+}
+
+void drawHat() {
+
+	glPushMatrix();
+	// transforms for entire hat
+
+	//glRotatef(45, 0, 0, 1);
+	// top of hat
+	glColor3f(0.5, 0.5, 0.5);
+	glPushMatrix();
+	glTranslatef(0, 2, 0);
+	glScalef(2.1, 0.1, 2.1);
+	drawSphere();
+	glPopMatrix();
+
+	// main hat body
+	glPushMatrix();
+	glTranslatef(0, 1.7, 0);
+	createCylinder(0.25, 0.4);
+	glPopMatrix();
+
+	// brim of hat
+	glPushMatrix();
+	glTranslatef(0, 1.7, 0);
+	glScalef(3.5, 0.1, 3.5);
+	drawSphere();
+	glPopMatrix();
+
+	// reset color to white
+	glColor3f(1, 1, 1);
+
+	// main hat body white stripe
+	glPushMatrix();
+	glTranslatef(0, 1.7, 0);
+	createCylinder(0.26, 0.1);
+	glPopMatrix();
+
+	glPopMatrix();
+}
+
+float rotationAngle = 5;
+
+void drawRightSideAppendages()
+{
+	glPushMatrix(); // right arm
+	glTranslatef(0.40f, 0.7f, 0.0f);
+	glRotatef(35, 0, 0, 1);
+	glScalef(0.5f, 4.0f, 0.5f);
+	drawSphere();
+	glPopMatrix();
+
+	glPushMatrix(); // right hand
+	glTranslatef(0.69f, 0.28f, 0.0f);
+	glRotatef(rotationAngle, 0, 0, 1);
+	drawSphere();
+	glPopMatrix();
+
+	glColor3f(0, 1, 0);
+	glPushMatrix(); // right thigh
+	glTranslatef(0.2f, -0.4f, 0.0f);
+	glRotatef(15, 0, 0, 1);
+	glScalef(0.5f, 3.0f, 0.5f);
+	drawSphere();
+	glPopMatrix();
+
+	glColor3f(1, 0, 0);
+	glPushMatrix(); // knee
+	glTranslatef(0.3f, -0.75f, 0.0f);
+	drawSphere();
+	glPopMatrix();
+
+	glColor3f(0, 1, 0);
+	glPushMatrix(); // right shin
+	glTranslatef(0.3f, -0.985f, 0.0f);
+	glRotatef(rotationAngle, 0, 1, 0);
+	glRotatef(6, 0, 0, 1);
+	glScalef(0.5f, 3.0f, 0.5f);
+	drawSphere();
+	glPopMatrix();
+
+	glColor3f(1, 0, 0);
+	glPushMatrix(); // right foot
+	glTranslatef(0.33f, -1.40f, 0.0f);
+	glRotatef(rotationAngle/2.0, 0, 1, 0);
+	glScalef(0.8, 1.0, 1.25);
+	drawSphere(); 
+	glPopMatrix();
+
+	// reset color to white
+	glColor3f(1, 1, 1);
+} 
+
+
+void drawRobot()
+{
+	/////////// clear window ///////////
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	/////////// future matrix manipulations should affect ///////////
+	/////////// the modelview matrix ///////////
+	glMatrixMode(GL_MODELVIEW);
+
+	/////////// Light Parameters ///////////
+	GLfloat light0_ambient[] = { 0.6, 0.6, 0.6, 1.0 };
+	GLfloat light0_diffuse[] = { 0.6f, 0.6f, 0.6f, 1.0 };
+	GLfloat light0_specular[] = { 0.8f, 0.8f, 0.8f, 1.0 };
+	GLfloat light0_position[] = { 0.8f, 0.8f, 0.5f, 1.0 };
+
+	/////////// Set Light Parameters and enable light ///////////
+	glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, light0_specular);
+	glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
+
+	glEnable(GL_LIGHT0);
+
+	/////////// set material ///////////
+	GLfloat ambientLight[] = { 0.10588, 0.058824, 0.0113725 };
+	GLfloat diffuseLight[] = { 0.427451, 0.470588, 0.541176 };
+	GLfloat specularLight[] = { 0.3333, 0.3333, 0.521569 };
+	glMaterialfv(GL_FRONT, GL_AMBIENT, ambientLight);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, ambientLight);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, ambientLight);
+	glPushMatrix();
+	glPushMatrix();
+
+	glPushMatrix(); // head
+	glTranslatef(0.0f, 1.5f, 0.0f);
+	glScalef(3.0f, 3.0f, 3.0f);
+	drawSphere();
+	glPopMatrix();
+
+	drawHat();
+	
+	glPushMatrix(); // body
+	glTranslatef(0.0f, 0.5f, 0.0f);
+	glScalef(2.5f, 7.0f, 2.5f);
+	drawSphere();
+	glPopMatrix();
+
+	drawRightSideAppendages();
+	// use reflection to draw the left side appendages
+	//
+	glPushMatrix();
+	glScalef(-1.0, 1.0, 1.0);
+	drawRightSideAppendages();
+	glPopMatrix();
+
+	glFlush();
+	glutSwapBuffers();
+}
+
+bool spin = true;
+void timer(int val) {
+	// increment rotation angle
+	rotationAngle += 1;
+
+	// call function again with delay
+	if(spin)
+		glutTimerFunc(16, timer, 0);
+
+	// recall display function
+	glutPostRedisplay();
+}
+
 int main(int argc, char* argv[]) {
 	// seed rand function
 	srand(time(NULL));
@@ -327,7 +496,7 @@ int main(int argc, char* argv[]) {
 
 	/* create and set up a window */
 	glutCreateWindow("Hello, 3D House!");
-	glutDisplayFunc(display);
+	glutDisplayFunc(drawRobot);
 	glutReshapeFunc(reshape);
 
 	/* set up depth-buffering */
@@ -351,6 +520,8 @@ int main(int argc, char* argv[]) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt(5.0, 5.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+
+	glutTimerFunc(0, timer, 0);
 
 	/* tell GLUT to wait for events */
 	glutMainLoop();
