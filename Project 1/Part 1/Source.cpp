@@ -8,6 +8,17 @@
 #include <GL/glut.h>
 using namespace std;
 
+float bodyYOffset = 0.0;
+float footXOffset = 0.0;
+float legXOffset = 0;
+float legRotationAngle = 0;
+float cameraRotationAngle = 0.0;
+float rotationAngle = 0.0;
+float animationSpeedRatio = 1.0;
+bool cameraRotation = false;
+bool increase = true;
+bool rightSide = true;
+
 void createCylinder(float trunkRadius, float trunkHeight) {
 	/* while looking for ideas I found a function to draw a tree
 	* didn't use that function but modified his cylinder function
@@ -320,9 +331,6 @@ void drawSphere()
 
 void drawHat() {
 
-	glPushMatrix();
-	// transforms for entire hat
-
 	//glRotatef(45, 0, 0, 1);
 	// top of hat
 	glColor3f(0.5, 0.5, 0.5);
@@ -353,30 +361,85 @@ void drawHat() {
 	glTranslatef(0, 1.7, 0);
 	createCylinder(0.26, 0.1);
 	glPopMatrix();
+}
 
+void drawCane() {
+	// cane main body
+	glPushMatrix();
+	glTranslatef(1.05f, 0, 0);
+	createCylinder(0.02, 1.25);
+	glPopMatrix();
+
+	// cane handle
+	glColor3f(0.5, 0.5, 0.5);
+	glPushMatrix();
+	glTranslatef(1.05f, 1.26, 0);
+	glRotatef(35, 1, 0, 0);
+	createCylinder(0.02, 0.1);
+	glPopMatrix();
+
+	glColor3f(1, 1, 1);
+	glPushMatrix();
+	glTranslatef(1.05f, 1.34, 0.05);
+	glRotatef(65, 1, 0, 0);
+	createCylinder(0.02, 0.1);
+	glPopMatrix();
+
+	glColor3f(0.5, 0.5, 0.5);
+	glPushMatrix();
+	glTranslatef(1.05f, 1.39, 0.15);
+	glRotatef(95, 1, 0, 0);
+	createCylinder(0.02, 0.1);
+	glPopMatrix();
+
+	glColor3f(1, 1, 1);
+	glPushMatrix();
+	glTranslatef(1.05f, 1.37, 0.24);
+	glRotatef(125, 1, 0, 0);
+	createCylinder(0.02, 0.1);
 	glPopMatrix();
 }
 
-float rotationAngle = 5;
-
 void drawRightSideAppendages()
 {
-	glPushMatrix(); // right arm
-	glTranslatef(0.40f, 0.7f, 0.0f);
-	glRotatef(35, 0, 0, 1);
-	glScalef(0.5f, 4.0f, 0.5f);
-	drawSphere();
-	glPopMatrix();
+	if (rightSide) {
+		glPushMatrix(); // right arm
+		glTranslatef(0.55f, 0.9f - bodyYOffset, 0.0);
+		glRotatef(75, 0, 0, 1);
+		glScalef(0.5f, 4.0f, 0.5f);
+		drawSphere();
+		glPopMatrix();
 
-	glPushMatrix(); // right hand
-	glTranslatef(0.69f, 0.28f, 0.0f);
-	glRotatef(rotationAngle, 0, 0, 1);
-	drawSphere();
-	glPopMatrix();
+		glPushMatrix(); // right hand
+		glColor3f(1, 1, 1);
+		glTranslatef(1.05f, 0.8f - bodyYOffset, 0.0);
+		glRotatef(rotationAngle, 0, 0, 1);
+		drawSphere();
+		glPopMatrix();
+		rightSide = false;
+	}
+	else {
+		glPushMatrix(); // right arm
+		glTranslatef(0.40f, 0.7f - bodyYOffset, 0.0f);
+		glRotatef(35, 0, 0, 1);
+		glScalef(0.5f, 4.0f, 0.5f);
+		drawSphere();
+		glPopMatrix();
+
+		glPushMatrix(); // right hand
+		glColor3f(1, 1, 1);
+		glTranslatef(0.69f, 0.28f - bodyYOffset, 0.0f);
+		glRotatef(rotationAngle, 0, 0, 1);
+		drawSphere();
+		glPopMatrix();
+		rightSide = true;
+	}
+	
 
 	glColor3f(0, 1, 0);
 	glPushMatrix(); // right thigh
-	glTranslatef(0.2f, -0.4f, 0.0f);
+	glTranslatef(0.2f + legXOffset, -0.4f, 0.0f);
+	glRotatef(legRotationAngle, 0, 1, 1);
 	glRotatef(15, 0, 0, 1);
 	glScalef(0.5f, 3.0f, 0.5f);
 	drawSphere();
@@ -384,23 +447,25 @@ void drawRightSideAppendages()
 
 	glColor3f(1, 0, 0);
 	glPushMatrix(); // knee
-	glTranslatef(0.3f, -0.75f, 0.0f);
+	glRotatef(legRotationAngle / 2.0, 0, 1, 1);
+	glTranslatef(0.3f + legXOffset, -0.75f, 0.0f);
 	drawSphere();
 	glPopMatrix();
 
 	glColor3f(0, 1, 0);
 	glPushMatrix(); // right shin
-	glTranslatef(0.3f, -0.985f, 0.0f);
-	glRotatef(rotationAngle, 0, 1, 0);
+	glTranslatef(0.3f + legXOffset, -0.985f, 0.0f);
+	//glRotatef(rotationAngle, 0, 1, 0);
+	glRotatef(-legRotationAngle, 0, 1, 1);
 	glRotatef(6, 0, 0, 1);
 	glScalef(0.5f, 3.0f, 0.5f);
 	drawSphere();
 	glPopMatrix();
 
+	
 	glColor3f(1, 0, 0);
 	glPushMatrix(); // right foot
-	glTranslatef(0.33f, -1.40f, 0.0f);
-	glRotatef(rotationAngle/2.0, 0, 1, 0);
+	glTranslatef(0.33f+ footXOffset, -1.40f, 0.0f);
 	glScalef(0.8, 1.0, 1.25);
 	drawSphere(); 
 	glPopMatrix();
@@ -409,9 +474,13 @@ void drawRightSideAppendages()
 	glColor3f(1, 1, 1);
 } 
 
-
 void drawRobot()
 {
+	/*
+	* Add an item to hands to show that hands are spinning
+	* Create a dance animation(really simple one; like bending knees, and swinging arms
+	* Make hat eat the character by growing and then going down; while character is scaled down
+	*/
 	/////////// clear window ///////////
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -440,24 +509,46 @@ void drawRobot()
 	glMaterialfv(GL_FRONT, GL_AMBIENT, ambientLight);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, ambientLight);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, ambientLight);
-	glPushMatrix();
-	glPushMatrix();
 
-	glPushMatrix(); // head
-	glTranslatef(0.0f, 1.5f, 0.0f);
+	glPushMatrix();
+	glRotatef(cameraRotationAngle, 0, 1, 0);
+
+	//////////////////// head ///////////////////////
+	glPushMatrix(); 
+	glTranslatef(0.0f, 1.5f - bodyYOffset, 0.0f);
 	glScalef(3.0f, 3.0f, 3.0f);
 	drawSphere();
 	glPopMatrix();
 
+	//////////////////// hat ///////////////////////
+	glPushMatrix();
+	glTranslatef(0.0f, 0.0f - bodyYOffset, 0.0f);
 	drawHat();
+	glPopMatrix();
+
+	//////////////////// cane ///////////////////////
+	glPushMatrix();
+	glTranslatef(0.0f, 0.0f - bodyYOffset, 0.0f);
+	glTranslatef(0, 0.80, 0);
+	glRotatef(rotationAngle*2.0, 1, 0, 0);
+	glTranslatef(0, -0.80, 0);
+	drawCane();
+	glPopMatrix();
 	
-	glPushMatrix(); // body
-	glTranslatef(0.0f, 0.5f, 0.0f);
+	//////////////////// body ///////////////////////
+	glPushMatrix();
+	glColor3f(0.25, 0.45, 0.64);
+	glTranslatef(0.0f, 0.5f - bodyYOffset, 0.0f);
 	glScalef(2.5f, 7.0f, 2.5f);
 	drawSphere();
 	glPopMatrix();
 
+	//////////////////// right side appendages ///////////////////////
+	glPushMatrix();
 	drawRightSideAppendages();
+	glPopMatrix();
+
+	//////////////////// left side appendages ///////////////////////
 	// use reflection to draw the left side appendages
 	//
 	glPushMatrix();
@@ -465,21 +556,140 @@ void drawRobot()
 	drawRightSideAppendages();
 	glPopMatrix();
 
+	glPopMatrix();
+
 	glFlush();
 	glutSwapBuffers();
 }
 
-bool spin = true;
+bool spin = false;
 void timer(int val) {
 	// increment rotation angle
 	rotationAngle += 1;
 
+	// cycle between the character  "dancing" up and down
+	// of increase increment the offsets and angles
+	// else decrease offsets amd amg;es
+	if (increase) {
+		bodyYOffset += (0.02 * animationSpeedRatio);
+		footXOffset += (0.005 * animationSpeedRatio);
+		legXOffset += (0.01 * animationSpeedRatio);
+		legRotationAngle += (1.25 * animationSpeedRatio);
+		if (bodyYOffset >= 0.2)
+			increase = false;
+	}
+	else {
+		bodyYOffset -= (0.02 * animationSpeedRatio);
+		footXOffset -= (0.005 * animationSpeedRatio);
+		legXOffset -= (0.01 * animationSpeedRatio);
+		legRotationAngle -= (1.25 * animationSpeedRatio);
+		if (bodyYOffset <= 0.0)
+			increase = true;
+	}
+
+	if (cameraRotation)
+		cameraRotationAngle += (2.5 * animationSpeedRatio);
+
 	// call function again with delay
 	if(spin)
-		glutTimerFunc(16, timer, 0);
+		glutTimerFunc(30, timer, 0);
 
 	// recall display function
 	glutPostRedisplay();
+}
+
+void mainMenu(int value) {
+	switch (value) {
+		default:
+			exit(0);
+			break;
+	}
+}
+
+void animMenu(int value) {
+	if (value == 1) {
+		spin = true;
+		glutTimerFunc(0, timer, 0);
+	}
+	else if (value == 2) {
+		animationSpeedRatio += 0.25;
+	}
+	else if (value == 3) {
+		animationSpeedRatio -= 0.25;
+	}
+	else if (value == 4) {
+		spin = false;
+	}
+}
+
+void rotationMenu(int value) {
+	if (value == 1) {
+		cameraRotation = true;
+	}
+	else if (value == 2) {
+		cameraRotation = false;
+	}
+
+}
+
+void starColorMenu(int value) {
+	if (value == 1) {
+
+	}
+	else if (value == 2) {
+
+	}
+	else if (value == 3) {
+
+	}
+	else if (value == 4) {
+
+	}
+	else if (value == 5) {
+
+	}
+
+
+}
+
+void centerColorMenu(int value) {
+	if (value == 1) {
+
+	}
+	else if (value == 2) {
+
+	}
+	else if (value == 3) {
+
+	}
+	else if (value == 4) {
+	}
+	else if (value == 5) {
+
+	}
+
+}
+
+void styleMenu(int value) {
+	if (value == 1) {
+
+	}
+	else if (value == 2) {
+
+	}
+	else if (value == 3) {
+
+	}
+
+}
+
+void shadeMenu(int value) {
+	if (value == 1) {
+		glShadeModel(GL_FLAT);
+	}
+	else if (value == 2) {
+		glShadeModel(GL_SMOOTH);
+	}
 }
 
 int main(int argc, char* argv[]) {
@@ -509,7 +719,7 @@ int main(int argc, char* argv[]) {
 	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT);
 
 	// Enable shading
-	glShadeModel(GL_SMOOTH); // GL_FLAT is a rough shading 
+	glShadeModel(GL_FLAT); // GL_FLAT is a rough shading 
 	
 	/* define the projection transformation */
 	glMatrixMode(GL_PROJECTION);
@@ -522,6 +732,48 @@ int main(int argc, char* argv[]) {
 	gluLookAt(5.0, 5.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
 	glutTimerFunc(0, timer, 0);
+
+	// create menu
+	int baseMenu = glutCreateMenu(mainMenu);  // the base menu
+	int animSubMenu = glutCreateMenu(animMenu); // submenu for drawing different figures
+	int shadeSubMenu = glutCreateMenu(shadeMenu); // submenu for color submenus
+	int rotationSubMenu = glutCreateMenu(rotationMenu); // the submenu for choosing the background polygon color(if applicable)
+	int starColorSubMenu = glutCreateMenu(starColorMenu); // the submenu for choosing the star color
+	int centerColorSubMenu = glutCreateMenu(centerColorMenu); // the submenu for chooseing the middle polygon color
+	int styleSubMenu = glutCreateMenu(styleMenu); // the submenu to choose drawing style
+
+	// start menu
+	glutSetMenu(baseMenu);
+	glutAddMenuEntry("Clear Screen", 1);
+
+	// add animation sub menu
+	glutAddSubMenu("Animation Menu", animSubMenu);
+	glutSetMenu(animSubMenu);
+	glutAddMenuEntry("Start Animation", 1);
+	glutAddMenuEntry("Speed Up Animation", 2);
+	glutAddMenuEntry("Slow Down Animation", 3);
+	glutAddMenuEntry("Stop Animation", 4);
+	glutSetMenu(baseMenu);
+
+	// add shaing submenu
+	glutAddSubMenu("Shading Menu", shadeSubMenu);
+	glutSetMenu(shadeSubMenu);
+	glutAddMenuEntry("Flat", 1);
+	glutAddMenuEntry("Smooth", 2);
+	glutSetMenu(baseMenu);
+
+	// add camera rotation menu
+	glutAddSubMenu("Rotation Menu", rotationSubMenu);
+	glutSetMenu(rotationSubMenu);
+	glutAddMenuEntry("Rotate On", 1);
+	glutAddMenuEntry("Rotate Off", 2);
+	glutSetMenu(baseMenu);
+
+	// add final exit option
+	glutAddMenuEntry("Exit", 6);
+
+	// set button to open menu (in this case its the right mouse button
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
 
 	/* tell GLUT to wait for events */
 	glutMainLoop();
