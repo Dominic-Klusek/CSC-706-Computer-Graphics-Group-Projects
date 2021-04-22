@@ -61,7 +61,38 @@ void createTree(float transX, float transZ) {
 	glColor3f(0.2, 0.2, 0);
 	glPushMatrix();
 	glTranslatef(transX, 0, transZ);
-	createCylinder(0.15, 0.7);
+	createCylinder(0.125, 0.7);
+	glPopMatrix();
+}
+
+void createBush(float transX, float transZ) {
+	/*
+	* Function to create a tree
+	* Made from simple solid Toruses, and a Cylinder
+	*/
+	// tree leaves
+	float transY = 0.6; // have a variable to hold y translation
+	float innerRadius = 0.14;
+	float outerRadius = 0.28;
+	glColor3f(0, 0.2, 0.0); // set color
+
+	glPushMatrix();
+	glTranslatef(transX, 0.15, transZ);
+	glRotatef(-90, 1, 0, 0);
+	glutSolidTorus(0.04, 0.1, 20, 20);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(transX, 0.25, transZ);
+	glRotatef(-90, 1, 0, 0);
+	glutSolidTorus(0.08, 0.15, 20, 20);
+	glPopMatrix();
+
+	// trunk
+	glColor3f(0.2, 0.2, 0);
+	glPushMatrix();
+	glTranslatef(transX, 0, transZ);
+	createCylinder(0.05, 0.2);
 	glPopMatrix();
 }
 
@@ -105,6 +136,45 @@ void createFlower() {
 
 }
 
+void createFlowerBox() {
+	// dirt 
+	glColor3f(0.20, 0.03, 0.00);
+	glPushMatrix();
+	glScalef(1.0, 0.8, 4.0);
+	glutSolidCube(0.25);
+	glPopMatrix();
+
+	// box
+	glColor3f(0.3, 0.25, 0.00);
+	glPushMatrix();
+	glScalef(1.05, 0.75, 4.05);
+	glutSolidCube(0.25);
+	glPopMatrix();
+
+	//rim
+	glColor3f(0.3, 0.25, 0.00);
+	glPushMatrix();
+	glTranslatef(0, 0.1, 0.5);
+	glScalef(1.1, 0.25, 0.25);
+	glutSolidCube(0.25);
+	glPopMatrix();
+
+	glColor3f(0.3, 0.25, 0.00);
+	glPushMatrix();
+	glTranslatef(-0.1, 0.1, 0);
+	glScalef(0.25, 0.25, 4.0);
+	glutSolidCube(0.25);
+	glPopMatrix();
+
+	glColor3f(0.3, 0.25, 0.00);
+	glPushMatrix();
+	glTranslatef(0.1, 0.1, 0);
+	glScalef(0.25, 0.25, 4.0);
+	glutSolidCube(0.25);
+	glPopMatrix();
+
+}
+
 void display() {
 	/////////// clear window ///////////
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -144,11 +214,19 @@ void display() {
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, ambientLight);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, ambientLight);
 
+	////////// flower box ////////////
+	glPushMatrix();
+	//glTranslatef(1.0, 0.75, 0.25);
+
+	createFlowerBox();
+	glPopMatrix();
+
+	/*
 	/////////// ground ///////////
 	glPushMatrix();
 	glColor3f(0.13, 0.40, 0.00);
-	glTranslatef(0, -1.5, 0.0);
-	glScalef(25, 0.25, 25);
+	glTranslatef(-1.5, -1.5, -1.5);
+	glScalef(45, 0.25, 45);
 	glutSolidCube(0.25);
 	glPopMatrix();
 		
@@ -214,59 +292,78 @@ void display() {
 	/////////// tree ///////////
 	glPushMatrix();
 	glScalef(1.2, 1.8, 1.2);
-	createTree(2.0, -0.5);
+	createTree(1.5, -0.5);
+	glPopMatrix();
+
+	glPushMatrix();
+	glScalef(1.2, 1.8, 1.2);
+	glTranslatef(-1.0, 0, 1.0);
+	createBush(2.0, -0.5);
 	glPopMatrix();
 
 	/////////// door ///////////
 	glPushMatrix();
 	glColor3f(0.66, 0.76, 0.83);
-	glTranslatef(-0.35, -0.35, 1.0);
+	glTranslatef(-1.35, -0.35, 0.0);
 	glScalef(3, 5, 0.25);
 	glutSolidCube(0.25);
 	glPopMatrix();
 
 	/////////// door handle ///////////
 	glPushMatrix();
-	glTranslatef(-0.10, -0.3, 1.1);
+	glColor3f(0.5, 0.5, 0.5);
+	glTranslatef(-1.10, -0.3, 0.1);
 	glutSolidSphere(0.05, 128, 128);
 	glPopMatrix();
 
 	/////////// house ///////////
 	glPushMatrix();
 	glColor3f(0.3, 0.3, 0.3);
+	glTranslatef(-1.0, 0, -1.0);
 	glutSolidCube(2); // building
 	glPopMatrix();
 
 	// window
 	glPushMatrix();
 	glColor3f(0.6, 0.8, 1);
-	glTranslatef(0.55, 0.35, 0.97);
+	glTranslatef(-0.45, 0.35, -0.03);
 	glScaled(3, 3, 0.25);
 	glutSolidCube(0.25); 
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3f(0.6, 0.8, 1);
+	glTranslatef(-0.02, 0.35, -1.0);
+	glScaled(0.25, 3, 5);
+	glutSolidCube(0.25);
 	glPopMatrix();
 
 	// window supports
 	glPushMatrix();
 	glColor3f(0.15, 0.19, 0.0);
-	glTranslatef(0.55, 0.35, 0.99);
-	glRotatef(180, 0, 1, 0);
+	glTranslatef(-0.45, 0.35, -0.01);
 	glScalef(1.5, 0.1, 0.1);
 	glutSolidCube(0.5);
 	glPopMatrix();
 
 	glPushMatrix();
 	glColor3f(0.15, 0.19, 0.0);
-	glTranslatef(0.55, 0.35, 0.99);
-	glRotatef(90, 0, 0, 1);
-	glRotatef(180, 0, 1, 0);
-	glScalef(1.5, 0.1, 0.1);
+	glTranslatef(-0.45, 0.35,-0.01);
+	glScalef(0.1, 1.5, 0.1);
+	glutSolidCube(0.5);
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3f(0.15, 0.19, 0.0);
+	glTranslatef(-0, 0, -1.0);
+	glScalef(0.1, 0.1, 3.0);
 	glutSolidCube(0.5);
 	glPopMatrix();
 
 	// roof
 	glPushMatrix();
 	glColor3f(0.56, 0.63, 0.7);
-	glTranslated(0, 1.35, 0);
+	glTranslated(-1.0, 1.35, -1.0);
 	glRotated(-90, 1, 0, 0);
 	glutSolidCone(1.5, 1, 16, 8);
 	glPopMatrix();
@@ -274,7 +371,7 @@ void display() {
 	// chimney
 	glPushMatrix();
 	glColor3f(0.28, 0.32, 0.35);
-	glTranslated(1, 2, -0.5);
+	glTranslated(-1, 2, -1.5);
 	glScaled(1, 3, 1);
 	glutSolidCube(.25);
 	glPopMatrix();
@@ -313,7 +410,7 @@ void display() {
 	glutSolidTorus(.05, .1, 8, 8); // wheel
 	glPopMatrix();
 
-	glPopMatrix();
+	glPopMatrix();*/
 
 	/* flush drawing routines to the window */
 	glFlush();
@@ -330,7 +427,6 @@ void drawSphere()
 }
 
 void drawHat() {
-
 	//glRotatef(45, 0, 0, 1);
 	// top of hat
 	glColor3f(0.5, 0.5, 0.5);
@@ -567,94 +663,6 @@ void drawRobot()
 	glutSwapBuffers();
 }
 
-bool spin = false;
-void timer(int val) {
-	// increment rotation angle
-	rotationAngle += 1;
-
-	// cycle between the character  "dancing" up and down
-	// of increase increment the offsets and angles
-	// else decrease offsets amd amg;es
-	if (increase) {
-		bodyYOffset += (0.02 * animationSpeedRatio);
-		footXOffset += (0.005 * animationSpeedRatio);
-		legXOffset += (0.01 * animationSpeedRatio);
-		legRotationAngle += (1.25 * animationSpeedRatio);
-		if (bodyYOffset >= 0.2)
-			increase = false;
-	}
-	else {
-		bodyYOffset -= (0.02 * animationSpeedRatio);
-		footXOffset -= (0.005 * animationSpeedRatio);
-		legXOffset -= (0.01 * animationSpeedRatio);
-		legRotationAngle -= (1.25 * animationSpeedRatio);
-		if (bodyYOffset <= 0.0)
-			increase = true;
-	}
-
-	// call function again with delay
-	if(spin)
-		glutTimerFunc(30, timer, 0);
-
-	// recall display function
-	glutPostRedisplay();
-}
-
-void cameraRotationFunction(int val) {
-	if (cameraRotation)
-		cameraRotationAngle += (2.5 * animationSpeedRatio);
-		glutTimerFunc(30, cameraRotationFunction, 0);
-
-	// recall display function
-	glutPostRedisplay();
-}
-
-void mainMenu(int value) {
-	switch (value) {
-		default:
-			exit(0);
-			break;
-	}
-}
-
-void animMenu(int value) {
-	if (value == 1) {
-		spin = true;
-		glutTimerFunc(0, timer, 0);
-	}
-	else if (value == 2) {
-		animationSpeedRatio += 0.25;
-	}
-	else if (value == 3) {
-		animationSpeedRatio -= 0.25;
-	}
-	else if (value == 4) {
-		spin = false;
-	}
-}
-
-void rotationMenu(int value) {
-	if (value == 1) {
-		cameraRotation = true;
-		glutTimerFunc(30, cameraRotationFunction, 0);
-	}
-	else if (value == 2) {
-		cameraRotation = false;
-	}
-}
-
-void shadeMenu(int value) {
-	if (value == 1) {
-		glShadeModel(GL_FLAT);
-	}
-	else if (value == 2) {
-		glShadeModel(GL_SMOOTH);
-	}
-
-	// recall display function
-	glutPostRedisplay();
-}
-
 int main(int argc, char* argv[]) {
 	// seed rand function
 	srand(time(NULL));
@@ -669,7 +677,7 @@ int main(int argc, char* argv[]) {
 
 	/* create and set up a window */
 	glutCreateWindow("Hello, 3D House!");
-	glutDisplayFunc(drawRobot);
+	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
 
 	/* set up depth-buffering */
@@ -693,47 +701,6 @@ int main(int argc, char* argv[]) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt(5.0, 5.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
-
-	glutTimerFunc(0, timer, 0);
-
-	// create menu
-	int baseMenu = glutCreateMenu(mainMenu);  // the base menu
-	int animSubMenu = glutCreateMenu(animMenu); // submenu for drawing different figures
-	int shadeSubMenu = glutCreateMenu(shadeMenu); // submenu for color submenus
-	int rotationSubMenu = glutCreateMenu(rotationMenu); // the submenu for choosing the background polygon color(if applicable)
-
-	// start menu
-	glutSetMenu(baseMenu);
-	glutAddMenuEntry("Clear Screen", 1);
-
-	// add animation sub menu
-	glutAddSubMenu("Animation Menu", animSubMenu);
-	glutSetMenu(animSubMenu);
-	glutAddMenuEntry("Start Animation", 1);
-	glutAddMenuEntry("Speed Up Animation", 2);
-	glutAddMenuEntry("Slow Down Animation", 3);
-	glutAddMenuEntry("Stop Animation", 4);
-	glutSetMenu(baseMenu);
-
-	// add shaing submenu
-	glutAddSubMenu("Shading Menu", shadeSubMenu);
-	glutSetMenu(shadeSubMenu);
-	glutAddMenuEntry("Flat", 1);
-	glutAddMenuEntry("Smooth", 2);
-	glutSetMenu(baseMenu);
-
-	// add camera rotation menu
-	glutAddSubMenu("Rotation Menu", rotationSubMenu);
-	glutSetMenu(rotationSubMenu);
-	glutAddMenuEntry("Rotate On", 1);
-	glutAddMenuEntry("Rotate Off", 2);
-	glutSetMenu(baseMenu);
-
-	// add final exit option
-	glutAddMenuEntry("Exit", 6);
-
-	// set button to open menu (in this case its the right mouse button
-	glutAttachMenu(GLUT_RIGHT_BUTTON);
 
 	/* tell GLUT to wait for events */
 	glutMainLoop();
