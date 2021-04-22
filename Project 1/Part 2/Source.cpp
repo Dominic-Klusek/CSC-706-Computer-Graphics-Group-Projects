@@ -14,6 +14,11 @@ float legXOffset = 0;
 float legRotationAngle = 0;
 float cameraRotationAngle = 0.0;
 float rotationAngle = 0.0;
+
+float swingRotationAngle = 0.0;
+float swingLegRotationAngle = -25;
+float armsClappingRotation = 105;
+
 float animationSpeedRatio = 1.0;
 bool cameraRotation = false;
 bool increase = true;
@@ -205,7 +210,7 @@ void createSwingSet() {
 	glPushMatrix();
 	glColor3f(0.5, 0.5, 0.5);
 	glRotatef(65, 1, 0, 0);
-	glScalef(0.4, 0.4, 12.0);
+	glScalef(0.4, 0.4, 10.0);
 	glTranslatef(-2.2, 0, 0.125);
 	glutSolidCube(0.25);
 	glPopMatrix();
@@ -213,7 +218,7 @@ void createSwingSet() {
 	glPushMatrix();
 	glColor3f(0.5, 0.5, 0.5);
 	glRotatef(105, 1, 0, 0);
-	glScalef(0.4, 0.4, 12.0);
+	glScalef(0.4, 0.4, 10.0);
 	glTranslatef(-2.2, 0, 0.125);
 	glutSolidCube(0.25);
 	glPopMatrix();
@@ -221,7 +226,7 @@ void createSwingSet() {
 	glPushMatrix();
 	glColor3f(0.5, 0.5, 0.5);
 	glRotatef(65, 1, 0, 0);
-	glScalef(0.4, 0.4, 12.0);
+	glScalef(0.4, 0.4, 10.0);
 	glTranslatef(2.2, 0, 0.125);
 	glutSolidCube(0.25);
 	glPopMatrix();
@@ -229,7 +234,7 @@ void createSwingSet() {
 	glPushMatrix();
 	glColor3f(0.5, 0.5, 0.5);
 	glRotatef(105, 1, 0, 0);
-	glScalef(0.4, 0.4, 12.0);
+	glScalef(0.4, 0.4, 10.0);
 	glTranslatef(2.2, 0, 0.125);
 	glutSolidCube(0.25);
 	glPopMatrix();
@@ -237,25 +242,30 @@ void createSwingSet() {
 	// seat
 	glPushMatrix();
 	glColor3f(0.25, 0.5, 0.5);
-	glTranslatef(0.0, -2.2, 0);
+	glRotatef(swingRotationAngle, 1, 0, 0);
+	glTranslatef(0, -1.8, 0);
 	glScalef(3.0, 0.2, 1.5);
 	glutSolidCube(0.25);
 	glPopMatrix();
 
 	// string
 	glPushMatrix();
-	glTranslatef(-0.25, -2.2, 0.0);
-	createCylinder(0.01, 2.2);
+	glTranslatef(-0.25, 0.0, 0.0);
+	glRotatef(swingRotationAngle, 1, 0, 0);
+	glTranslatef(0, -1.8, 0);
+	createCylinder(0.02, 1.8);
 	glPopMatrix();
 
 	// string
 	glPushMatrix();
-	glTranslatef(0.25, -2.2, 0.0);
-	createCylinder(0.01, 2.2);
+	glTranslatef(0.25, 0.0, 0.0);
+	glRotatef(swingRotationAngle, 1, 0, 0);
+	glTranslatef(0, -1.8, 0);
+	createCylinder(0.02, 1.8);
 	glPopMatrix();
 }
 
-void createCare() {
+void createCar() {
 	// body
 	glColor3f(0.5, 0.5, 0.5);
 	glPushMatrix();
@@ -287,177 +297,6 @@ void createCare() {
 	glPopMatrix();
 }
 
-void display() {
-	/////////// clear window ///////////
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	/////////// future matrix manipulations should affect ///////////
-	/////////// the modelview matrix ///////////
-	glMatrixMode(GL_MODELVIEW);
-
-	/////////// draw scene ///////////
-	glPushMatrix();
-	//glRotatef(90, 0, 1, 1);
-
-	// Nightime Light Parameters
-	/*GLfloat light0_ambient[] = { 0.25, 0.55, 0.85, 1.0 };
-	GLfloat light0_diffuse[] = { 0.0f, 0.15f, 0.30f, 1.0 };
-	GLfloat light0_specular[] = { 0.60f, 0.8f, 1.0f, 1.0 };
-	GLfloat light0_position[] = { 0.8f, 0.8f, 0.5f, 1.0 };*/
-
-	/////////// Light Parameters ///////////
-	GLfloat light0_ambient[] = { 0.6, 0.6, 0.6, 1.0 };
-	GLfloat light0_diffuse[] = { 0.6f, 0.5f, 0.6f, 1.0 };
-	GLfloat light0_specular[] = { 0.8f, 0.8f, 0.8f, 1.0 };
-	GLfloat light0_position[] = { 0.8f, 0.8f, 0.5f, 1.0 };
-
-	/////////// Set Light Parameters and enable light ///////////
-	glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, light0_specular);
-	glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
-
-	glEnable(GL_LIGHT0);
-
-	/////////// set material ///////////
-	GLfloat ambientLight[] = { 0.10588, 0.058824, 0.0113725 };
-	GLfloat diffuseLight[] = { 0.427451, 0.470588, 0.541176 };
-	GLfloat specularLight[] = { 0.3333, 0.3333, 0.521569 };
-	glMaterialfv(GL_FRONT, GL_AMBIENT, ambientLight);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, ambientLight);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, ambientLight);
-
-	/////////// ground ///////////
-	glPushMatrix();
-	glColor3f(0.13, 0.40, 0.00);
-	glTranslatef(-1.5, -1.5, -1.5);
-	glScalef(45, 0.25, 45);
-	glutSolidCube(0.25);
-	glPopMatrix();
-		
-	/////////// driveway ///////////
-	glPushMatrix();
-	glColor3f(0, 0, 0);
-	glTranslatef(0.8, -1.45, 1.7);
-	glScalef(15, 0.25, 5);
-	glutSolidCube(0.25);
-	glPopMatrix();
-	
-	/////////// tree ///////////
-	glPushMatrix();
-	glScalef(1.2, 1.8, 1.2);
-	glTranslatef(0, -0.5, -0.5);
-	createTree(1.5, -0.5);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-1.0, -1.0, 0.0);
-	glScalef(1.2, 1.8, 1.2);
-	createBush(2.0, -0.5);
-	glPopMatrix();
-
-	/////////// door ///////////
-	glPushMatrix();
-	glColor3f(0.66, 0.76, 0.83);
-	glTranslatef(-1.35, -0.35, 0.0);
-	glScalef(3, 5, 0.25);
-	glutSolidCube(0.25);
-	glPopMatrix();
-
-	/////////// door handle ///////////
-	glPushMatrix();
-	glColor3f(0.5, 0.5, 0.5);
-	glTranslatef(-1.10, -0.3, 0.1);
-	glutSolidSphere(0.05, 128, 128);
-	glPopMatrix();
-
-	/////////// house ///////////
-	glPushMatrix();
-	glColor3f(0.3, 0.3, 0.3);
-	glTranslatef(-1.0, 0, -1.0);
-	glutSolidCube(2); // building
-	glPopMatrix();
-
-	// window
-	glPushMatrix();
-	glColor3f(0.6, 0.8, 1);
-	glTranslatef(-0.45, 0.35, -0.03);
-	glScaled(3, 3, 0.25);
-	glutSolidCube(0.25); 
-	glPopMatrix();
-
-	glPushMatrix();
-	glColor3f(0.6, 0.8, 1);
-	glTranslatef(-0.02, 0.35, -1.0);
-	glScaled(0.25, 3, 5);
-	glutSolidCube(0.25);
-	glPopMatrix();
-
-	// window supports
-	glPushMatrix();
-	glColor3f(0.15, 0.19, 0.0);
-	glTranslatef(-0.45, 0.35, -0.01);
-	glScalef(1.5, 0.1, 0.1);
-	glutSolidCube(0.5);
-	glPopMatrix();
-
-	glPushMatrix();
-	glColor3f(0.15, 0.19, 0.0);
-	glTranslatef(-0.45, 0.35,-0.01);
-	glScalef(0.1, 1.5, 0.1);
-	glutSolidCube(0.5);
-	glPopMatrix();
-
-	glPushMatrix();
-	glColor3f(0.15, 0.19, 0.0);
-	glTranslatef(-0, 0, -1.0);
-	glScalef(0.1, 0.1, 3.0);
-	glutSolidCube(0.5);
-	glPopMatrix();
-
-	// roof
-	glPushMatrix();
-	glColor3f(0.56, 0.63, 0.7);
-	glTranslated(-1.0, 1, -1.0);
-	glRotated(-90, 1, 0, 0);
-	glutSolidCone(1.5, 1, 16, 8);
-	glPopMatrix();
-
-	// chimney
-	glPushMatrix();
-	glColor3f(0.28, 0.32, 0.35);
-	glTranslated(-1, 1.5, -1.5);
-	glScaled(1, 3, 1);
-	glutSolidCube(.25);
-	glPopMatrix();
-
-	////////// flower box ////////////
-	glPushMatrix();
-	glTranslatef(0.1, -0.1, -1.0);
-	createFlowerBox();
-	glPopMatrix();
-
-	/////////// car ///////////
-	glPushMatrix();
-	glScalef(1.25, 1.25, 1.25);
-	glTranslatef(-0.75, 0.25, -0.7);
-	createCare();
-	glPopMatrix();
-
-	/////////// swingset //////////////
-	glPushMatrix();
-	glTranslatef(2.0, 0.0, 0.0);
-	glScalef(0.8, 0.5, 0.5);
-	createSwingSet();
-	glPopMatrix();
-	glPushMatrix();
-
-	glPopMatrix();
-
-	/* flush drawing routines to the window */
-	glFlush();
-}
-
 void reshape(int width, int height) {
 	/* define the viewport transformation */
 	glViewport(0, 0, width, height);
@@ -468,7 +307,7 @@ void drawSphere()
 	glutSolidSphere(.1, 16, 16);
 }
 
-void drawHat() {
+void drawTopHat() {
 	//glRotatef(45, 0, 0, 1);
 	// top of hat
 	glColor3f(0.5, 0.5, 0.5);
@@ -616,48 +455,18 @@ void drawRightSideAppendages()
 	glColor3f(1, 1, 1);
 } 
 
-void drawRobot()
+void drawDancingRobot()
 {
-	/*
-	* Add an item to hands to show that hands are spinning
-	* Create a dance animation(really simple one; like bending knees, and swinging arms
-	* Make hat eat the character by growing and then going down; while character is scaled down
-	*/
-	/////////// clear window ///////////
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	/////////// future matrix manipulations should affect ///////////
 	/////////// the modelview matrix ///////////
 	glMatrixMode(GL_MODELVIEW);
 
-	/////////// Light Parameters ///////////
-	GLfloat light0_ambient[] = { 0.6, 0.6, 0.6, 1.0 };
-	GLfloat light0_diffuse[] = { 0.6f, 0.6f, 0.6f, 1.0 };
-	GLfloat light0_specular[] = { 0.8f, 0.8f, 0.8f, 1.0 };
-	GLfloat light0_position[] = { 0.8f, 0.8f, 0.5f, 1.0 };
-
-	/////////// Set Light Parameters and enable light ///////////
-	glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, light0_specular);
-	glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
-
-	glEnable(GL_LIGHT0);
-
-	/////////// set material ///////////
-	GLfloat ambientLight[] = { 0.10588, 0.058824, 0.0113725 };
-	GLfloat diffuseLight[] = { 0.427451, 0.470588, 0.541176 };
-	GLfloat specularLight[] = { 0.3333, 0.3333, 0.521569 };
-	glMaterialfv(GL_FRONT, GL_AMBIENT, ambientLight);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, ambientLight);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, ambientLight);
-
-	glPushMatrix();
 	// rotate the entire figure
 	glRotatef(cameraRotationAngle, 0, 1, 0);
 
 	//////////////////// head ///////////////////////
 	glPushMatrix(); 
+	glColor3f(1.0, 1.0, 1.0);
 	glTranslatef(0.0f, 1.5f - bodyYOffset, 0.0f);
 	glScalef(3.0f, 3.0f, 3.0f);
 	drawSphere();
@@ -666,7 +475,7 @@ void drawRobot()
 	//////////////////// hat ///////////////////////
 	glPushMatrix();
 	glTranslatef(0.0f, 0.0f - bodyYOffset, 0.0f);
-	drawHat();
+	drawTopHat();
 	glPopMatrix();
 
 	//////////////////// cane ///////////////////////
@@ -698,11 +507,381 @@ void drawRobot()
 	glScalef(-1.0, 1.0, 1.0);
 	drawRightSideAppendages();
 	glPopMatrix();
+}
+
+void drawClappingChildAppendages()
+{
+	glColor3f(0.00, 0.67, 1.0);
+	glPushMatrix(); // right arm
+	glTranslatef(0.33f, 1.0f, 0.0);
+	glRotatef(-armsClappingRotation, 0, 1, 0);
+	glTranslatef(0.33, 0, 0);
+	glRotatef(90, 0, 0, 1);
+	glScalef(0.4f, 4.0f, 0.4f);
+	drawSphere();
+	glPopMatrix();
+
+	glPushMatrix(); // right hand
+	glColor3f(1, 1, 1);
+	glTranslatef(0.33, 1.0, 0);
+	glRotatef(-armsClappingRotation, 0, 1, 0);
+	glTranslatef(0.73, 0.0, 0);
+	glScalef(1.0, 1.0, 1.0);
+	drawSphere();
+	glPopMatrix();
+
+	glColor3f(0.3, 0.3, 0.3);
+	glPushMatrix(); // right thigh
+	glRotatef(45, 0, 1, 0);
+	glTranslatef(0.15, 0.2f, 0.4f);
+	glScalef(0.4f, 0.4f, 3.0f);
+	drawSphere();
+	glPopMatrix();
+
+	glColor3f(0.5, 0.5, 0.5);
+	glPushMatrix(); // knee
+	glTranslatef(0.65f, 0.2f, 0.45f);
+	drawSphere();
+	glPopMatrix();
+
+	glColor3f(0.3, 0.3, 0.3);
+	glPushMatrix(); // right shin
+	glTranslatef(0, 0, 0.8);
+	glRotatef(120, 0, 1, 0);
+	glTranslatef(0.0, 0.2f, 0.4f);
+	glScalef(0.4f, 0.4f, 3.0f);
+	drawSphere();
+	glPopMatrix();
+
+	glColor3f(0.5, 0.5, 0.5);
+	glPushMatrix(); // right foot
+	glTranslatef(0.15f, 0.2f, 0.72);
+	glRotatef(45, 0, 1, 0);
+	glScalef(0.8, 1.0, 1.25);
+	drawSphere();
+	glPopMatrix();
+
+	// reset color to white
+	glColor3f(1, 1, 1);
+}
+
+void drawClappingChildRobot()
+{
+	//////////////////// head ///////////////////////
+	glPushMatrix();
+	glColor3f(1.0, 1.0, 1.0);
+	glTranslatef(0.0f, 1.1f, 0.0f);
+	glScalef(2.0f, 2.0f, 2.0f);
+	drawSphere();
+	glPopMatrix();
+
+	//////////////////// hat ///////////////////////
+	glPushMatrix();
+	glColor3f(1, 0, 0);
+	glTranslatef(0.0f, 1.1, 0.0f);
+	glutWireSphere(0.30, 8, 8);
+	glPopMatrix();
+
+	//////////////////// body ///////////////////////
+	glPushMatrix();
+	glColor3f(0.00, 0.67, 1.0);
+	glTranslatef(0.0f, 0.5f - bodyYOffset, 0.0f);
+	glScalef(2.5f, 4.0f, 2.5f);
+	drawSphere();
+	glPopMatrix();
+
+	//////////////////// right side appendages ///////////////////////
+	glPushMatrix();
+	glScalef(0.7, 0.7, 0.7);
+	drawClappingChildAppendages();
+	glPopMatrix();
+
+	//////////////////// left side appendages ///////////////////////
+	// use reflection to draw the left side appendages
+	//
+	glPushMatrix();
+	glScalef(-1.0, 1.0, 1.0);
+	glScalef(0.7, 0.7, 0.7);
+	drawClappingChildAppendages();
+	glPopMatrix();
+}
+
+void drawSwingingChildAppendages()
+{
+	glColor3f(0.00, 0.67, 1.0);
+	glPushMatrix(); // right arm
+	glTranslatef(0.33f, 1.0f, 0.0);
+	glRotatef(-35, 0, 1, 0);
+	glTranslatef(0.33, 0, 0);
+	glRotatef(90, 0, 0, 1);
+	glScalef(0.4f, 4.0f, 0.4f);
+	drawSphere();
+	glPopMatrix();
+
+	glPushMatrix(); // right hand
+	glColor3f(1, 1, 1);
+	glTranslatef(0.33, 1.0, 0);
+	glRotatef(-35, 0, 1, 0);
+	glTranslatef(0.73, 0.0, 0);
+	glScalef(1.0, 1.0, 1.0);
+	drawSphere();
+	glPopMatrix();
+
+	glColor3f(0.3, 0.3, 0.3);
+	glPushMatrix(); // right thigh
+	glTranslatef(0.15, 0.2f, 0.4f);
+	glScalef(0.4f, 0.4f, 3.0f);
+	drawSphere();
+	glPopMatrix();
+
+	glColor3f(0.5, 0.5, 0.5);
+	glPushMatrix(); // knee
+	glTranslatef(0.15f, 0.2f, 0.65f);
+	drawSphere();
+	glPopMatrix();
+
+	glColor3f(0.3, 0.3, 0.3);
+	glPushMatrix(); // right shin
+	glTranslatef(0.15, 0.15, 0.65f);
+	glRotatef(swingLegRotationAngle, 1, 0, 0);
+	glTranslatef(0.0, -0.15, 0.0f);
+	glScalef(0.4f, 3.0f, 0.4f);
+	drawSphere();
+	glPopMatrix();
+
+	glColor3f(0.5, 0.5, 0.5);
+	glPushMatrix(); // right foot
+	glTranslatef(0.0f, 0.0f, 0.65f);
+	glRotatef(swingLegRotationAngle, 1, 0, 0);
+	glTranslatef(0.15f, -0.3f, 0.0);
+	glRotatef(-swingLegRotationAngle, 1, 0, 0);
+	glScalef(0.8, 1.0, 1.25);
+	drawSphere();
+	glPopMatrix();
+
+	// reset color to white
+	glColor3f(1, 1, 1);
+}
+
+void drawSwingingChildRobot()
+{
+	//////////////////// head ///////////////////////
+	glPushMatrix();
+	glColor3f(1.0, 1.0, 1.0);
+	glTranslatef(0.0f, 1.1f, 0.0f);
+	glScalef(2.0f, 2.0f, 2.0f);
+	drawSphere();
+	glPopMatrix();
+
+	//////////////////// hat ///////////////////////
+	glPushMatrix();
+	glColor3f(1, 0, 0);
+	glTranslatef(0.0f, 1.1, 0.0f);
+	glutWireSphere(0.30, 8, 8);
+	glPopMatrix();
+
+	//////////////////// body ///////////////////////
+	glPushMatrix();
+	glColor3f(0.00, 0.67, 1.0);
+	glTranslatef(0.0f, 0.5f, 0.0f);
+	glScalef(2.5f, 4.0f, 2.5f);
+	drawSphere();
+	glPopMatrix();
+
+	//////////////////// right side appendages ///////////////////////
+	glPushMatrix();
+	glScalef(0.7, 0.7, 0.7);
+	drawSwingingChildAppendages();
+	glPopMatrix();
+
+	//////////////////// left side appendages ///////////////////////
+	// use reflection to draw the left side appendages
+	//
+	glPushMatrix();
+	glScalef(-1.0, 1.0, 1.0);
+	glScalef(0.7, 0.7, 0.7);
+	drawSwingingChildAppendages();
+	glPopMatrix();
+}
+
+
+
+void display() {
+	/////////// clear window ///////////
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	/////////// future matrix manipulations should affect ///////////
+	/////////// the modelview matrix ///////////
+	glMatrixMode(GL_MODELVIEW);
+
+	/////////// draw scene ///////////
+	glPushMatrix();
+	//glRotatef(-35, 1, 1, 0);
+	//glRotatef(90, 0, 1, 1);
+
+	// Nightime Light Parameters
+	/*GLfloat light0_ambient[] = { 0.25, 0.55, 0.85, 1.0 };
+	GLfloat light0_diffuse[] = { 0.0f, 0.15f, 0.30f, 1.0 };
+	GLfloat light0_specular[] = { 0.60f, 0.8f, 1.0f, 1.0 };
+	GLfloat light0_position[] = { 0.8f, 0.8f, 0.5f, 1.0 };*/
+
+	/////////// Light Parameters ///////////
+	GLfloat light0_ambient[] = { 0.6, 0.6, 0.6, 1.0 };
+	GLfloat light0_diffuse[] = { 0.6f, 0.5f, 0.6f, 1.0 };
+	GLfloat light0_specular[] = { 0.8f, 0.8f, 0.8f, 1.0 };
+	GLfloat light0_position[] = { 0.8f, 0.8f, 0.5f, 1.0 };
+
+	/////////// Set Light Parameters and enable light ///////////
+	glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, light0_specular);
+	glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
+
+	glEnable(GL_LIGHT0);
+
+	/////////// set material ///////////
+	GLfloat ambientLight[] = { 0.10588, 0.058824, 0.0113725 };
+	GLfloat diffuseLight[] = { 0.427451, 0.470588, 0.541176 };
+	GLfloat specularLight[] = { 0.3333, 0.3333, 0.521569 };
+	glMaterialfv(GL_FRONT, GL_AMBIENT, ambientLight);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, ambientLight);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, ambientLight);
+
+	/////////// ground ///////////
+	glPushMatrix();
+	glColor3f(0.13, 0.40, 0.00);
+	glTranslatef(-1.5, -1.5, -1.5);
+	glScalef(45, 0.25, 45);
+	glutSolidCube(0.25);
+	glPopMatrix();
+
+	/*/////////// driveway ///////////
+	glPushMatrix();
+	glColor3f(0, 0, 0);
+	glTranslatef(0.8, -1.45, 1.7);
+	glScalef(15, 0.25, 5);
+	glutSolidCube(0.25);
+	glPopMatrix();
+
+	/////////// tree ///////////
+	glPushMatrix();
+	glScalef(1.2, 1.8, 1.2);
+	glTranslatef(0, -0.5, -0.5);
+	createTree(1.5, -0.5);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-1.0, -1.0, 0.0);
+	glScalef(1.2, 1.8, 1.2);
+	createBush(2.0, -0.5);
+	glPopMatrix();
+
+	/////////// door ///////////
+	glPushMatrix();
+	glColor3f(0.66, 0.76, 0.83);
+	glTranslatef(-1.35, -0.35, 0.0);
+	glScalef(3, 5, 0.25);
+	glutSolidCube(0.25);
+	glPopMatrix();
+
+	/////////// door handle ///////////
+	glPushMatrix();
+	glColor3f(0.5, 0.5, 0.5);
+	glTranslatef(-1.10, -0.3, 0.1);
+	glutSolidSphere(0.05, 128, 128);
+	glPopMatrix();
+
+	/////////// house ///////////
+	glPushMatrix();
+	glColor3f(0.3, 0.3, 0.3);
+	glTranslatef(-1.0, 0, -1.0);
+	glutSolidCube(2); // building
+	glPopMatrix();
+
+	// window
+	glPushMatrix();
+	glColor3f(0.6, 0.8, 1);
+	glTranslatef(-0.45, 0.35, -0.03);
+	glScaled(3, 3, 0.25);
+	glutSolidCube(0.25);
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3f(0.6, 0.8, 1);
+	glTranslatef(-0.02, 0.35, -1.0);
+	glScaled(0.25, 3, 5);
+	glutSolidCube(0.25);
+	glPopMatrix();
+
+	// window supports
+	glPushMatrix();
+	glColor3f(0.15, 0.19, 0.0);
+	glTranslatef(-0.45, 0.35, -0.01);
+	glScalef(1.5, 0.1, 0.1);
+	glutSolidCube(0.5);
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3f(0.15, 0.19, 0.0);
+	glTranslatef(-0.45, 0.35,-0.01);
+	glScalef(0.1, 1.5, 0.1);
+	glutSolidCube(0.5);
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3f(0.15, 0.19, 0.0);
+	glTranslatef(-0, 0, -1.0);
+	glScalef(0.1, 0.1, 3.0);
+	glutSolidCube(0.5);
+	glPopMatrix();
+
+	// roof
+	glPushMatrix();
+	glColor3f(0.56, 0.63, 0.7);
+	glTranslated(-1.0, 1, -1.0);
+	glRotated(-90, 1, 0, 0);
+	glutSolidCone(1.5, 1, 16, 8);
+	glPopMatrix();
+
+	// chimney
+	glPushMatrix();
+	glColor3f(0.28, 0.32, 0.35);
+	glTranslated(-1, 1.5, -1.5);
+	glScaled(1, 3, 1);
+	glutSolidCube(.25);
+	glPopMatrix();
+
+	////////// flower box ////////////
+	glPushMatrix();
+	glTranslatef(0.1, -0.1, -1.0);
+	createFlowerBox();
+	glPopMatrix();
+
+	/////////// car ///////////
+	glPushMatrix();
+	glScalef(1.25, 1.25, 1.25);
+	glTranslatef(-0.75, 0.25, -0.7);
+	createCar();
+	glPopMatrix();*/
+
+	/////////// swingset //////////////
+	glPushMatrix();
+	glTranslatef(2.0, 1.0, 0.0);
+	glScalef(1.0, 1.0, 1.0);
+	createSwingSet();
+	glPopMatrix();
+	glPushMatrix();
+
+	glPushMatrix();
+	glTranslatef(0.0, -0.5, 0.0);
+	glScalef(0.5, 0.5, 0.5);
+	drawSwingingChildRobot();
+	glPopMatrix();
 
 	glPopMatrix();
 
+	/* flush drawing routines to the window */
 	glFlush();
-	glutSwapBuffers();
 }
 
 int main(int argc, char* argv[]) {
