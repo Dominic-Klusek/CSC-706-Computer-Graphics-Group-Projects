@@ -173,6 +173,118 @@ void createFlowerBox() {
 	glutSolidCube(0.25);
 	glPopMatrix();
 
+	glColor3f(0.3, 0.25, 0.00);
+	glPushMatrix();
+	glTranslatef(0, 0.1, -0.5);
+	glScalef(1.1, 0.25, 0.25);
+	glutSolidCube(0.25);
+	glPopMatrix();
+
+	// flowers
+	float transZ = 5.5;
+	for (int i = 0; i < 4; i++) {
+		glPushMatrix();
+		glScalef(0.07, 0.07, 0.07);
+		glTranslatef(0.5, 2.0, transZ);
+		createFlower();
+		glPopMatrix();
+
+		transZ -= 3.5;
+	}
+
+}
+
+void createSwingSet() {
+	// frame
+	glPushMatrix();
+	glColor3f(0.5, 0.5, 0.5);
+	glScalef(8.0, 0.4, 0.4);
+	glutSolidCube(0.25);
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3f(0.5, 0.5, 0.5);
+	glRotatef(65, 1, 0, 0);
+	glScalef(0.4, 0.4, 12.0);
+	glTranslatef(-2.2, 0, 0.125);
+	glutSolidCube(0.25);
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3f(0.5, 0.5, 0.5);
+	glRotatef(105, 1, 0, 0);
+	glScalef(0.4, 0.4, 12.0);
+	glTranslatef(-2.2, 0, 0.125);
+	glutSolidCube(0.25);
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3f(0.5, 0.5, 0.5);
+	glRotatef(65, 1, 0, 0);
+	glScalef(0.4, 0.4, 12.0);
+	glTranslatef(2.2, 0, 0.125);
+	glutSolidCube(0.25);
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3f(0.5, 0.5, 0.5);
+	glRotatef(105, 1, 0, 0);
+	glScalef(0.4, 0.4, 12.0);
+	glTranslatef(2.2, 0, 0.125);
+	glutSolidCube(0.25);
+	glPopMatrix();
+
+	// seat
+	glPushMatrix();
+	glColor3f(0.25, 0.5, 0.5);
+	glTranslatef(0.0, -2.2, 0);
+	glScalef(3.0, 0.2, 1.5);
+	glutSolidCube(0.25);
+	glPopMatrix();
+
+	// string
+	glPushMatrix();
+	glTranslatef(-0.25, -2.2, 0.0);
+	createCylinder(0.01, 2.2);
+	glPopMatrix();
+
+	// string
+	glPushMatrix();
+	glTranslatef(0.25, -2.2, 0.0);
+	createCylinder(0.01, 2.2);
+	glPopMatrix();
+}
+
+void createCare() {
+	// body
+	glColor3f(0.5, 0.5, 0.5);
+	glPushMatrix();
+	glTranslated(0.9, -1.0, 2.05);
+	glScaled(2, 1, 1);
+	glutSolidCube(.5);
+	glPopMatrix();
+
+	glColor3f(0, 0, 0);
+	glPushMatrix();
+	glTranslated(1.35, -1.25, 2.35);
+	glutSolidTorus(.05, .1, 8, 8); // wheel
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslated(0.45, -1.25, 2.35);
+	glutSolidTorus(.05, .1, 8, 8); // wheel
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslated(1.35, -1.25, 1.75);
+	glutSolidTorus(.05, .1, 8, 8); // wheel
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslated(0.45, -1.25, 1.75);
+	glScaled(1, 1, 1);
+	glutSolidTorus(.05, .1, 8, 8); // wheel
+	glPopMatrix();
 }
 
 void display() {
@@ -185,6 +297,7 @@ void display() {
 
 	/////////// draw scene ///////////
 	glPushMatrix();
+	//glRotatef(90, 0, 1, 1);
 
 	// Nightime Light Parameters
 	/*GLfloat light0_ambient[] = { 0.25, 0.55, 0.85, 1.0 };
@@ -194,7 +307,7 @@ void display() {
 
 	/////////// Light Parameters ///////////
 	GLfloat light0_ambient[] = { 0.6, 0.6, 0.6, 1.0 };
-	GLfloat light0_diffuse[] = { 0.6f, 0.6f, 0.6f, 1.0 };
+	GLfloat light0_diffuse[] = { 0.6f, 0.5f, 0.6f, 1.0 };
 	GLfloat light0_specular[] = { 0.8f, 0.8f, 0.8f, 1.0 };
 	GLfloat light0_position[] = { 0.8f, 0.8f, 0.5f, 1.0 };
 
@@ -214,14 +327,6 @@ void display() {
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, ambientLight);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, ambientLight);
 
-	////////// flower box ////////////
-	glPushMatrix();
-	//glTranslatef(1.0, 0.75, 0.25);
-
-	createFlowerBox();
-	glPopMatrix();
-
-	/*
 	/////////// ground ///////////
 	glPushMatrix();
 	glColor3f(0.13, 0.40, 0.00);
@@ -237,67 +342,17 @@ void display() {
 	glScalef(15, 0.25, 5);
 	glutSolidCube(0.25);
 	glPopMatrix();
-
-	/////////// flowers ///////////
-	float transX;
-	float transZ;
-
-	transX = 2.0;
-	transZ = 0.75;
-
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
-			glPushMatrix();
-			glTranslatef(transX, 0, transZ);
-			glScalef(0.1, 0.1, 0.1);
-			createFlower();
-			glPopMatrix();
-			transZ += 0.3;
-		}
-
-		transZ = 0.75;
-		transX += 0.3;
-	}
-
-	/////////// flower box ///////////
-	glColor3f(0.20, 0.03, 0.00);
-	glPushMatrix();
-	glTranslatef(1.75, 0, 1.15);
-	glRotatef(90, 0, 1, 0);
-	glScalef(1.4, 0.1, 0.1);
-	glutSolidCube(1.0);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(2.4, 0, 0.50);
-	glRotatef(180, 0, 1, 0);
-	glScalef(1.4, 0.1, 0.1);
-	glutSolidCube(1.0);
-	glPopMatrix();
-	
-	glPushMatrix();
-	glTranslatef(3.05, 0, 1.15);
-	glRotatef(90, 0, 1, 0);
-	glScalef(1.4, 0.1, 0.1);
-	glutSolidCube(1.0);
-	glPopMatrix();
-	
-	glPushMatrix();
-	glTranslatef(2.40, 0, 1.85);
-	glRotatef(180, 0, 1, 0);
-	glScalef(1.4, 0.1, 0.1);
-	glutSolidCube(1.0);
-	glPopMatrix();
 	
 	/////////// tree ///////////
 	glPushMatrix();
 	glScalef(1.2, 1.8, 1.2);
+	glTranslatef(0, -0.5, -0.5);
 	createTree(1.5, -0.5);
 	glPopMatrix();
 
 	glPushMatrix();
+	glTranslatef(-1.0, -1.0, 0.0);
 	glScalef(1.2, 1.8, 1.2);
-	glTranslatef(-1.0, 0, 1.0);
 	createBush(2.0, -0.5);
 	glPopMatrix();
 
@@ -363,7 +418,7 @@ void display() {
 	// roof
 	glPushMatrix();
 	glColor3f(0.56, 0.63, 0.7);
-	glTranslated(-1.0, 1.35, -1.0);
+	glTranslated(-1.0, 1, -1.0);
 	glRotated(-90, 1, 0, 0);
 	glutSolidCone(1.5, 1, 16, 8);
 	glPopMatrix();
@@ -371,46 +426,33 @@ void display() {
 	// chimney
 	glPushMatrix();
 	glColor3f(0.28, 0.32, 0.35);
-	glTranslated(-1, 2, -1.5);
+	glTranslated(-1, 1.5, -1.5);
 	glScaled(1, 3, 1);
 	glutSolidCube(.25);
 	glPopMatrix();
 
+	////////// flower box ////////////
+	glPushMatrix();
+	glTranslatef(0.1, -0.1, -1.0);
+	createFlowerBox();
+	glPopMatrix();
+
 	/////////// car ///////////
-	// body
-	glColor3f(0.5, 0.5, 0.5);
 	glPushMatrix();
-	glTranslated(1, 0, 2.25);
-	glScaled(2, 1, 1);
-	glutSolidCube(.5);
+	glScalef(1.25, 1.25, 1.25);
+	glTranslatef(-0.75, 0.25, -0.7);
+	createCare();
 	glPopMatrix();
 
-	glColor3f(0, 0, 0);
+	/////////// swingset //////////////
 	glPushMatrix();
-	glTranslated(1.45,-0.25,2.55);
-	glScaled(1, 1, 1);
-	glutSolidTorus(.05, .1, 8, 8); // wheel
+	glTranslatef(2.0, 0.0, 0.0);
+	glScalef(0.8, 0.5, 0.5);
+	createSwingSet();
 	glPopMatrix();
-
 	glPushMatrix();
-	glTranslated(0.55, -0.25, 2.55);
-	glScaled(1, 1, 1);
-	glutSolidTorus(.05, .1, 8, 8); // wheel
-	glPopMatrix();
 
-	glPushMatrix();
-	glTranslated(1.45, -0.25, 1.95);
-	glScaled(1, 1, 1);
-	glutSolidTorus(.05, .1, 8, 8); // wheel
 	glPopMatrix();
-
-	glPushMatrix();
-	glTranslated(0.55, -0.25, 1.95);
-	glScaled(1, 1, 1);
-	glutSolidTorus(.05, .1, 8, 8); // wheel
-	glPopMatrix();
-
-	glPopMatrix();*/
 
 	/* flush drawing routines to the window */
 	glFlush();
