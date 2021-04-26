@@ -5,16 +5,20 @@
 #include <time.h>
 #include <stdlib.h>
 #include <iostream>
+#include<math.h>
 #include <GL/glut.h>
 using namespace std;
+
+#define PI 3.14
 
 float bodyYOffset = 0.0;
 float footXOffset = 0.0;
 float legXOffset = 0;
 float legRotationAngle = 0;
-float cameraRotationAngle = 0.0;
+float cameraRotationAngle = 30.0;
 float rotationAngle = 0.0;
 float animationSpeedRatio = 1.0;
+float cameraX = 0, cameraZ = 0;
 bool cameraRotation = false;
 bool increase = true;
 bool rightSide = true;
@@ -516,7 +520,7 @@ void drawRobot()
 
 	glPushMatrix();
 	// rotate the entire figure
-	glRotatef(cameraRotationAngle, 0, 1, 0);
+	//glRotatef(cameraRotationAngle, 0, 1, 0);
 
 	//////////////////// head ///////////////////////
 	glPushMatrix(); 
@@ -580,6 +584,7 @@ void timer(int val) {
 		footXOffset += (0.005 * animationSpeedRatio);
 		legXOffset += (0.01 * animationSpeedRatio);
 		legRotationAngle += (1.25 * animationSpeedRatio);
+
 		if (bodyYOffset >= 0.2)
 			increase = false;
 	}
@@ -602,7 +607,24 @@ void timer(int val) {
 
 void cameraRotationFunction(int val) {
 	if (cameraRotation)
-		cameraRotationAngle += (2.5 * animationSpeedRatio);
+		// increment camera angle
+		cameraRotationAngle += (1.0 * animationSpeedRatio);
+		
+		// check camera angle is not greater than 360, if it is reset to 0
+		if (cameraRotationAngle > 360)
+			cameraRotationAngle = 0;
+
+		// calculate camera X and Z position (Y is fixed)
+		cameraX = sin((cameraRotationAngle * PI) / 180) * 7;
+		cameraZ = cos((cameraRotationAngle * PI) / 180) * 7;
+
+		// change camera position
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		gluLookAt(cameraX, 5.0, cameraZ,
+			0.0, 0.0, 0.0, 
+			0.0, 1.0, 0.0);
+
 		glutTimerFunc(30, cameraRotationFunction, 0);
 
 	// recall display function

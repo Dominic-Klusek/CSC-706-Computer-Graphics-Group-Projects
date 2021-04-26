@@ -16,13 +16,16 @@ float cameraRotationAngle = 0.0;
 float rotationAngle = 0.0;
 
 float swingRotationAngle = 0.0;
-float swingLegRotationAngle = -25;
+float swingLegRotationAngle = 0.0;
 float armsClappingRotation = 105;
 
 float animationSpeedRatio = 1.0;
 bool cameraRotation = false;
 bool increase = true;
 bool rightSide = true;
+bool spin = true;
+bool swingIncrease = true;
+bool clappingIncrease = true;
 
 void createCylinder(float trunkRadius, float trunkHeight) {
 	/* while looking for ideas I found a function to draw a tree
@@ -66,7 +69,7 @@ void createTree(float transX, float transZ) {
 	glColor3f(0.2, 0.2, 0);
 	glPushMatrix();
 	glTranslatef(transX, 0, transZ);
-	createCylinder(0.125, 0.7);
+	createCylinder(0.08, 0.7);
 	glPopMatrix();
 }
 
@@ -244,13 +247,13 @@ void createSwingSet() {
 	glColor3f(0.25, 0.5, 0.5);
 	glRotatef(swingRotationAngle, 1, 0, 0);
 	glTranslatef(0, -1.8, 0);
-	glScalef(3.0, 0.2, 1.5);
+	glScalef(2.5, 0.2, 1);
 	glutSolidCube(0.25);
 	glPopMatrix();
 
 	// string
 	glPushMatrix();
-	glTranslatef(-0.25, 0.0, 0.0);
+	glTranslatef(-0.30, 0.0, 0.0);
 	glRotatef(swingRotationAngle, 1, 0, 0);
 	glTranslatef(0, -1.8, 0);
 	createCylinder(0.02, 1.8);
@@ -258,7 +261,7 @@ void createSwingSet() {
 
 	// string
 	glPushMatrix();
-	glTranslatef(0.25, 0.0, 0.0);
+	glTranslatef(0.30, 0.0, 0.0);
 	glRotatef(swingRotationAngle, 1, 0, 0);
 	glTranslatef(0, -1.8, 0);
 	createCylinder(0.02, 1.8);
@@ -297,6 +300,22 @@ void createCar() {
 	glPopMatrix();
 }
 
+void createSideWalk() {
+	float transX = 0.0;
+	float transZ = 0.0;
+
+	glColor3f(0.5, 0.5, 0.5);
+	for (int i = 0; i < 10; i++) {
+		glPushMatrix();
+		glTranslatef(0.0, 0, transZ);
+		glScalef(2.0, 0.1, 2.0);
+		glutSolidCube(1.0);
+		glPopMatrix();
+
+		transZ += 2.05;
+	}
+}
+
 void reshape(int width, int height) {
 	/* define the viewport transformation */
 	glViewport(0, 0, width, height);
@@ -312,8 +331,8 @@ void drawTopHat() {
 	// top of hat
 	glColor3f(0.5, 0.5, 0.5);
 	glPushMatrix();
-	glTranslatef(0, 2, 0);
-	glScalef(2.1, 0.1, 2.1);
+	glTranslatef(0, 2.1, 0);
+	glScalef(2.2, 0.1, 2.2);
 	drawSphere();
 	glPopMatrix();
 
@@ -457,13 +476,6 @@ void drawRightSideAppendages()
 
 void drawDancingRobot()
 {
-	/////////// future matrix manipulations should affect ///////////
-	/////////// the modelview matrix ///////////
-	glMatrixMode(GL_MODELVIEW);
-
-	// rotate the entire figure
-	glRotatef(cameraRotationAngle, 0, 1, 0);
-
 	//////////////////// head ///////////////////////
 	glPushMatrix(); 
 	glColor3f(1.0, 1.0, 1.0);
@@ -585,7 +597,7 @@ void drawClappingChildRobot()
 	//////////////////// body ///////////////////////
 	glPushMatrix();
 	glColor3f(0.00, 0.67, 1.0);
-	glTranslatef(0.0f, 0.5f - bodyYOffset, 0.0f);
+	glTranslatef(0.0f, 0.5f, 0.0f);
 	glScalef(2.5f, 4.0f, 2.5f);
 	drawSphere();
 	glPopMatrix();
@@ -610,19 +622,32 @@ void drawSwingingChildAppendages()
 {
 	glColor3f(0.00, 0.67, 1.0);
 	glPushMatrix(); // right arm
-	glTranslatef(0.33f, 1.0f, 0.0);
+	glTranslatef(0.40, 1.0, 0.0);
+	glRotatef(-65, 1, 0, 0);
+	glRotatef(35, 0, 1, 0);
+	glScalef(2.0f, 0.4f, 0.4f);
+	drawSphere();
+	glPopMatrix();
+
+	glColor3f(1.0, 1.0, 1.0);
+	glPushMatrix(); // right elbow
+	glTranslatef(0.60, 0.90, 0.0);
+	glScalef(0.6f, 0.6f, 0.6f);
+	drawSphere();
+	glPopMatrix();
+
+	glColor3f(0.00, 0.67, 1.0);
+	glPushMatrix(); // right arm
+	glTranslatef(0.75, 1.0, 0.0);
+	glRotatef(-75, 1, 0, 0);
 	glRotatef(-35, 0, 1, 0);
-	glTranslatef(0.33, 0, 0);
-	glRotatef(90, 0, 0, 1);
-	glScalef(0.4f, 4.0f, 0.4f);
+	glScalef(2.0f, 0.4f, 0.4f);
 	drawSphere();
 	glPopMatrix();
 
 	glPushMatrix(); // right hand
 	glColor3f(1, 1, 1);
-	glTranslatef(0.33, 1.0, 0);
-	glRotatef(-35, 0, 1, 0);
-	glTranslatef(0.73, 0.0, 0);
+	glTranslatef(0.85, 1.05, 0.05);
 	glScalef(1.0, 1.0, 1.0);
 	drawSphere();
 	glPopMatrix();
@@ -673,13 +698,6 @@ void drawSwingingChildRobot()
 	drawSphere();
 	glPopMatrix();
 
-	//////////////////// hat ///////////////////////
-	glPushMatrix();
-	glColor3f(1, 0, 0);
-	glTranslatef(0.0f, 1.1, 0.0f);
-	glutWireSphere(0.30, 8, 8);
-	glPopMatrix();
-
 	//////////////////// body ///////////////////////
 	glPushMatrix();
 	glColor3f(0.00, 0.67, 1.0);
@@ -704,8 +722,6 @@ void drawSwingingChildRobot()
 	glPopMatrix();
 }
 
-
-
 void display() {
 	/////////// clear window ///////////
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -714,8 +730,9 @@ void display() {
 	/////////// the modelview matrix ///////////
 	glMatrixMode(GL_MODELVIEW);
 
-	/////////// draw scene ///////////
 	glPushMatrix();
+
+	/////////// draw scene ///////////
 	//glRotatef(-35, 1, 1, 0);
 	//glRotatef(90, 0, 1, 1);
 
@@ -755,133 +772,127 @@ void display() {
 	glutSolidCube(0.25);
 	glPopMatrix();
 
-	/*/////////// driveway ///////////
+	/////////// scenery ///////////
+	// tree 1
 	glPushMatrix();
-	glColor3f(0, 0, 0);
-	glTranslatef(0.8, -1.45, 1.7);
-	glScalef(15, 0.25, 5);
-	glutSolidCube(0.25);
+	glTranslatef(-3.0, 0.0, 0.0);
+	glScalef(2.0, 2.0, 2.0);
+	createTree(0, 0);
 	glPopMatrix();
 
-	/////////// tree ///////////
+	// tree 2
 	glPushMatrix();
-	glScalef(1.2, 1.8, 1.2);
-	glTranslatef(0, -0.5, -0.5);
-	createTree(1.5, -0.5);
+	glTranslatef(-1.5, 0.0, -3.0);
+	glScalef(2.0, 2.0, 2.0);
+	createTree(0, 0);
 	glPopMatrix();
 
+	// tree 3
 	glPushMatrix();
-	glTranslatef(-1.0, -1.0, 0.0);
-	glScalef(1.2, 1.8, 1.2);
-	createBush(2.0, -0.5);
+	glTranslatef(-3.0, 0.0, -2.0);
+	glScalef(2.0, 2.0, 2.0);
+	createTree(0, 0);
 	glPopMatrix();
 
-	/////////// door ///////////
+	// sidewalk
 	glPushMatrix();
-	glColor3f(0.66, 0.76, 0.83);
-	glTranslatef(-1.35, -0.35, 0.0);
-	glScalef(3, 5, 0.25);
-	glutSolidCube(0.25);
+	createSideWalk();
 	glPopMatrix();
 
-	/////////// door handle ///////////
-	glPushMatrix();
-	glColor3f(0.5, 0.5, 0.5);
-	glTranslatef(-1.10, -0.3, 0.1);
-	glutSolidSphere(0.05, 128, 128);
-	glPopMatrix();
-
-	/////////// house ///////////
-	glPushMatrix();
-	glColor3f(0.3, 0.3, 0.3);
-	glTranslatef(-1.0, 0, -1.0);
-	glutSolidCube(2); // building
-	glPopMatrix();
-
-	// window
-	glPushMatrix();
-	glColor3f(0.6, 0.8, 1);
-	glTranslatef(-0.45, 0.35, -0.03);
-	glScaled(3, 3, 0.25);
-	glutSolidCube(0.25);
-	glPopMatrix();
-
-	glPushMatrix();
-	glColor3f(0.6, 0.8, 1);
-	glTranslatef(-0.02, 0.35, -1.0);
-	glScaled(0.25, 3, 5);
-	glutSolidCube(0.25);
-	glPopMatrix();
-
-	// window supports
-	glPushMatrix();
-	glColor3f(0.15, 0.19, 0.0);
-	glTranslatef(-0.45, 0.35, -0.01);
-	glScalef(1.5, 0.1, 0.1);
-	glutSolidCube(0.5);
-	glPopMatrix();
-
-	glPushMatrix();
-	glColor3f(0.15, 0.19, 0.0);
-	glTranslatef(-0.45, 0.35,-0.01);
-	glScalef(0.1, 1.5, 0.1);
-	glutSolidCube(0.5);
-	glPopMatrix();
-
-	glPushMatrix();
-	glColor3f(0.15, 0.19, 0.0);
-	glTranslatef(-0, 0, -1.0);
-	glScalef(0.1, 0.1, 3.0);
-	glutSolidCube(0.5);
-	glPopMatrix();
-
-	// roof
-	glPushMatrix();
-	glColor3f(0.56, 0.63, 0.7);
-	glTranslated(-1.0, 1, -1.0);
-	glRotated(-90, 1, 0, 0);
-	glutSolidCone(1.5, 1, 16, 8);
-	glPopMatrix();
-
-	// chimney
-	glPushMatrix();
-	glColor3f(0.28, 0.32, 0.35);
-	glTranslated(-1, 1.5, -1.5);
-	glScaled(1, 3, 1);
-	glutSolidCube(.25);
-	glPopMatrix();
-
-	////////// flower box ////////////
-	glPushMatrix();
-	glTranslatef(0.1, -0.1, -1.0);
-	createFlowerBox();
-	glPopMatrix();
-
-	/////////// car ///////////
-	glPushMatrix();
-	glScalef(1.25, 1.25, 1.25);
-	glTranslatef(-0.75, 0.25, -0.7);
-	createCar();
-	glPopMatrix();*/
-
-	/////////// swingset //////////////
+	/////////// swingset ///////////
 	glPushMatrix();
 	glTranslatef(2.0, 1.0, 0.0);
 	glScalef(1.0, 1.0, 1.0);
 	createSwingSet();
 	glPopMatrix();
-	glPushMatrix();
 
+	/////////// people ///////////
+	// draw child on swingset
 	glPushMatrix();
-	glTranslatef(0.0, -0.5, 0.0);
+	glTranslatef(0.0, 1.0, 0.0);
+	glRotatef(swingRotationAngle, 1, 0, 0);
+	glTranslatef(2.0, -1.8, 0.0);
 	glScalef(0.5, 0.5, 0.5);
 	drawSwingingChildRobot();
+	glPopMatrix();
+
+	// draw clapping child
+	glPushMatrix();
+	glTranslatef(-1.0, -0.80, -1.0);
+	glScalef(0.5, 0.5, 0.5);
+	drawClappingChildRobot();
+	glPopMatrix();
+
+	// draw dancing adult
+	glPushMatrix();
+	glTranslatef(-1.0, -0.80, 1.0);
+	glScalef(0.5, 0.5, 0.5);
+	drawDancingRobot();
 	glPopMatrix();
 
 	glPopMatrix();
 
 	/* flush drawing routines to the window */
 	glFlush();
+}
+
+void timer(int val) {
+	// increment rotation angle
+	rotationAngle += 1;
+
+	// cycle between the character  "dancing" up and down
+	// of increase increment the offsets and angles
+	// else decrease offsets amd amg;es
+	if (increase) {
+		bodyYOffset += (0.02 * animationSpeedRatio);
+		footXOffset += (0.005 * animationSpeedRatio);
+		legXOffset += (0.01 * animationSpeedRatio);
+		legRotationAngle += (1.25 * animationSpeedRatio);
+		if (bodyYOffset >= 0.2)
+			increase = false;
+	}
+	else {
+		bodyYOffset -= (0.02 * animationSpeedRatio);
+		footXOffset -= (0.005 * animationSpeedRatio);
+		legXOffset -= (0.01 * animationSpeedRatio);
+		legRotationAngle -= (1.25 * animationSpeedRatio);
+		if (bodyYOffset <= 0.0)
+			increase = true;
+	}
+
+	if (swingIncrease) {
+		swingRotationAngle += (2.5);
+		swingLegRotationAngle += (3.5);
+		if (swingRotationAngle >= 45.0)
+			swingIncrease = false;
+	}
+	else {
+		swingRotationAngle -= (2.5);
+		swingLegRotationAngle -= (3.5);
+
+		if (swingRotationAngle <= -45.0)
+			swingIncrease = true;
+	}
+	
+	if (clappingIncrease) {
+		armsClappingRotation += (5.0);
+		
+		if (armsClappingRotation >= 115.0)
+			clappingIncrease = false;
+	}
+	else {
+		armsClappingRotation -= (5.0);
+
+		if (armsClappingRotation <= 45.0)
+			clappingIncrease = true;
+	}
+	
+	// recall display function
+	glutPostRedisplay();
+
+	// call function again with delay
+	if (spin)
+		glutTimerFunc(70, timer, 0);
 }
 
 int main(int argc, char* argv[]) {
@@ -916,12 +927,14 @@ int main(int argc, char* argv[]) {
 	/* define the projection transformation */
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(40, 1, 4, 20);
+	gluPerspective(30, 1, 4, 20);
 
 	/* define the viewing transformation */
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt(5.0, 5.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+
+	glutTimerFunc(0, timer, 0);
 
 	/* tell GLUT to wait for events */
 	glutMainLoop();
