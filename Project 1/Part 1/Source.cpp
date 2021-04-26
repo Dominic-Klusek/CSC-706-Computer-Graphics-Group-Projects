@@ -333,14 +333,13 @@ void drawSphere()
 	glutSolidSphere(.1, 16, 16);
 }
 
-void drawHat() {
-
+void drawTopHat() {
 	//glRotatef(45, 0, 0, 1);
 	// top of hat
 	glColor3f(0.5, 0.5, 0.5);
 	glPushMatrix();
-	glTranslatef(0, 2, 0);
-	glScalef(2.1, 0.1, 2.1);
+	glTranslatef(0, 2.1, 0);
+	glScalef(2.2, 0.1, 2.2);
 	drawSphere();
 	glPopMatrix();
 
@@ -366,6 +365,7 @@ void drawHat() {
 	createCylinder(0.26, 0.1);
 	glPopMatrix();
 }
+
 
 void drawCane() {
 	// cane main body

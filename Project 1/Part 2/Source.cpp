@@ -120,7 +120,7 @@ void createFlower() {
 	// create leaves (stretched torus)
 	float angle;
 	for (int i = 0; i < 4; i++) {
-		angle = rand() % 180 - 90;
+		angle = i % 180 - 90;
 		glPushMatrix();
 		glRotatef(angle, 0, 0, 1);
 		glRotatef(-45, 1, 1, 1);
@@ -304,13 +304,28 @@ void createSideWalk() {
 	float transX = 0.0;
 	float transZ = 0.0;
 
-	glColor3f(0.5, 0.5, 0.5);
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 20; i++) {
+		glColor3f(0.5, 0.5, 0.5);
 		glPushMatrix();
 		glTranslatef(0.0, 0, transZ);
 		glScalef(2.0, 0.1, 2.0);
 		glutSolidCube(1.0);
 		glPopMatrix();
+
+		// draw flower every other sidewalk panel
+		if (i % 2 == 0) {
+			glPushMatrix();
+			glTranslatef(-1.2, 0, transZ);
+			glScalef(0.15, 0.15, 0.15);
+			createFlower();
+			glPopMatrix();
+
+			glPushMatrix();
+			glTranslatef(1.2, 0, transZ);
+			glScalef(0.15, 0.15, 0.15);
+			createFlower();
+			glPopMatrix();
+		}
 
 		transZ += 2.05;
 	}
@@ -796,6 +811,8 @@ void display() {
 
 	// sidewalk
 	glPushMatrix();
+	glTranslatef(0.0, -1.5, -5.0);
+	glScalef(0.5, 1.0, 0.5);
 	createSideWalk();
 	glPopMatrix();
 
