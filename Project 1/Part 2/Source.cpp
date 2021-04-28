@@ -14,6 +14,7 @@ float legXOffset = 0;
 float legRotationAngle = 0;
 float cameraRotationAngle = 0.0;
 float rotationAngle = 0.0;
+float spinnerRotationAngle = 0.0;
 
 float swingRotationAngle = 0.0;
 float swingLegRotationAngle = 0.0;
@@ -26,6 +27,11 @@ bool rightSide = true;
 bool spin = true;
 bool swingIncrease = true;
 bool clappingIncrease = true;
+
+void drawSphere()
+{
+	glutSolidSphere(.1, 16, 16);
+}
 
 void createCylinder(float trunkRadius, float trunkHeight) {
 	/* while looking for ideas I found a function to draw a tree
@@ -331,14 +337,58 @@ void createSideWalk() {
 	}
 }
 
+void createSupportBars() {
+	glPushMatrix();
+	glRotatef(-20, 0, 1, 0);
+	glTranslatef(0.7, 0.0, 0.0);
+	createCylinder(0.05, 0.2);
+	glPopMatrix();
+
+	glPushMatrix();
+	glRotatef(20, 0, 1, 0);
+	glTranslatef(0.7, 0.0, 0.0);
+	createCylinder(0.05, 0.2);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0.65, 0.18, -0.25);
+	glRotatef(90, 1, 0, 0);
+	createCylinder(0.05, 0.5);
+	glPopMatrix();
+}
+
+void createSpinner() {
+	// bottom plate
+	glPushMatrix();
+	glScalef(10.0, 0.01, 10.0);
+	drawSphere();
+	glPopMatrix();
+
+	// support bars
+	glPushMatrix();
+	createSupportBars();
+	glPopMatrix();
+
+	glPushMatrix();
+	glRotatef(90, 0, 1, 0);
+	createSupportBars();
+	glPopMatrix();
+
+	glPushMatrix();
+	glRotatef(180, 0, 1, 0);
+	createSupportBars();
+	glPopMatrix();
+
+	glPushMatrix();
+	glRotatef(270, 0, 1, 0);
+	createSupportBars();
+	glPopMatrix();
+	
+}
+
 void reshape(int width, int height) {
 	/* define the viewport transformation */
 	glViewport(0, 0, width, height);
-}
-
-void drawSphere()
-{
-	glutSolidSphere(.1, 16, 16);
 }
 
 void drawTopHat() {
@@ -538,7 +588,7 @@ void drawDancingRobot()
 
 void drawClappingChildAppendages()
 {
-	glColor3f(0.00, 0.67, 1.0);
+	glColor3f(0.60, 0.0, 0.9);
 	glPushMatrix(); // right arm
 	glTranslatef(0.33f, 1.0f, 0.0);
 	glRotatef(-armsClappingRotation, 0, 1, 0);
@@ -611,7 +661,7 @@ void drawClappingChildRobot()
 
 	//////////////////// body ///////////////////////
 	glPushMatrix();
-	glColor3f(0.00, 0.67, 1.0);
+	glColor3f(0.60, 0.0, 0.9);
 	glTranslatef(0.0f, 0.5f, 0.0f);
 	glScalef(2.5f, 4.0f, 2.5f);
 	drawSphere();
@@ -748,8 +798,6 @@ void display() {
 	glPushMatrix();
 
 	/////////// draw scene ///////////
-	//glRotatef(-35, 1, 1, 0);
-	//glRotatef(90, 0, 1, 1);
 
 	// Nightime Light Parameters
 	/*GLfloat light0_ambient[] = { 0.25, 0.55, 0.85, 1.0 };
@@ -816,11 +864,19 @@ void display() {
 	createSideWalk();
 	glPopMatrix();
 
-	/////////// swingset ///////////
+	// swingset 
 	glPushMatrix();
 	glTranslatef(2.0, 1.0, 0.0);
 	glScalef(1.0, 1.0, 1.0);
 	createSwingSet();
+	glPopMatrix();
+
+	// spinner
+	glPushMatrix();
+	glTranslatef(-3.0, -1.0, -2.5);
+	glRotatef(spinnerRotationAngle, 0, 1, 0);
+	glScalef(1.25, 1.25, 1.25);
+	createSpinner();
 	glPopMatrix();
 
 	/////////// people ///////////
@@ -855,7 +911,9 @@ void display() {
 
 void timer(int val) {
 	// increment rotation angle
-	rotationAngle += 1;
+	rotationAngle += 1 * animationSpeedRatio;
+
+	spinnerRotationAngle += 2 * animationSpeedRatio;
 
 	// cycle between the character  "dancing" up and down
 	// of increase increment the offsets and angles
@@ -909,7 +967,7 @@ void timer(int val) {
 
 	// call function again with delay
 	if (spin)
-		glutTimerFunc(70, timer, 0);
+		glutTimerFunc(40, timer, 0);
 }
 
 int main(int argc, char* argv[]) {
