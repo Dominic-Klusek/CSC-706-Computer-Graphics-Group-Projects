@@ -146,6 +146,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Canvas_freeglut.h" />
+    <ClInclude Include="drawingFunctions.h" />
     <ClInclude Include="masks.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
