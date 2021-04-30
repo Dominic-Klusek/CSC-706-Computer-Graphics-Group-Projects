@@ -1,20 +1,23 @@
-// CSC 706 HW 3 Part 1
+// CSC 706 Project 1 Part 2
 // Robert Kigobe, Dominic Klusek, Novichenko Konstantin
-// house.cpp
-//#include <windows.h>
+
 #include <time.h>
 #include <stdlib.h>
 #include <iostream>
+#include<math.h>
 #include <GL/glut.h>
 using namespace std;
+
+#define PI 3.14
 
 float bodyYOffset = 0.0;
 float footXOffset = 0.0;
 float legXOffset = 0;
 float legRotationAngle = 0;
-float cameraRotationAngle = 0.0;
+float cameraRotationAngle = 30.0;
 float rotationAngle = 0.0;
 float animationSpeedRatio = 1.0;
+float cameraX = 0, cameraZ = 0;
 bool cameraRotation = false;
 bool increase = true;
 bool rightSide = true;
@@ -329,14 +332,13 @@ void drawSphere()
 	glutSolidSphere(.1, 16, 16);
 }
 
-void drawHat() {
-
+void drawTopHat() {
 	//glRotatef(45, 0, 0, 1);
 	// top of hat
 	glColor3f(0.5, 0.5, 0.5);
 	glPushMatrix();
-	glTranslatef(0, 2, 0);
-	glScalef(2.1, 0.1, 2.1);
+	glTranslatef(0, 2.1, 0);
+	glScalef(2.2, 0.1, 2.2);
 	drawSphere();
 	glPopMatrix();
 
@@ -362,6 +364,7 @@ void drawHat() {
 	createCylinder(0.26, 0.1);
 	glPopMatrix();
 }
+
 
 void drawCane() {
 	// cane main body
@@ -516,7 +519,7 @@ void drawRobot()
 
 	glPushMatrix();
 	// rotate the entire figure
-	glRotatef(cameraRotationAngle, 0, 1, 0);
+	//glRotatef(cameraRotationAngle, 0, 1, 0);
 
 	//////////////////// head ///////////////////////
 	glPushMatrix(); 
@@ -528,7 +531,7 @@ void drawRobot()
 	//////////////////// hat ///////////////////////
 	glPushMatrix();
 	glTranslatef(0.0f, 0.0f - bodyYOffset, 0.0f);
-	drawHat();
+	drawTopHat();
 	glPopMatrix();
 
 	//////////////////// cane ///////////////////////
@@ -580,6 +583,7 @@ void timer(int val) {
 		footXOffset += (0.005 * animationSpeedRatio);
 		legXOffset += (0.01 * animationSpeedRatio);
 		legRotationAngle += (1.25 * animationSpeedRatio);
+
 		if (bodyYOffset >= 0.2)
 			increase = false;
 	}
@@ -602,7 +606,24 @@ void timer(int val) {
 
 void cameraRotationFunction(int val) {
 	if (cameraRotation)
-		cameraRotationAngle += (2.5 * animationSpeedRatio);
+		// increment camera angle
+		cameraRotationAngle += (1.0 * animationSpeedRatio);
+		
+		// check camera angle is not greater than 360, if it is reset to 0
+		if (cameraRotationAngle > 360)
+			cameraRotationAngle = 0;
+
+		// calculate camera X and Z position (Y is fixed)
+		cameraX = sin((cameraRotationAngle * PI) / 180) * 7;
+		cameraZ = cos((cameraRotationAngle * PI) / 180) * 7;
+
+		// change camera position
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		gluLookAt(cameraX, 5.0, cameraZ,
+			0.0, 0.0, 0.0, 
+			0.0, 1.0, 0.0);
+
 		glutTimerFunc(30, cameraRotationFunction, 0);
 
 	// recall display function
@@ -668,7 +689,7 @@ int main(int argc, char* argv[]) {
 	glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH);
 
 	/* create and set up a window */
-	glutCreateWindow("Hello, 3D House!");
+	glutCreateWindow("Dapper Dancing Robot");
 	glutDisplayFunc(drawRobot);
 	glutReshapeFunc(reshape);
 
@@ -704,7 +725,6 @@ int main(int argc, char* argv[]) {
 
 	// start menu
 	glutSetMenu(baseMenu);
-	glutAddMenuEntry("Clear Screen", 1);
 
 	// add animation sub menu
 	glutAddSubMenu("Animation Menu", animSubMenu);
