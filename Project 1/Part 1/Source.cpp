@@ -1,7 +1,6 @@
-// CSC 706 HW 3 Part 1
+// CSC 706 Project 1 Part 2
 // Robert Kigobe, Dominic Klusek, Novichenko Konstantin
-// house.cpp
-//#include <windows.h>
+
 #include <time.h>
 #include <stdlib.h>
 #include <iostream>
@@ -532,7 +531,7 @@ void drawRobot()
 	//////////////////// hat ///////////////////////
 	glPushMatrix();
 	glTranslatef(0.0f, 0.0f - bodyYOffset, 0.0f);
-	drawHat();
+	drawTopHat();
 	glPopMatrix();
 
 	//////////////////// cane ///////////////////////
@@ -690,7 +689,7 @@ int main(int argc, char* argv[]) {
 	glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH);
 
 	/* create and set up a window */
-	glutCreateWindow("Hello, 3D House!");
+	glutCreateWindow("Dapper Dancing Robot");
 	glutDisplayFunc(drawRobot);
 	glutReshapeFunc(reshape);
 
@@ -726,7 +725,6 @@ int main(int argc, char* argv[]) {
 
 	// start menu
 	glutSetMenu(baseMenu);
-	glutAddMenuEntry("Clear Screen", 1);
 
 	// add animation sub menu
 	glutAddSubMenu("Animation Menu", animSubMenu);

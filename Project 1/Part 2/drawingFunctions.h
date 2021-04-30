@@ -23,8 +23,8 @@ float animationSpeedRatio = 1.0;
 bool cameraRotation = false;
 bool increase = true;
 bool rightSide = true;
-bool spin = true;
-bool swingIncrease = true;
+bool spin = false;
+bool swingIncrease = false;
 bool clappingIncrease = true;
 
 

@@ -1,7 +1,6 @@
-// CSC 706 HW 3 Part 1
+// CSC 706 Project 1 Part 2
 // Robert Kigobe, Dominic Klusek, Novichenko Konstantin
-// house.cpp
-//#include <windows.h>
+
 #include <time.h>
 #include <stdlib.h>
 #include <iostream>
@@ -120,7 +119,7 @@ void display() {
 
 	// draw dancing adult
 	glPushMatrix();
-	glTranslatef(-1.0, -0.80, 1.0);
+	glTranslatef(-1.0, -0.75, 1.0);
 	glScalef(0.5, 0.5, 0.5);
 	drawDancingRobot();
 	glPopMatrix();
@@ -251,7 +250,7 @@ int main(int argc, char* argv[]) {
 	glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH);
 
 	/* create and set up a window */
-	glutCreateWindow("Hello, 3D House!");
+	glutCreateWindow("Normal Day at the Park.");
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
 
@@ -287,7 +286,6 @@ int main(int argc, char* argv[]) {
 
 	// start menu
 	glutSetMenu(baseMenu);
-	glutAddMenuEntry("Clear Screen", 1);
 
 	// add animation sub menu
 	glutAddSubMenu("Animation Menu", animSubMenu);
