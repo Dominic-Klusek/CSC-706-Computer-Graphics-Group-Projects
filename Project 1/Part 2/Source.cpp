@@ -131,15 +131,12 @@ void display() {
 }
 
 void timer(int val) {
-	// increment rotation angle
-	rotationAngle += 1 * animationSpeedRatio;
-
-	spinnerRotationAngle += 2 * animationSpeedRatio;
-
 	// cycle between the character  "dancing" up and down
 	// of increase increment the offsets and angles
 	// else decrease offsets amd amg;es
 	if (increase) {
+		rotationAngle += 2 * animationSpeedRatio;
+		spinnerRotationAngle += 2 * animationSpeedRatio;
 		bodyYOffset += (0.02 * animationSpeedRatio);
 		footXOffset += (0.005 * animationSpeedRatio);
 		legXOffset += (0.01 * animationSpeedRatio);
@@ -148,6 +145,8 @@ void timer(int val) {
 			increase = false;
 	}
 	else {
+		rotationAngle += 2 * animationSpeedRatio;
+		spinnerRotationAngle += 2 * animationSpeedRatio;
 		bodyYOffset -= (0.02 * animationSpeedRatio);
 		footXOffset -= (0.005 * animationSpeedRatio);
 		legXOffset -= (0.01 * animationSpeedRatio);

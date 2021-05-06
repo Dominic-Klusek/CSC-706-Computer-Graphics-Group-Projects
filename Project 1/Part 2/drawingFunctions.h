@@ -23,7 +23,7 @@ float animationSpeedRatio = 1.0;
 bool cameraRotation = false;
 bool increase = true;
 bool rightSide = true;
-bool spin = false;
+bool spin = true;
 bool swingIncrease = false;
 bool clappingIncrease = true;
 
@@ -475,7 +475,7 @@ void drawRightSideAppendages()
 		glPushMatrix(); // right hand
 		glColor3f(1, 1, 1);
 		glTranslatef(1.05f, 0.8f - bodyYOffset, 0.0);
-		glRotatef(rotationAngle * 2.0, 1, 0, 1);
+		glRotatef(rotationAngle, 1, 0, 1);
 		glScalef(0.8, 1.0, 1.25);
 		drawSphere();
 		glPopMatrix();
@@ -493,7 +493,7 @@ void drawRightSideAppendages()
 		glPushMatrix(); // right hand
 		glColor3f(1, 1, 1);
 		glTranslatef(0.69f, 0.28f - bodyYOffset, 0.0f);
-		glRotatef(rotationAngle * 2.0, 1, 0, 1);
+		glRotatef(rotationAngle, 1, 0, 1);
 		glScalef(0.8, 1.0, 1.25);
 		drawSphere();
 		glPopMatrix();
@@ -530,7 +530,7 @@ void drawRightSideAppendages()
 	glColor3f(0.5, 0.5, 0.5);
 	glPushMatrix(); // right foot
 	glTranslatef(0.33f + footXOffset, -1.40f, 0.0f);
-	glRotatef(rotationAngle * 2.0, 0, 1, 0);
+	glRotatef(rotationAngle, 0, 1, 0);
 	glScalef(0.8, 1.0, 1.25);
 	drawSphere();
 	glPopMatrix();

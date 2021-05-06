@@ -1,0 +1,35 @@
+
+void init(void)
+{
+	glClearColor(1.0, 1.0, 1.0, 0.0); // Set display-window color to white.
+	glMatrixMode(GL_PROJECTION); // Set projection parameters.
+	glEnable(GL_TEXTURE_2D);
+	gluOrtho2D(0.0, 200.0, 0.0, 250.0);
+}
+// load first texture
+	char filename[] = "resized_texture_2.png";
+	GLuint tex = glInitTexture(filename);
+
+	// set texture environment
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+
+	// bind texture to be used
+	glBindTexture(GL_TEXTURE_2D, tex);
+
+	// draw rectabgle with texture
+	glBegin(GL_QUADS);
+		// top left vertex
+		glTexCoord2f(0.0, 1.0);
+		glVertex2i(20, 20);
+		// top right
+		glTexCoord2f(1.0, 1.0);
+		glVertex2i(70, 20);
+		// bottom right
+		glTexCoord2f(1.0, 0.0);
+		glVertex2i(70, 70);
+		//bottom left
+		glTexCoord2f(0.0, 0.0);
+		glVertex2i(20, 70);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
