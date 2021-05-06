@@ -312,7 +312,7 @@ void createStreetLamp() {
 
 	// main body
 	glPushMatrix();
-	createCylinder(0.08, 2.0);
+	createCylinder(0.08, 4.0);
 	glPopMatrix();
 
 	// base
@@ -330,7 +330,7 @@ void createStreetLamp() {
 
 	// light top
 	glPushMatrix();
-	glTranslatef(0.0, 2.2, 0.0);
+	glTranslatef(0.0, 4.2, 0.0);
 	glRotatef(90, 1, 0, 0);
 	glutSolidTorus(0.1, 0.4, 20, 20);
 	glPopMatrix();

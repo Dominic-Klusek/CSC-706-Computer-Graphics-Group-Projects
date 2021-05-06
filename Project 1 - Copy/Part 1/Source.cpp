@@ -23,10 +23,10 @@ void display() {
 	GLfloat light0_position[] = { 0.8f, 0.8f, 0.5f, 1.0 };*/
 
 	/////////// Light Parameters ///////////
-	GLfloat light0_ambient[] = { 0.6, 0.6, 0.6, 1.0 };
-	GLfloat light0_diffuse[] = { 0.6f, 0.5f, 0.6f, 1.0 };
-	GLfloat light0_specular[] = { 0.8f, 0.8f, 0.8f, 1.0 };
-	GLfloat light0_position[] = { 0.8f, 0.8f, 0.5f, 1.0 };
+	GLfloat light0_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
+	GLfloat light0_diffuse[] = { 1, 1, 1, 1.0 };
+	GLfloat light0_specular[] = { 1, 1, 1, 1.0 };
+	GLfloat light0_position[] = { 0.8f, 5.0f, 0.5f, 1.0 };
 
 	/////////// Set Light Parameters and enable light ///////////
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
@@ -34,7 +34,30 @@ void display() {
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light0_specular);
 	glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
 
-	glEnable(GL_LIGHT0);
+	//glEnable(GL_LIGHT0);
+
+	// light for streetlamp 1
+	float spotExponent = 0.8;
+	float spotCutoff = 70.75;
+
+	// bottom right light
+	GLfloat light1_ambient[] = { 1, 1, 1, 1.0 };
+	GLfloat light1_diffuse[] = { 0.8f, 0.8f, 0.8f, 1.0 };
+	GLfloat light1_specular[] = { 0.5f, 0.5f, 0.5f, 0.5 };
+	GLfloat light1_position[] = { 0, 4, 0, 1.0, 1.0 };
+	GLfloat spot_direction[] = { 0.0, -1.0, 0.0 };
+
+	glLightfv(GL_LIGHT1, GL_AMBIENT, light1_ambient);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_diffuse);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, light1_specular);
+	glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
+
+	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, spotCutoff);
+	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, spot_direction);
+	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, spotExponent);
+	glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 0.25f);
+
+	glEnable(GL_LIGHT1);
 
 	/////////// set material ///////////
 	GLfloat ambientLight[] = { 0.10588, 0.058824, 0.0113725 };
@@ -115,7 +138,7 @@ int main(int argc, char* argv[]) {
 	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT);
 
 	// Enable shading
-	glShadeModel(GL_FLAT); // GL_FLAT is a rough shading 
+	glShadeModel(GL_PHONG_WIN); // GL_FLAT is a rough shading 
 	
 	/* define the projection transformation */
 	glMatrixMode(GL_PROJECTION);
