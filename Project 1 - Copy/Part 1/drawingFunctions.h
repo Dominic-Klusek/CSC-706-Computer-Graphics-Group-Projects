@@ -220,9 +220,9 @@ void createCar() {
 
 void createSideWalk() {
 	float transX = 0.0;
-	float transZ = 0.0;
+	float transZ = -19.0;
 
-	for (int i = 0; i < 11; i++) {
+	for (int i = 0; i < 20; i++) {
 		glColor3f(0.5, 0.5, 0.5);
 		glPushMatrix();
 		glTranslatef(0.0, 0, transZ);
@@ -334,8 +334,67 @@ void createStreetLamp() {
 	glRotatef(90, 1, 0, 0);
 	glutSolidTorus(0.1, 0.4, 20, 20);
 	glPopMatrix();
+
+	// white LED
+	glColor3f(1.0, 1.0, 1.0);
+	glPushMatrix();
+	glTranslatef(0.0, 4.1, 0.0);
+	glRotatef(90, 1, 0, 0);
+	glutSolidTorus(0.1, 0.4, 20, 20);
+	glPopMatrix();
 }
 
+void createCyberTruck() {
+	glColor3f(0.5, 0.5, 0.5);
+	// main body middle
+	glPushMatrix();
+	glScalef(1.0, 0.2, 2.0);
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	// car underside
+	glPushMatrix();
+	glTranslatef(0.0, -0.2, 0.0);
+	glScalef(0.5, 0.3, 2.0);
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0.0, -0.2, 0.8);
+	glScalef(1.0, 0.3, 0.3);
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0.0, -0.2, -0.8);
+	glScalef(1.0, 0.3, 0.3);
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0.0, -0.2, 0.0);
+	glScalef(1.0, 0.3, 0.5);
+	glutSolidCube(1.0);
+	glPopMatrix();
+	
+	// car windshield
+	glPushMatrix();
+	glTranslatef(0.0, 0.27, 0.71);
+	glRotatef(35, 1, 0, 0);
+	glScalef(1.0, 0.05, 0.68);
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	// car roof
+	glPushMatrix();
+	glTranslatef(0.0, 0.27, -0.27);
+	glRotatef(-15, 1, 0, 0);
+	glScalef(1.0, 0.05, 1.48);
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+
+}
 void reshape(int width, int height) {
 	/* define the viewport transformation */
 	glViewport(0, 0, width, height);

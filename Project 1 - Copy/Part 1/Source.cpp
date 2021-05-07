@@ -5,13 +5,20 @@
 #include <stdlib.h>
 #include <iostream>
 #include <GL/glut.h>
+//#include <GL/glew.h>
 #include "drawingFunctions.h"
 using namespace std;
+
+float currentCameraX = 5.0;
+float currentCameraY = 5.0;
+float currentCameraZ = 5.0;
+float cameraRadius = 7.0;
+float cameraAngle = 45;
 
 void display() {
 	/////////// clear window ///////////
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	
 	/////////// future matrix manipulations should affect ///////////
 
 	/////////// draw scene ///////////
@@ -21,7 +28,7 @@ void display() {
 	GLfloat light0_diffuse[] = { 0.0f, 0.15f, 0.30f, 1.0 };
 	GLfloat light0_specular[] = { 0.60f, 0.8f, 1.0f, 1.0 };
 	GLfloat light0_position[] = { 0.8f, 0.8f, 0.5f, 1.0 };*/
-
+	
 	/////////// Light Parameters ///////////
 	GLfloat light0_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
 	GLfloat light0_diffuse[] = { 1, 1, 1, 1.0 };
@@ -34,17 +41,17 @@ void display() {
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light0_specular);
 	glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
 
-	//glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHT0);
 
 	// light for streetlamp 1
-	float spotExponent = 0.8;
+	float spotExponent = 0;
 	float spotCutoff = 70.75;
-
+	
 	// bottom right light
 	GLfloat light1_ambient[] = { 1, 1, 1, 1.0 };
 	GLfloat light1_diffuse[] = { 0.8f, 0.8f, 0.8f, 1.0 };
 	GLfloat light1_specular[] = { 0.5f, 0.5f, 0.5f, 0.5 };
-	GLfloat light1_position[] = { 0, 4, 0, 1.0, 1.0 };
+	GLfloat light1_position[] = { -1.3, 4, 0.8, 1.0 };
 	GLfloat spot_direction[] = { 0.0, -1.0, 0.0 };
 
 	glLightfv(GL_LIGHT1, GL_AMBIENT, light1_ambient);
@@ -55,7 +62,8 @@ void display() {
 	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, spotCutoff);
 	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, spot_direction);
 	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, spotExponent);
-	glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 0.25f);
+	//glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 0.4);
+	glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, .55);
 
 	glEnable(GL_LIGHT1);
 
@@ -79,8 +87,8 @@ void display() {
 	glPopMatrix();
 
 	/////////// scenry ///////////
-	// sidewalks
-	/*glPushMatrix();
+	/*// sidewalks
+	glPushMatrix();
 	glTranslatef(-3.0, -1.25, 0);
 	glScalef(0.5, 0.5, 0.5);
 	glRotatef(45, 0, 1, 0);
@@ -97,18 +105,83 @@ void display() {
 	// street
 	glPushMatrix();
 	createStreet();
+	glPopMatrix();
+
+	// streetlamp 1
+	glPushMatrix();
+	glTranslatef(-1.3, 0, 0.8);
+	glRotatef(45, 0, 1, 0);
+	glScalef(0.5, 0.5, 0.5);
+	createStreetLamp();
 	glPopMatrix();*/
 
 	glPushMatrix();
-	createStreetLamp();
+	createCyberTruck();
 	glPopMatrix();
-
 
 	glPopMatrix();
 	glPopMatrix();
 
 	/* flush drawing routines to the window */
 	glFlush();
+}
+
+void keyCallback(unsigned char key, int x, int y) {
+	if (key == 'w') {
+		//cout << "Up arrow pressed" << endl;
+		currentCameraY += 0.5;
+	}
+	else if (key == 's') {
+		//cout << "Down arrow pressed" << endl;
+		currentCameraY -= 0.5;
+	}
+	else if (key == 'a') {
+		//cout << "Left arrow pressed" << endl;
+		cameraAngle -= 5;
+		currentCameraX = sin((cameraAngle * PI) / 180) * cameraRadius;
+		currentCameraZ = cos((cameraAngle * PI) / 180) * cameraRadius;
+	}
+	else if (key == 'd') {
+		//cout << "Right arrow pressed" << endl;
+		cameraAngle += 5;
+		currentCameraX = sin((cameraAngle * PI) / 180) * cameraRadius;
+		currentCameraZ = cos((cameraAngle * PI) / 180) * cameraRadius;
+	}
+	//cout << currentCameraX << " " << currentCameraY << " " << currentCameraZ << endl;
+
+	// change camera position
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt(currentCameraX, currentCameraY, currentCameraZ,
+		0.0, 0.0, 0.0,
+		0.0, 1.0, 0.0);
+
+	// recall display function
+	glutPostRedisplay();
+
+}
+void specialKeyFunction(int key, int x, int y) {
+	if (key == GLUT_KEY_PAGE_UP) {
+	cameraRadius -= 0.5;
+	currentCameraX = sin((cameraAngle * PI) / 180) * cameraRadius;
+	currentCameraZ = cos((cameraAngle * PI) / 180) * cameraRadius;
+	}
+	else if (key == GLUT_KEY_PAGE_DOWN) {
+	cameraRadius += 0.5;
+	currentCameraX = sin((cameraAngle * PI) / 180) * cameraRadius;
+	currentCameraZ = cos((cameraAngle * PI) / 180) * cameraRadius;
+	}
+	//cout << currentCameraX << " " << currentCameraY << " " << currentCameraZ << endl;
+
+	// change camera position
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt(currentCameraX, currentCameraY, currentCameraZ,
+		0.0, 0.0, 0.0,
+		0.0, 1.0, 0.0);
+
+	// recall display function
+	glutPostRedisplay();
 }
 
 int main(int argc, char* argv[]) {
@@ -149,6 +222,10 @@ int main(int argc, char* argv[]) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt(5.0, 5.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+
+	/* Create a */
+	glutKeyboardFunc(keyCallback);
+	glutSpecialFunc(specialKeyFunction);
 
 	/* tell GLUT to wait for events */
 	glutMainLoop();
