@@ -27,8 +27,8 @@ void display() {
 	GLfloat light0_position[] = { 0.8f, 0.8f, 0.5f, 1.0 };*/
 	
 	/////////// Light Parameters ///////////
-	GLfloat light0_ambient[] = { 1.0, 1.0, 1.0, 1.0 };
-	GLfloat light0_diffuse[] = { 1, 1, 1, 1.0 };
+	GLfloat light0_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
+	GLfloat light0_diffuse[] = { 0.5, 0.5, 0.5, 1.0 };
 	GLfloat light0_specular[] = { 1, 1, 1, 1.0 };
 	GLfloat light0_position[] = { 0.8f, 5.0f, 0.5f, 1.0 };
 

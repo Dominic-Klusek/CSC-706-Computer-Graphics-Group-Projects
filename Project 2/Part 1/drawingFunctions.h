@@ -346,9 +346,43 @@ void createStreetLamp() {
 	glPopMatrix();
 }
 
+void createCyberTruckWheelArch() {
+	glPushMatrix();
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glBegin(GL_POLYGON);
+	glNormal3d(1, 1, 1);
+
+	glVertex3f(0, 0.5, 0);
+	glVertex3f(2, 0.5, 0);
+	glVertex3f(2, 0, -1);
+	glVertex3f(0, 0, -1);
+
+	glEnd();
+
+	glBegin(GL_POLYGON);
+	glNormal3d(1, 1, 1);
+
+	glVertex3f(0, 0.5, 0);
+	glVertex3f(0, 0, -1);
+	glVertex3f(-1, -1, -1);
+	glVertex3f(-1, -1, 0);
+
+	glEnd();
+
+	glBegin(GL_POLYGON);
+	glNormal3d(1, 1, 1);
+
+	glVertex3f(2, 0.5, 0);
+	glVertex3f(2, 0, -1);
+	glVertex3f(3, -1, -1);
+	glVertex3f(3, -1, 0);
+
+	glEnd();
+	glPopMatrix();
+}
+
 void createCyberTruck() {
 	glColor3f(0.5, 0.5, 0.5);
-	/*glColor3f(0.5, 0.5, 0.5);
 	// main body middle
 	glPushMatrix();
 	glScalef(1.0, 0.2, 2.0);
@@ -357,16 +391,16 @@ void createCyberTruck() {
 	
 	// main body accents
 	glPushMatrix();
-	glTranslatef(0.5, 0.0, 0.0);
+	glTranslatef(0.5, -0.13, 0.0);
 	glRotatef(-5, 0, 0, 1);
-	glScalef(0.1, 0.2, 2.0);
+	glScalef(0.1, 0.45, 2.0);
 	glutSolidCube(1.0);
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(-0.5, 0.0, 0.0);
+	glTranslatef(-0.5, -0.13, 0.0);
 	glRotatef(5, 0, 0, 1);
-	glScalef(0.1, 0.2, 2.0);
+	glScalef(0.1, 0.45, 2.0);
 	glutSolidCube(1.0);
 	glPopMatrix();
 
@@ -395,6 +429,7 @@ void createCyberTruck() {
 	glutSolidCube(1.0);
 	glPopMatrix();
 	
+	glColor3f(0.1, 0.1, 0.1);
 	// car windshield
 	glPushMatrix();
 	glTranslatef(0.0, 0.27, 0.71);
@@ -411,20 +446,21 @@ void createCyberTruck() {
 	glutSolidCube(1.0);
 	glPopMatrix();
 
+	glColor3f(0.5, 0.5, 0.5);
 	// side windows
 	glPushMatrix();
 	glBegin(GL_TRIANGLES);
-		glVertex3f(0.56, 0.48, 0.45);
-		glVertex3f(0.565, 0.095, 1.0);
-		glVertex3f(0.565, 0.095, -1.0);
+		glVertex3f(0.555, 0.48, 0.45);
+		glVertex3f(0.565, 0.09, 1.0);
+		glVertex3f(0.565, 0.09, -1.0);
 	glEnd();
 	glPopMatrix();
 
 	glPushMatrix();
 	glBegin(GL_TRIANGLES);
-		glVertex3f(-0.56, 0.48, 0.45);
-		glVertex3f(-0.565, 0.095, 1.0);
-		glVertex3f(-0.565, 0.095, -1.0);
+		glVertex3f(-0.555, 0.48, 0.45);
+		glVertex3f(-0.565, 0.09, 1.0);
+		glVertex3f(-0.565, 0.09, -1.0);
 	glEnd();
 	glPopMatrix();
 
@@ -485,83 +521,37 @@ void createCyberTruck() {
 	glRotatef(90, 0, 1, 0);
 	glScalef(0.15, 0.15, 0.15);
 	glutSolidOctahedron();
-	glPopMatrix();*/
+	glPopMatrix();
 
 	// wheel arch accents
-	/*glPushMatrix();
-	glTranslatef(0.03, -0.058, 0.0);
-	glRotatef(-35, 0, 0, 1);
-	glScalef(0.1, 0.2, 0.5);
-	glutSolidCube(1.0);
+	glColor3f(0, 0, 0);
+	glPushMatrix();
+	glTranslatef(0.5, -0.09, 0.32);
+	glScalef(0.17, 0.17, 0.14);
+	glRotatef(-90, 0, 1, 0);
+	createCyberTruckWheelArch();
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(-0.2, -0.0, 0.0);
-	glScalef(0.5, 0.1, 0.5);
-	glutSolidCube(1.0);
+	glTranslatef(0.5, -0.09, -0.6);
+	glScalef(0.17, 0.17, 0.14);
+	glRotatef(-90, 0, 1, 0);
+	createCyberTruckWheelArch();
 	glPopMatrix();
 
 	glPushMatrix();
-	
-	glTranslatef(0.00, -0.0471, 0.34);
-	glRotatef(25, 1, 0, 0);
-	glScalef(1.001, 1.0, 0.5);
-
-	glPushMatrix();
-	glTranslatef(0.03, -0.058, 0.0);
-	glRotatef(-35, 0, 0, 1);
-	glScalef(0.1, 0.2, 0.5);
-	glutSolidCube(1.0);
+	glTranslatef(-0.5, -0.09, 0.6);
+	glScalef(0.17, 0.17, 0.14);
+	glRotatef(90, 0, 1, 0);
+	createCyberTruckWheelArch();
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(-0.2, -0.0, 0.0);
-	glScalef(0.5, 0.1, 0.5);
-	glutSolidCube(1.0);
+	glTranslatef(-0.5, -0.09, -0.32);
+	glScalef(0.17, 0.17, 0.14);
+	glRotatef(90, 0, 1, 0);
+	createCyberTruckWheelArch();
 	glPopMatrix();
-
-	glPopMatrix();
-
-	glPushMatrix();
-
-	glTranslatef(0.00, -0.0471, -0.34);
-	glRotatef(-25, 1, 0, 0);
-	glScalef(1.001, 1.0, 0.5);
-
-	glPushMatrix();
-	glTranslatef(0.03, -0.058, 0.0);
-	glRotatef(-35, 0, 0, 1);
-	glScalef(0.1, 0.2, 0.5);
-	glutSolidCube(1.0);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(-0.2, -0.0, 0.0);
-	glScalef(0.5, 0.1, 0.5);
-	glutSolidCube(1.0);
-	glPopMatrix();
-
-	glPopMatrix();*/
-
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	glBegin(GL_POLYGON);
-	glNormal3d(1, 1, 1);
-
-	glVertex3f(0, 0.5, 0);
-	glVertex3f(2, 0.5, 0);
-	glVertex3f(2, 0, -1);
-	glVertex3f(0, 0, -1);
-
-	glVertex3f(-1, -1, -1);
-	glVertex3f(-1, -1, 0);
-
-	glVertex3f(3, -1, 0);
-	glVertex3f(3, -1, -1);
-	glVertex3f(2, 0, -1);
-	glVertex3f(2, 0.5, 0);
-	glVertex3f(3, -1, 0);
-	
-	glEnd();
 
 	/*char stringArray[50];
 	sprintf_s(stringArray, "%s: %f", "Hello", 15.5);
