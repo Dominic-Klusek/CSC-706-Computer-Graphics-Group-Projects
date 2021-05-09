@@ -18,5 +18,11 @@
     <ClInclude Include="drawingFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Normal Map.bmp" />
   </ItemGroup>
 </Project>

@@ -2,8 +2,10 @@
 #include <time.h>
 #include <stdlib.h>
 #include <iostream>
+#include "texture.h"
 #include <GL/glut.h>
 #include <GL/freeglut.h>
+#include <SOIL/SOIL.h>
 
 #define PI 3.14159
 
@@ -234,6 +236,9 @@ void createSideWalk() {
 
 		transZ += 2.05;
 	}
+	
+	// remove texture from memory
+	//FreeTexture(sidewalkTexture);
 }
 
 void createSupportBars() {
@@ -559,6 +564,7 @@ void createCyberTruck() {
 	glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_10, (const unsigned char*) stringArray);*/
 
 }
+
 void reshape(int width, int height) {
 	/* define the viewport transformation */
 	glViewport(0, 0, width, height);
