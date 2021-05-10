@@ -16,6 +16,10 @@ float cameraAngle = 45;
 void display() {
 	/////////// clear window ///////////
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// enalbe mipmap coordinate generation
+	glEnable(GL_TEXTURE_GEN_S);
+	glEnable(GL_TEXTURE_GEN_T);
 	
 	/////////// future matrix manipulations should affect ///////////
 
@@ -72,8 +76,23 @@ void display() {
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, ambientLight);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, ambientLight);
 
+	// apply fog to scene
+	GLfloat density = 0.05;
+	GLfloat fogColor[4] = { 0.5, 0.5, 0.5, 1.0 };
+	glEnable(GL_DEPTH_TEST); //enable the depth testing
+	//glEnable(GL_FOG);
+	glFogi(GL_FOG_MODE, GL_EXP2);
+	glFogfv(GL_FOG_COLOR, fogColor);
+	glFogf(GL_FOG_DENSITY, density);
+	glHint(GL_FOG_HINT, GL_NICEST);
+
+	// Push identity matrix onto stack
 	glPushMatrix();
 	glPushMatrix();
+
+	// load grass texture
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, textureArray[0]);
 
 	/////////// ground ///////////
 	glPushMatrix();
@@ -84,7 +103,7 @@ void display() {
 	glPopMatrix();
 
 	/////////// scenry ///////////
-	/*// sidewalks
+	// sidewalks
 	glPushMatrix();
 	glTranslatef(-3.0, -1.25, 0);
 	glScalef(0.5, 0.5, 0.5);
@@ -101,6 +120,7 @@ void display() {
 
 	// street
 	glPushMatrix();
+	glTranslatef(0, -1.25, 0);
 	createStreet();
 	glPopMatrix();
 
@@ -112,43 +132,14 @@ void display() {
 	createStreetLamp();
 	glPopMatrix();
 
+	glDisable(GL_TEXTURE_2D);
+
 	glPushMatrix();
 	createCyberTruck();
-	glPopMatrix();*/
-
-	
-
-	// sidewalks
-	glPushMatrix();
-	glTranslatef(-3.0, -1.4, 0);
-	glScalef(0.5, 0.5, 0.5);
-	glRotatef(45, 0, 1, 0);
-
-	// get texture, bind, and then automatically calculate texture coordinates
-	GLuint texture;
-	LoadGLTextures(&texture, "tiled_sidewalk_1_resized.jpg");
-
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glEnable(GL_TEXTURE_GEN_S); //enable texture coordinate generation
-	glEnable(GL_TEXTURE_GEN_T);
-	createSideWalk();
-
-	glDisable(GL_TEXTURE_2D);
 	glPopMatrix();
 
 	glPopMatrix();
 	glPopMatrix();
-
-	// apply fog to scene
-	GLfloat density = 0.05;
-	GLfloat fogColor[4] = { 0.5, 0.5, 0.5, 1.0 };
-	glEnable(GL_DEPTH_TEST); //enable the depth testing
-	glEnable(GL_FOG);
-	glFogi(GL_FOG_MODE, GL_EXP2);
-	glFogfv(GL_FOG_COLOR, fogColor);
-	glFogf(GL_FOG_DENSITY, density);
-	glHint(GL_FOG_HINT, GL_NICEST);
 
 	/* flush drawing routines to the window */
 	glFlush();
@@ -188,6 +179,7 @@ void keyCallback(unsigned char key, int x, int y) {
 	glutPostRedisplay();
 
 }
+
 void specialKeyFunction(int key, int x, int y) {
 	if (key == GLUT_KEY_PAGE_UP) {
 	cameraRadius -= 0.5;
@@ -255,7 +247,11 @@ int main(int argc, char* argv[]) {
 	glutKeyboardFunc(keyCallback);
 	glutSpecialFunc(specialKeyFunction);
 
+	LoadAllTextures(); // load all textures
+
 	/* tell GLUT to wait for events */
 	glutMainLoop();
+
+	FreeAllTextures(); // free all textures
 	return 0;
 }

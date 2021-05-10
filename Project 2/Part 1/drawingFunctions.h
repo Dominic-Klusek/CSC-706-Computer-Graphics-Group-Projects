@@ -226,6 +226,9 @@ void createSideWalk() {
 	float transX = 0.0;
 	float transZ = -19.0;
 
+	// get texture, bind, and then automatically calculate texture coordinates
+	glBindTexture(GL_TEXTURE_2D, textureArray[1]);
+
 	for (int i = 0; i < 20; i++) {
 		glColor3f(0.5, 0.5, 0.5);
 		glPushMatrix();
@@ -236,9 +239,6 @@ void createSideWalk() {
 
 		transZ += 2.05;
 	}
-	
-	// remove texture from memory
-	//FreeTexture(sidewalkTexture);
 }
 
 void createSupportBars() {
@@ -294,16 +294,21 @@ void createStreet() {
 	// asphalt
 	glColor3f(0.1, 0.1, 0.1);
 	
+	// load asphalt texture
+	glBindTexture(GL_TEXTURE_2D, textureArray[2]);
+
 	glPushMatrix();
 	glRotatef(45, 0, 1, 0);
-	glScalef(2.5, 0.1, 16.30);
+	glScalef(2.5, 0.1, 24.00);
 	glutSolidCube(1.0);
 	glPopMatrix();
 
-	float trans = -5.0;
+	// load asphalt texture
+	glBindTexture(GL_TEXTURE_2D, textureArray[3]);
+	float trans = -7.0;
 	glColor3f(1.0, 1.0, 1.0);
 	// road markings
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 12; i++) {
 		glPushMatrix();
 		glTranslatef(trans, 0.01, trans);
 		glRotatef(45, 0, 1, 0);
@@ -315,7 +320,10 @@ void createStreet() {
 }
 
 void createStreetLamp() {
-	glColor3f(0.05, 0.05, 0.05);
+	//glColor3f(0.05, 0.05, 0.05);
+
+	// get texture, bind, and then automatically calculate texture coordinates
+	glBindTexture(GL_TEXTURE_2D, textureArray[4]);
 
 	// main body
 	glPushMatrix();
@@ -341,6 +349,9 @@ void createStreetLamp() {
 	glRotatef(90, 1, 0, 0);
 	glutSolidTorus(0.1, 0.4, 20, 20);
 	glPopMatrix();
+
+	// get texture, bind, and then automatically calculate texture coordinates
+	glBindTexture(GL_TEXTURE_2D, textureArray[5]);
 
 	// white LED
 	glColor3f(1.0, 1.0, 1.0);
