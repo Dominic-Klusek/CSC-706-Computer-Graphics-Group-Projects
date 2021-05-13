@@ -141,10 +141,13 @@ void display() {
 	createHome();
 	glPopMatrix();
 
+	// disable textures
 	glDisable(GL_TEXTURE_2D);
 
 	// draw car
 	glPushMatrix();
+	glTranslatef(carZ, -0.9, carZ+carOffset);
+	glRotatef(carAngle, 0, 1, 0);
 	createCyberTruck();
 	glPopMatrix();
 
@@ -220,8 +223,26 @@ void specialKeyFunction(int key, int x, int y) {
 void timerFunc(int val) {
 	glUpdateParticles();
 
+	// move car
+	carZ += carVelocity;
+
+	if (carZ > 12.0) {
+		carVelocity = -carVelocity;
+		carOffset = -carOffset;
+		carAngle = 180 + carAngle;
+		carZ = 9.9;
+	}
+	else if (carZ < -12.0) {
+		carVelocity = -carVelocity;
+		carOffset = -carOffset;
+		carAngle = 45;
+		carZ = -9.9;
+	}
+	
+	// create new callback
 	glutTimerFunc(30, timerFunc, 0);
 
+	// redisplay scene
 	glutPostRedisplay();
 }
 

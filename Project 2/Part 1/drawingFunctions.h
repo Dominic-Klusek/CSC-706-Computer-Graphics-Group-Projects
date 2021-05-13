@@ -9,6 +9,9 @@
 
 #define PI 3.14159
 
+float wheelRotation = 0, carZ = -10, 
+carOffset = 1.25, carVelocity = 0.08, carAngle = 45;
+
 void drawSphere()
 {
 	glutSolidSphere(.1, 16, 16);
@@ -192,12 +195,12 @@ void createFlowerBox() {
 
 void createSideWalk() {
 	float transX = 0.0;
-	float transZ = -19.0;
+	float transZ = -21.0;
 
 	// get texture, bind, and then automatically calculate texture coordinates
 	glBindTexture(GL_TEXTURE_2D, textureArray[1]);
 
-	for (int i = 0; i < 20; i++) {
+	for (int i = 0; i < 26; i++) {
 		glColor3f(0.5, 0.5, 0.5);
 		glPushMatrix();
 		glTranslatef(0.0, 0, transZ);
@@ -205,7 +208,7 @@ void createSideWalk() {
 		glutSolidCube(1.0);
 		glPopMatrix();
 
-		transZ += 2.00;
+		transZ += 2.05;
 	}
 }
 
@@ -255,7 +258,6 @@ void createSpinner() {
 	glRotatef(270, 0, 1, 0);
 	createSupportBars();
 	glPopMatrix();
-
 }
 
 void createStreet() {
@@ -267,13 +269,13 @@ void createStreet() {
 
 	glPushMatrix();
 	glRotatef(45, 0, 1, 0);
-	glScalef(3.5, 0.1, 25.00);
+	glScalef(3.5, 0.1, 29.00);
 	glutSolidCube(1.0);
 	glPopMatrix();
 
 	// load paint texture
 	glBindTexture(GL_TEXTURE_2D, textureArray[3]);
-	float trans = -7.0;
+	float trans = -7.5;
 	glColor3f(1.0, 1.0, 1.0);
 
 	// road markings
@@ -442,6 +444,29 @@ void createCyberTruck() {
 	
 	// no longer need transluecent material
 	glDisable(GL_BLEND);
+
+	float spotExponent = 0;
+	float spotCutoff = 55.75;
+	glPushMatrix();
+	// give the car a light
+	GLfloat light2_ambient[] = { 1, 1, 1, 1.0 };
+	GLfloat light2_diffuse[] = { 0.8f, 0.8f, 0.8f, 1.0 };
+	GLfloat light2_specular[] = { 0.5f, 0.5f, 0.5f, 0.5 };
+	GLfloat light2_position[] = { -0.75, -0.23, -0.5, 1.0 };
+	GLfloat spot_direction[] = { 0.5, 0.0, 0.5 };
+
+	glLightfv(GL_LIGHT2, GL_AMBIENT, light2_ambient);
+	glLightfv(GL_LIGHT2, GL_DIFFUSE, light2_diffuse);
+	glLightfv(GL_LIGHT2, GL_SPECULAR, light2_specular);
+	glLightfv(GL_LIGHT2, GL_POSITION, light2_position);
+
+	glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, spotCutoff);
+	glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, spot_direction);
+	glLightf(GL_LIGHT2, GL_SPOT_EXPONENT, spotExponent);
+	glLightf(GL_LIGHT2, GL_LINEAR_ATTENUATION, .55);
+
+	glEnable(GL_LIGHT2);
+	glPopMatrix();
 
 	// car roof
 	glPushMatrix();
