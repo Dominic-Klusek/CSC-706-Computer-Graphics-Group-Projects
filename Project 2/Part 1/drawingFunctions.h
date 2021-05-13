@@ -190,38 +190,6 @@ void createFlowerBox() {
 
 }
 
-void createCar() {
-	// body
-	glColor3f(0.5, 0.5, 0.5);
-	glPushMatrix();
-	glTranslated(0.9, -1.0, 2.05);
-	glScaled(2, 1, 1);
-	glutSolidCube(.5);
-	glPopMatrix();
-
-	glColor3f(0, 0, 0);
-	glPushMatrix();
-	glTranslated(1.35, -1.25, 2.35);
-	glutSolidTorus(.05, .1, 8, 8); // wheel
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslated(0.45, -1.25, 2.35);
-	glutSolidTorus(.05, .1, 8, 8); // wheel
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslated(1.35, -1.25, 1.75);
-	glutSolidTorus(.05, .1, 8, 8); // wheel
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslated(0.45, -1.25, 1.75);
-	glScaled(1, 1, 1);
-	glutSolidTorus(.05, .1, 8, 8); // wheel
-	glPopMatrix();
-}
-
 void createSideWalk() {
 	float transX = 0.0;
 	float transZ = -19.0;
@@ -237,7 +205,7 @@ void createSideWalk() {
 		glutSolidCube(1.0);
 		glPopMatrix();
 
-		transZ += 2.05;
+		transZ += 2.00;
 	}
 }
 
@@ -299,14 +267,15 @@ void createStreet() {
 
 	glPushMatrix();
 	glRotatef(45, 0, 1, 0);
-	glScalef(2.5, 0.1, 24.00);
+	glScalef(3.5, 0.1, 25.00);
 	glutSolidCube(1.0);
 	glPopMatrix();
 
-	// load asphalt texture
+	// load paint texture
 	glBindTexture(GL_TEXTURE_2D, textureArray[3]);
 	float trans = -7.0;
 	glColor3f(1.0, 1.0, 1.0);
+
 	// road markings
 	for (int i = 0; i < 12; i++) {
 		glPushMatrix();
@@ -446,13 +415,33 @@ void createCyberTruck() {
 	glPopMatrix();
 	
 	glColor3f(0.1, 0.1, 0.1);
+
 	// car windshield
+	// using blend GL_ONE with itself gives a transluencent material
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_ONE, GL_ONE);
 	glPushMatrix();
 	glTranslatef(0.0, 0.27, 0.71);
 	glRotatef(35, 1, 0, 0);
 	glScalef(1.1, 0.05, 0.68);
 	glutSolidCube(1.0);
 	glPopMatrix();
+
+	// car headlights
+	glPushMatrix();
+	glTranslatef(0.38, -0.23, 0.92);
+	glScalef(0.2, 0.27, 0.2);
+	glutSolidCube(1.0);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-0.32, -0.23, 0.92);
+	glScalef(0.2, 0.27, 0.2);
+	glutSolidCube(1.0);
+	glPopMatrix();
+	
+	// no longer need transluecent material
+	glDisable(GL_BLEND);
 
 	// car roof
 	glPushMatrix();
@@ -574,6 +563,76 @@ void createCyberTruck() {
 	
 	glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_10, (const unsigned char*) stringArray);*/
 
+}
+
+void createHome() {
+	glBindTexture(GL_TEXTURE_2D, textureArray[8]);
+
+	/////////// door ///////////
+	glPushMatrix();
+	glColor3f(0.66, 0.76, 0.83);
+	glTranslatef(-0.35, -0.35, 1.0);
+	glScalef(3, 5, 0.25);
+	glutSolidCube(0.25);
+	glPopMatrix();
+
+	// window supports
+	glPushMatrix();
+	glColor3f(0.15, 0.19, 0.0);
+	glTranslatef(0.55, 0.35, 0.99);
+	glRotatef(180, 0, 1, 0);
+	glScalef(1.5, 0.1, 0.1);
+	glutSolidCube(0.5);
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3f(0.15, 0.19, 0.0);
+	glTranslatef(0.55, 0.35, 0.99);
+	glRotatef(90, 0, 0, 1);
+	glRotatef(180, 0, 1, 0);
+	glScalef(1.5, 0.1, 0.1);
+	glutSolidCube(0.5);
+	glPopMatrix();
+
+	glBindTexture(GL_TEXTURE_2D, textureArray[7]);
+	/////////// house ///////////
+	glPushMatrix();
+	glColor3f(0.3, 0.3, 0.3);
+	glutSolidCube(2); // building
+	glPopMatrix();
+
+	glBindTexture(GL_TEXTURE_2D, textureArray[6]);
+	// roof
+	glPushMatrix();
+	glColor3f(0.56, 0.63, 0.7);
+	glTranslated(0, 1.0, 0);
+	glRotated(-90, 1, 0, 0);
+	glutSolidCone(1.5, 1, 16, 8);
+	glPopMatrix();
+
+	glBindTexture(GL_TEXTURE_2D, textureArray[9]);
+	// chimney
+	glPushMatrix();
+	glColor3f(0.28, 0.32, 0.35);
+	glTranslated(1, 1.5, -0.5);
+	glScaled(1, 3, 1);
+	glutSolidCube(.25);
+	glPopMatrix();
+	glDisable(GL_TEXTURE_2D);
+
+	/////////// door handle ///////////
+	glPushMatrix();
+	glTranslatef(-0.10, -0.3, 1.1);
+	glutSolidSphere(0.05, 128, 128);
+	glPopMatrix();
+
+	// window
+	glPushMatrix();
+	glColor3f(0.6, 0.8, 1);
+	glTranslatef(0.55, 0.35, 0.97);
+	glScaled(3, 3, 0.25);
+	glutSolidCube(0.25);
+	glPopMatrix();
 }
 
 void reshape(int width, int height) {

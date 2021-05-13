@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include "drawingFunctions.h"
+#include "particles.h"
 using namespace std;
 
 float currentCameraX = 5.0;
@@ -25,16 +26,17 @@ void display() {
 
 	/////////// draw scene ///////////
 	// Nightime Light Parameters
-	/*GLfloat light0_ambient[] = { 0.25, 0.55, 0.85, 1.0 };
+	GLfloat light0_ambient[] = { 0.25, 0.55, 0.85, 1.0 };
 	GLfloat light0_diffuse[] = { 0.0f, 0.15f, 0.30f, 1.0 };
 	GLfloat light0_specular[] = { 0.60f, 0.8f, 1.0f, 1.0 };
-	GLfloat light0_position[] = { 0.8f, 0.8f, 0.5f, 1.0 };*/
+	GLfloat light0_position[] = { 0.8f, 0.8f, 0.5f, 1.0 };
+	glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, .35);
 	
 	/////////// Light Parameters ///////////
-	GLfloat light0_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
+	/*GLfloat light0_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
 	GLfloat light0_diffuse[] = { 1, 1, 1, 1.0 };
 	GLfloat light0_specular[] = { 1, 1, 1, 1.0 };
-	GLfloat light0_position[] = { 0.8f, 5.0f, 0.5f, 1.0 };
+	GLfloat light0_position[] = { 0.8f, 5.0f, 0.5f, 1.0 };*/
 
 	/////////// Set Light Parameters and enable light ///////////
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
@@ -78,9 +80,9 @@ void display() {
 
 	// apply fog to scene
 	GLfloat density = 0.05;
-	GLfloat fogColor[4] = { 0.5, 0.5, 0.5, 1.0 };
+	GLfloat fogColor[4] = { 0.2, 0.2, 0.2, 1.0 };
 	glEnable(GL_DEPTH_TEST); //enable the depth testing
-	//glEnable(GL_FOG);
+	glEnable(GL_FOG);
 	glFogi(GL_FOG_MODE, GL_EXP2);
 	glFogfv(GL_FOG_COLOR, fogColor);
 	glFogf(GL_FOG_DENSITY, density);
@@ -105,14 +107,14 @@ void display() {
 	/////////// scenry ///////////
 	// sidewalks
 	glPushMatrix();
-	glTranslatef(-3.0, -1.25, 0);
+	glTranslatef(-3.0, -1.4, 0);
 	glScalef(0.5, 0.5, 0.5);
 	glRotatef(45, 0, 1, 0);
 	createSideWalk();
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(-0.0, -1.25, -3.0);
+	glTranslatef(-0.0, -1.4, -3.0);
 	glScalef(0.5, 0.5, 0.5);
 	glRotatef(45, 0, 1, 0);
 	createSideWalk();
@@ -120,23 +122,34 @@ void display() {
 
 	// street
 	glPushMatrix();
-	glTranslatef(0, -1.25, 0);
+	glTranslatef(0, -1.45, 0);
 	createStreet();
 	glPopMatrix();
 
 	// streetlamp 1
 	glPushMatrix();
-	glTranslatef(-1.3, 0, 0.8);
+	glTranslatef(-1.85, -1.35, 0.8);
 	glRotatef(45, 0, 1, 0);
 	glScalef(0.5, 0.5, 0.5);
 	createStreetLamp();
 	glPopMatrix();
 
+	// draw homes
+	glPushMatrix();
+	glTranslatef(-5.25, -0.4, 0);
+	glRotatef(135, 0, 1, 0);
+	createHome();
+	glPopMatrix();
+
 	glDisable(GL_TEXTURE_2D);
 
+	// draw car
 	glPushMatrix();
 	createCyberTruck();
 	glPopMatrix();
+
+	//draw rain
+	glDrawParticles();
 
 	glPopMatrix();
 	glPopMatrix();
@@ -204,6 +217,14 @@ void specialKeyFunction(int key, int x, int y) {
 	glutPostRedisplay();
 }
 
+void timerFunc(int val) {
+	glUpdateParticles();
+
+	glutTimerFunc(30, timerFunc, 0);
+
+	glutPostRedisplay();
+}
+
 int main(int argc, char* argv[]) {
 	// seed rand function
 	srand(time(NULL));
@@ -243,11 +264,19 @@ int main(int argc, char* argv[]) {
 	glLoadIdentity();
 	gluLookAt(5.0, 5.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
+	// enable textures
+	glEnable(GL_TEXTURE_2D);
+
 	/* Create a */
 	glutKeyboardFunc(keyCallback);
 	glutSpecialFunc(specialKeyFunction);
 
 	LoadAllTextures(); // load all textures
+
+	// populate particles array
+	glCreateParticles();
+
+	glutTimerFunc(30, timerFunc, 0);
 
 	/* tell GLUT to wait for events */
 	glutMainLoop();

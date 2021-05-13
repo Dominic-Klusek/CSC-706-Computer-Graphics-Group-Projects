@@ -6,6 +6,11 @@
 
 int LoadGLTextures(GLuint *texture, const char* filename)   // Load Bitmaps And Convert To Textures
 {
+	/*
+	* Code for function taken from tutorial at http://www.swiftless.com/tutorials/glsl/8_bump_mapping.html,
+	*  and then modified to utilize SOIL library
+	*/
+
 	/* load an image file directly as a new OpenGL texture */
 	texture[0] = SOIL_load_OGL_texture
 	(
@@ -41,10 +46,9 @@ void FreeTexture(GLuint texture)
 	glDeleteTextures(1, &texture);
 }
 
-GLuint textureArray[6];
+GLuint textureArray[12];
 
 void LoadAllTextures() {
-
 	GLuint tempTexture;
 	LoadGLTextures(&tempTexture, "grass_1_2048x2048.jpg");
 	textureArray[0] = tempTexture;
@@ -58,10 +62,22 @@ void LoadAllTextures() {
 	textureArray[4] = tempTexture;
 	LoadGLTextures(&tempTexture, "frosted_glass.jpg");
 	textureArray[5] = tempTexture;
+	LoadGLTextures(&tempTexture, "tiled_roof_texture.jpg");
+	textureArray[6] = tempTexture;
+	LoadGLTextures(&tempTexture, "stucco-texture-1491937.jpg");
+	textureArray[7] = tempTexture;
+	LoadGLTextures(&tempTexture, "wood_texture.jpg");
+	textureArray[8] = tempTexture;
+	LoadGLTextures(&tempTexture, "brick_texture.jpg");
+	textureArray[9] = tempTexture;
+	LoadGLTextures(&tempTexture, "particle.bmp");
+	textureArray[10] = tempTexture;
+	LoadGLTextures(&tempTexture, "particle_mask.bmp");
+	textureArray[11] = tempTexture;
 }
 
 void FreeAllTextures() {
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 12;  i++) {
 		FreeTexture(textureArray[i]);
 	}
 }
