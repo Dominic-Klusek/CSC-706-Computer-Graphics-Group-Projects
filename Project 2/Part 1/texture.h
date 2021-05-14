@@ -46,7 +46,7 @@ void FreeTexture(GLuint texture)
 	glDeleteTextures(1, &texture);
 }
 
-GLuint textureArray[12];
+GLuint textureArray[14];
 
 void LoadAllTextures() {
 	GLuint tempTexture;
@@ -74,10 +74,14 @@ void LoadAllTextures() {
 	textureArray[10] = tempTexture;
 	LoadGLTextures(&tempTexture, "particle_mask.bmp");
 	textureArray[11] = tempTexture;
+	LoadGLTextures(&tempTexture, "leaf_texture.jpg");
+	textureArray[12] = tempTexture;
+	LoadGLTextures(&tempTexture, "wood-log-texture.jpg");
+	textureArray[13] = tempTexture;
 }
 
 void FreeAllTextures() {
-	for (int i = 0; i < 12;  i++) {
+	for (int i = 0; i < 14;  i++) {
 		FreeTexture(textureArray[i]);
 	}
 }

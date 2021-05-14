@@ -1,16 +1,21 @@
 #pragma once
 #include <time.h>
 #include <stdlib.h>
+#include <math.h>
 #include <iostream>
 #include "texture.h"
 #include <GL/glut.h>
 #include <GL/freeglut.h>
 #include <SOIL/SOIL.h>
+using namespace std;
 
 #define PI 3.14159
 
 float wheelRotation = 0, carZ = -10, 
 carOffset = 1.25, carVelocity = 0.08, carAngle = 45;
+float currentCameraX = 5.0, currentCameraY = 5.0, currentCameraZ = 5.0;
+float cameraRadius = 7.0, cameraAngle = 45;
+float FPS = 30;
 
 void drawSphere()
 {
@@ -34,19 +39,21 @@ void createCylinder(float trunkRadius, float trunkHeight) {
 	glPopMatrix();
 }
 
-void createTree(float transX, float transZ) {
+void createTree() {
 	/*
 	* Function to create a tree
 	* Made from simple solid Toruses, and a Cylinder
 	*/
 	// tree leaves
+	glBindTexture(GL_TEXTURE_2D, textureArray[12]);
+	glBlendFunc(GL_ZERO, GL_ONE);
 	float transY = 0.6; // have a variable to hold y translation
 	float innerRadius = 0.14;
 	float outerRadius = 0.28;
-	glColor3f(0, 0.2, 0.0); // set color
-	for (int i = 0; i < 7; i++) {
+
+	for (int i = 0; i < 6; i++) {
 		glPushMatrix();
-		glTranslatef(transX, transY, transZ);
+		glTranslatef(0, transY, 0);
 		glRotatef(-90, 1, 0, 0);
 		glutSolidTorus(innerRadius, outerRadius, 20, 20);
 		glPopMatrix();
@@ -56,10 +63,12 @@ void createTree(float transX, float transZ) {
 		outerRadius = outerRadius / 1.2;
 	}
 
+	glBindTexture(GL_TEXTURE_2D, textureArray[13]);
+
 	// trunk
 	glColor3f(0.2, 0.2, 0);
 	glPushMatrix();
-	glTranslatef(transX, 0, transZ);
+	glTranslatef(0, 0, 0);
 	createCylinder(0.08, 0.7);
 	glPopMatrix();
 }
@@ -200,6 +209,14 @@ void createSideWalk() {
 	// get texture, bind, and then automatically calculate texture coordinates
 	glBindTexture(GL_TEXTURE_2D, textureArray[1]);
 
+	// rotate sidewalk texture to make it more consitent with cameraAngle
+	glPushMatrix();
+	glMatrixMode(GL_TEXTURE);
+	glLoadIdentity();
+	glRotatef(cameraAngle - 45, 0, 0, 1);
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+
 	for (int i = 0; i < 26; i++) {
 		glColor3f(0.5, 0.5, 0.5);
 		glPushMatrix();
@@ -292,6 +309,30 @@ void createStreet() {
 
 void createStreetLamp() {
 	//glColor3f(0.05, 0.05, 0.05);
+
+	// light for streetlamp 1
+	float spotExponent = 0;
+	float spotCutoff = 70.75;
+
+	// bottom right light
+	GLfloat light1_ambient[] = { 1, 1, 1, 1.0 };
+	GLfloat light1_diffuse[] = { 0.8f, 0.8f, 0.8f, 1.0 };
+	GLfloat light1_specular[] = { 0.5f, 0.5f, 0.5f, 0.5 };
+	GLfloat light1_position[] = { -1.3, 4, 0.8, 1.0 };
+	GLfloat spot_direction[] = { 0.0, -1.0, 0.0 };
+
+	glLightfv(GL_LIGHT1, GL_AMBIENT, light1_ambient);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_diffuse);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, light1_specular);
+	glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
+
+	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, spotCutoff);
+	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, spot_direction);
+	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, spotExponent);
+	//glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 0.4);
+	glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, .55);
+
+	glEnable(GL_LIGHT1);
 
 	// get texture, bind, and then automatically calculate texture coordinates
 	glBindTexture(GL_TEXTURE_2D, textureArray[4]);
@@ -643,6 +684,7 @@ void createHome() {
 	glScaled(1, 3, 1);
 	glutSolidCube(.25);
 	glPopMatrix();
+
 	glDisable(GL_TEXTURE_2D);
 
 	/////////// door handle ///////////
@@ -658,6 +700,8 @@ void createHome() {
 	glScaled(3, 3, 0.25);
 	glutSolidCube(0.25);
 	glPopMatrix();
+
+	glEnable(GL_TEXTURE_2D);
 }
 
 void reshape(int width, int height) {

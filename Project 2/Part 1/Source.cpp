@@ -8,12 +8,6 @@
 #include "particles.h"
 using namespace std;
 
-float currentCameraX = 5.0;
-float currentCameraY = 5.0;
-float currentCameraZ = 5.0;
-float cameraRadius = 7.0;
-float cameraAngle = 45;
-
 void display() {
 	/////////// clear window ///////////
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -46,30 +40,6 @@ void display() {
 
 	glEnable(GL_LIGHT0);
 
-	// light for streetlamp 1
-	float spotExponent = 0;
-	float spotCutoff = 70.75;
-	
-	// bottom right light
-	GLfloat light1_ambient[] = { 1, 1, 1, 1.0 };
-	GLfloat light1_diffuse[] = { 0.8f, 0.8f, 0.8f, 1.0 };
-	GLfloat light1_specular[] = { 0.5f, 0.5f, 0.5f, 0.5 };
-	GLfloat light1_position[] = { -1.3, 4, 0.8, 1.0 };
-	GLfloat spot_direction[] = { 0.0, -1.0, 0.0 };
-
-	glLightfv(GL_LIGHT1, GL_AMBIENT, light1_ambient);
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_diffuse);
-	glLightfv(GL_LIGHT1, GL_SPECULAR, light1_specular);
-	glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
-
-	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, spotCutoff);
-	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, spot_direction);
-	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, spotExponent);
-	//glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 0.4);
-	glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, .55);
-
-	glEnable(GL_LIGHT1);
-
 	/////////// set material ///////////
 	GLfloat ambientLight[] = { 0.10588, 0.058824, 0.0113725 };
 	GLfloat diffuseLight[] = { 0.427451, 0.470588, 0.541176 };
@@ -79,8 +49,8 @@ void display() {
 	glMaterialfv(GL_FRONT, GL_SPECULAR, ambientLight);
 
 	// apply fog to scene
-	GLfloat density = 0.05;
-	GLfloat fogColor[4] = { 0.2, 0.2, 0.2, 1.0 };
+	GLfloat density = 0.06;
+	GLfloat fogColor[4] = { 0.4, 0.4, 0.4, 1.0 };
 	glEnable(GL_DEPTH_TEST); //enable the depth testing
 	glEnable(GL_FOG);
 	glFogi(GL_FOG_MODE, GL_EXP2);
@@ -130,7 +100,7 @@ void display() {
 	glPushMatrix();
 	glTranslatef(-1.85, -1.35, 0.8);
 	glRotatef(45, 0, 1, 0);
-	glScalef(0.5, 0.5, 0.5);
+	glScalef(0.5, 0.75, 0.5);
 	createStreetLamp();
 	glPopMatrix();
 
@@ -140,6 +110,139 @@ void display() {
 	glRotatef(135, 0, 1, 0);
 	createHome();
 	glPopMatrix();
+
+	float radius = 0.75;
+	// trees
+	float transX = -7, transZ = -12;
+	for (int i = 0; i < 10; i++) {
+		glPushMatrix();
+		glTranslatef(transX, -1.35, transZ);
+		glScalef(3.0, 3.0, 3.0);
+		createTree();
+		glPopMatrix();
+
+		transX += 2.5;
+		transZ += 2.5;
+	}
+
+	transX = -4, transZ = -12;
+	for (int i = 0; i < 5; i++) {
+		glPushMatrix();
+		glTranslatef(transX, -1.35, transZ);
+		glScalef(3.0, 3.0, 3.0);
+		createTree();
+		glPopMatrix();
+
+		glDisable(GL_TEXTURE_2D);
+		// add flowers and mushrooms(mini trees)
+		for (int j = 0; j < 270; j += 45) {
+			if (j % 30 == 0) {
+				glColor3f(0.2, 0.2, 0);
+				glPushMatrix();
+				glTranslatef(transX + cos(j) * radius, -1.35, transZ + sin(j) * radius);
+				glRotatef(j % 30, 1, 0, 1);
+				glScalef(0.3, 0.3, 0.3);
+				createTree();
+				glPopMatrix();
+			}
+			else {
+				glPushMatrix();
+				glTranslatef(transX + cos(j) * radius, -1.35, transZ + sin(j) * radius);
+				glRotatef(j, 0, 1, 0);
+				glScalef(0.1, 0.1, 0.1);
+				createFlower();
+				glPopMatrix();
+			}
+		}
+		glEnable(GL_TEXTURE_2D);
+
+		transX += 5.0;
+		transZ += 5.0;
+	}
+
+	transX = -1, transZ = -12;
+	for (int i = 0; i < 10; i++) {
+		glPushMatrix();
+		glTranslatef(transX, -1.35, transZ);
+		glScalef(3.0, 3.0, 3.0);
+		createTree();
+		glPopMatrix();
+
+		transX += 2.5;
+		transZ += 2.5;
+	}
+
+	transX = 5, transZ = -12;
+	for (int i = 0; i < 10; i++) {
+		glPushMatrix();
+		glTranslatef(transX, -1.35, transZ);
+		glScalef(3.0, 3.0, 3.0);
+		createTree();
+		glPopMatrix();
+
+		transX += 2.5;
+		transZ += 2.5;
+	}
+
+	transX = -12, transZ = -3;
+	for (int i = 0; i < 10; i++) {
+		glPushMatrix();
+		glTranslatef(transX, -1.35, transZ);
+		glScalef(3.0, 3.0, 3.0);
+		createTree();
+		glPopMatrix();
+
+		transX += 2.5;
+		transZ += 2.5;
+	}
+
+	transX = -12, transZ = 0;
+	for (int i = 0; i < 10; i++) {
+		glPushMatrix();
+		glTranslatef(transX, -1.35, transZ);
+		glScalef(3.0, 3.0, 3.0);
+		createTree();
+		glPopMatrix();
+
+		glDisable(GL_TEXTURE_2D);
+		// add flowers and mushrooms(mini trees)
+		for (int j = 0; j < 270; j += 45) {
+			if (j % 30 == 0) {
+				glColor3f(0.2, 0.2, 0);
+				glPushMatrix();
+				glTranslatef(transX + cos(j) * radius, -1.35, transZ + sin(j) * radius);
+				glRotatef(j % 30, 1, 0, 1);
+				glScalef(0.3, 0.3, 0.3);
+				createTree();
+				glPopMatrix();
+			}
+			else {
+				glPushMatrix();
+				glTranslatef(transX + cos(j) * radius, -1.35, transZ + sin(j) * radius);
+				glRotatef(j, 0, 1, 0);
+				glScalef(0.1, 0.1, 0.1);
+				createFlower();
+				glPopMatrix();
+			}
+		}
+		glEnable(GL_TEXTURE_2D);
+
+		transX += 5;
+		transZ += 5;
+	}
+
+	transX = -12, transZ = 3;
+	for (int i = 0; i < 10; i++) {
+		glPushMatrix();
+		glTranslatef(transX, -1.35, transZ);
+		glScalef(3.0, 3.0, 3.0);
+		createTree();
+		glPopMatrix();
+
+		transX += 2.5;
+		transZ += 2.5;
+	}
+
 
 	// disable textures
 	glDisable(GL_TEXTURE_2D);
@@ -182,7 +285,6 @@ void keyCallback(unsigned char key, int x, int y) {
 		currentCameraX = sin((cameraAngle * PI) / 180) * cameraRadius;
 		currentCameraZ = cos((cameraAngle * PI) / 180) * cameraRadius;
 	}
-	//cout << currentCameraX << " " << currentCameraY << " " << currentCameraZ << endl;
 
 	// change camera position
 	glMatrixMode(GL_MODELVIEW);
@@ -193,7 +295,6 @@ void keyCallback(unsigned char key, int x, int y) {
 
 	// recall display function
 	glutPostRedisplay();
-
 }
 
 void specialKeyFunction(int key, int x, int y) {
@@ -240,7 +341,7 @@ void timerFunc(int val) {
 	}
 	
 	// create new callback
-	glutTimerFunc(30, timerFunc, 0);
+	glutTimerFunc(1000 / FPS, timerFunc, 0);
 
 	// redisplay scene
 	glutPostRedisplay();
@@ -297,7 +398,7 @@ int main(int argc, char* argv[]) {
 	// populate particles array
 	glCreateParticles();
 
-	glutTimerFunc(30, timerFunc, 0);
+	glutTimerFunc(1000 / FPS, timerFunc, 0);
 
 	/* tell GLUT to wait for events */
 	glutMainLoop();

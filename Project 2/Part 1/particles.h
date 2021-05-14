@@ -2,7 +2,8 @@
 #include "texture.h"
 
 /*
-*	Patricle code was taken from tutorial at http://www.swiftless.com/tutorials/opengl/particles.html, and then modified to better suit our needs
+*	Patricle code was taken from tutorial at http://www.swiftless.com/tutorials/opengl/particles.html, 
+	and then modified to better suit our needs
 */
 
 const int ParticleCount = 500;
