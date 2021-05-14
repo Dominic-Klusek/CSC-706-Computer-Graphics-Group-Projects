@@ -127,6 +127,7 @@ void display() {
 	glPopMatrix();
 
 	/* flush drawing routines to the window */
+
 	glFlush();
 }
 

@@ -609,8 +609,8 @@ void drawClappingChildAppendages()
 
 	glColor3f(0.3, 0.3, 0.3);
 	glPushMatrix(); // right thigh
-	glRotatef(45, 0, 1, 0);
-	glTranslatef(0.15, 0.2f, 0.4f);
+	glRotatef(47, 0, 1, 0);
+	glTranslatef(0.1, 0.2f, 0.4f);
 	glScalef(0.4f, 0.4f, 3.0f);
 	drawSphere();
 	glPopMatrix();

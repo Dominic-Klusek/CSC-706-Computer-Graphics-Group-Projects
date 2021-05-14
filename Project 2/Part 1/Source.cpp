@@ -243,7 +243,6 @@ void display() {
 		transZ += 2.5;
 	}
 
-
 	// disable textures
 	glDisable(GL_TEXTURE_2D);
 
