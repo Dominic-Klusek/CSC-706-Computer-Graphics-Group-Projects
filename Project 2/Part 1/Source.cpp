@@ -1,4 +1,4 @@
-// CSC 706 Project 1 Part 2
+// CSC 706 Project 2
 // Robert Kigobe, Dominic Klusek, Novichenko Konstantin
 
 #include <time.h>
@@ -50,13 +50,15 @@ void display() {
 
 	// apply fog to scene
 	GLfloat density = 0.06;
-	GLfloat fogColor[4] = { 0.4, 0.4, 0.4, 1.0 };
+	GLfloat fogColor[4] = { 0.2, 0.2, 0.2, 1.0 };
 	glEnable(GL_DEPTH_TEST); //enable the depth testing
-	glEnable(GL_FOG);
-	glFogi(GL_FOG_MODE, GL_EXP2);
-	glFogfv(GL_FOG_COLOR, fogColor);
-	glFogf(GL_FOG_DENSITY, density);
-	glHint(GL_FOG_HINT, GL_NICEST);
+
+	// enable and set fog parameteres
+	glEnable(GL_FOG); // enable fog
+	glFogi(GL_FOG_MODE, GL_EXP2); // set the fog dispersion
+	glFogfv(GL_FOG_COLOR, fogColor); // set fog color
+	glFogf(GL_FOG_DENSITY, density); // set fog density
+	glHint(GL_FOG_HINT, GL_NICEST); // set the calculation accuracy
 
 	// Push identity matrix onto stack
 	glPushMatrix();

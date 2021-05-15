@@ -68,22 +68,7 @@ void glDrawParticles(void) {
 		glDisable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
 
-		glBlendFunc(GL_DST_COLOR, GL_ONE);
-		glBindTexture(GL_TEXTURE_2D, textureArray[10]);
-
-		glBegin(GL_QUADS);
-		glTexCoord2d(0, 0);
-		glVertex3f(-0.02, -0.5, 0);
-		glTexCoord2d(1, 0);
-		glVertex3f(0.02, -0.5, 0);
-		glTexCoord2d(1, 1);
-		glVertex3f(0.02, 0.5, 0);
-		glTexCoord2d(0, 1);
-		glVertex3f(-0.02, 0.5, 0);
-		glEnd();
-
 		glBlendFunc(GL_ONE, GL_ONE);
-		glBindTexture(GL_TEXTURE_2D, textureArray[11]);
 
 		glBegin(GL_QUADS);
 		glTexCoord2d(0, 0);

@@ -11,11 +11,10 @@ using namespace std;
 
 #define PI 3.14159
 
-float wheelRotation = 0, carZ = -10, 
-carOffset = 1.25, carVelocity = 0.08, carAngle = 45;
+float FPS = 30;
+float carZ = -10, carOffset = 1.25, carVelocity = 0.08, carAngle = 45;
 float currentCameraX = 5.0, currentCameraY = 5.0, currentCameraZ = 5.0;
 float cameraRadius = 7.0, cameraAngle = 45;
-float FPS = 30;
 
 void drawSphere()
 {
@@ -487,14 +486,14 @@ void createCyberTruck() {
 	glDisable(GL_BLEND);
 
 	float spotExponent = 0;
-	float spotCutoff = 55.75;
+	float spotCutoff = 56.75;
 	glPushMatrix();
 	// give the car a light
 	GLfloat light2_ambient[] = { 1, 1, 1, 1.0 };
 	GLfloat light2_diffuse[] = { 0.8f, 0.8f, 0.8f, 1.0 };
 	GLfloat light2_specular[] = { 0.5f, 0.5f, 0.5f, 0.5 };
-	GLfloat light2_position[] = { -0.75, -0.23, -0.5, 1.0 };
-	GLfloat spot_direction[] = { 0.5, 0.0, 0.5 };
+	GLfloat light2_position[] = { 0.0, -0.23, 0.0, 1.0 };
+	GLfloat spot_direction[] = { 0.0, 0.0, 0.5 };
 
 	glLightfv(GL_LIGHT2, GL_AMBIENT, light2_ambient);
 	glLightfv(GL_LIGHT2, GL_DIFFUSE, light2_diffuse);
@@ -504,7 +503,7 @@ void createCyberTruck() {
 	glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, spotCutoff);
 	glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, spot_direction);
 	glLightf(GL_LIGHT2, GL_SPOT_EXPONENT, spotExponent);
-	glLightf(GL_LIGHT2, GL_LINEAR_ATTENUATION, .55);
+	glLightf(GL_LIGHT2, GL_LINEAR_ATTENUATION, .35);
 
 	glEnable(GL_LIGHT2);
 	glPopMatrix();
