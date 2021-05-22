@@ -538,7 +538,7 @@ void drawRobot()
 	glPushMatrix();
 	glTranslatef(0.0f, 0.0f - bodyYOffset, 0.0f);
 	glTranslatef(0, 0.80, 0);
-	glRotatef(rotationAngle*2.0, 1, 0, 0);
+	glRotatef(rotationAngle, 1, 0, 0);
 	glTranslatef(0, -0.80, 0);
 	drawCane();
 	glPopMatrix();
@@ -570,15 +570,13 @@ void drawRobot()
 	glutSwapBuffers();
 }
 
-bool spin = false;
+bool spin = true;
 void timer(int val) {
-	// increment rotation angle
-	rotationAngle += 1;
-
 	// cycle between the character  "dancing" up and down
 	// of increase increment the offsets and angles
 	// else decrease offsets amd amg;es
 	if (increase) {
+		rotationAngle += (2 * animationSpeedRatio);
 		bodyYOffset += (0.02 * animationSpeedRatio);
 		footXOffset += (0.005 * animationSpeedRatio);
 		legXOffset += (0.01 * animationSpeedRatio);
@@ -588,6 +586,7 @@ void timer(int val) {
 			increase = false;
 	}
 	else {
+		rotationAngle += (2 * animationSpeedRatio);
 		bodyYOffset -= (0.02 * animationSpeedRatio);
 		footXOffset -= (0.005 * animationSpeedRatio);
 		legXOffset -= (0.01 * animationSpeedRatio);
@@ -644,10 +643,10 @@ void animMenu(int value) {
 		glutTimerFunc(0, timer, 0);
 	}
 	else if (value == 2) {
-		animationSpeedRatio += 0.25;
+		animationSpeedRatio += 0.5;
 	}
 	else if (value == 3) {
-		animationSpeedRatio -= 0.25;
+		animationSpeedRatio -= 0.5;
 	}
 	else if (value == 4) {
 		spin = false;
