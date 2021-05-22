@@ -1,3 +1,6 @@
+// CSC 706 Project 2
+// Robert Kigobe, Dominic Klusek, Novichenko Konstantin
+
 #pragma once
 #include <GL/glew.h>
 #include <GL/glut.h>
@@ -50,33 +53,33 @@ GLuint textureArray[14];
 
 void LoadAllTextures() {
 	GLuint tempTexture;
-	LoadGLTextures(&tempTexture, "grass_1_2048x2048.jpg");
+	LoadGLTextures(&tempTexture, "textures/grass_1_2048x2048.jpg");
 	textureArray[0] = tempTexture;
-	LoadGLTextures(&tempTexture, "wet-sidewalk-texture.jpg");
+	LoadGLTextures(&tempTexture, "textures/wet-sidewalk-texture.jpg");
 	textureArray[1] = tempTexture;
-	LoadGLTextures(&tempTexture, "asphalt_texture.jpg");
+	LoadGLTextures(&tempTexture, "textures/asphalt_texture.jpg");
 	textureArray[2] = tempTexture;
-	LoadGLTextures(&tempTexture, "paint_texture_recolored.jpg");
+	LoadGLTextures(&tempTexture, "textures/paint_texture_recolored.jpg");
 	textureArray[3] = tempTexture;
-	LoadGLTextures(&tempTexture, "scratched-and-scraped-metal-texture-6.jpg");
+	LoadGLTextures(&tempTexture, "textures/scratched-and-scraped-metal-texture-6.jpg");
 	textureArray[4] = tempTexture;
-	LoadGLTextures(&tempTexture, "frosted_glass.jpg");
+	LoadGLTextures(&tempTexture, "textures/frosted_glass.jpg");
 	textureArray[5] = tempTexture;
-	LoadGLTextures(&tempTexture, "tiled_roof_texture.jpg");
+	LoadGLTextures(&tempTexture, "textures/tiled_roof_texture.jpg");
 	textureArray[6] = tempTexture;
-	LoadGLTextures(&tempTexture, "stucco-texture-1491937.jpg");
+	LoadGLTextures(&tempTexture, "textures/stucco-texture-1491937.jpg");
 	textureArray[7] = tempTexture;
-	LoadGLTextures(&tempTexture, "wood_texture.jpg");
+	LoadGLTextures(&tempTexture, "textures/wood_texture.jpg");
 	textureArray[8] = tempTexture;
-	LoadGLTextures(&tempTexture, "brick_texture.jpg");
+	LoadGLTextures(&tempTexture, "textures/brick_texture.jpg");
 	textureArray[9] = tempTexture;
-	LoadGLTextures(&tempTexture, "particle.bmp");
+	LoadGLTextures(&tempTexture, "textures/particle.bmp");
 	textureArray[10] = tempTexture;
-	LoadGLTextures(&tempTexture, "particle_mask.bmp");
+	LoadGLTextures(&tempTexture, "textures/particle_mask.bmp");
 	textureArray[11] = tempTexture;
-	LoadGLTextures(&tempTexture, "leaf_texture.jpg");
+	LoadGLTextures(&tempTexture, "textures/leaf_texture.jpg");
 	textureArray[12] = tempTexture;
-	LoadGLTextures(&tempTexture, "wood-log-texture.jpg");
+	LoadGLTextures(&tempTexture, "textures/wood-log-texture.jpg");
 	textureArray[13] = tempTexture;
 }
 

@@ -1,3 +1,6 @@
+// CSC 706 Project 2
+// Robert Kigobe, Dominic Klusek, Novichenko Konstantin
+
 #pragma once
 #include <time.h>
 #include <stdlib.h>

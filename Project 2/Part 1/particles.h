@@ -1,9 +1,12 @@
+// CSC 706 Project 2
+// Robert Kigobe, Dominic Klusek, Novichenko Konstantin
+
 #pragma once
 #include "texture.h"
 
 /*
-*	Patricle code was taken from tutorial at http://www.swiftless.com/tutorials/opengl/particles.html, 
-	and then modified to better suit our needs
+*	Patricle code was adapted from tutorial at 
+*	http://www.swiftless.com/tutorials/opengl/particles.html,
 */
 
 const int ParticleCount = 500;
